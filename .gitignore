@@ -1,0 +1,11 @@
+# file di sistema macOS
+.DS_Store
+**/.DS_Store
+
+# dipendenze e build (se in futuro servissero)
+node_modules/
+.vercel/
+
+# variabili d'ambiente — NON devono MAI finire su GitHub
+.env
+.env.*
