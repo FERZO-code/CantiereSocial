@@ -13,7 +13,7 @@ module.exports = function handler(req, res) {
     return res.status(404).json({ errore: 'Non trovato.' });
   }
 
-  var chiave = process.env.RESEND_API_KEY;
+  var chiave = process.env.RESEND_API_KEY || process.env.RESEND_KEY;
 
   // nomi (non valori) delle variabili che ci interessano
   var nomiPertinenti = Object.keys(process.env)
@@ -27,6 +27,8 @@ module.exports = function handler(req, res) {
     commit: (process.env.VERCEL_GIT_COMMIT_SHA || '').slice(0, 7) || '(nessun git)',
 
     chiave: {
+      nomeUsato: process.env.RESEND_API_KEY ? 'RESEND_API_KEY'
+               : (process.env.RESEND_KEY ? 'RESEND_KEY' : '(nessuna)'),
       presente: !!chiave,
       lunghezza: chiave ? chiave.length : 0,
       iniziaConRe_: chiave ? chiave.indexOf('re_') === 0 : false,

@@ -165,6 +165,10 @@
 
   var status = document.getElementById('form-status');
 
+  // Istante di apertura: il server rifiuta gli invii troppo rapidi,
+  // che nessun umano riesce a produrre compilando davvero i campi.
+  var apertoIl = Date.now();
+
   var RULES = {
     nome:     { err: 'err-nome',     msg: 'Serve il nome per sapere con chi parliamo.' },
     email:    { err: 'err-email',    msg: 'Controllate l’indirizzo email: sembra incompleto.' },
@@ -249,6 +253,7 @@
       settore:   leggi('settore'),
       messaggio: leggi('messaggio'),
       website:   leggi('website'),          // trappola anti-spam
+      ts:        apertoIl,                  // trappola temporale
       privacy:   form.elements.privacy.checked
     };
 

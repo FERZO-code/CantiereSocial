@@ -381,3 +381,70 @@ l'utente, non sicurezza: chiunque può aggirarla in dieci secondi.
 Con questo collegamento **Vercel** e **Resend** diventano responsabili del
 trattamento dei dati inviati dal modulo. Vanno nominati nell'informativa
 privacy, insieme alla base giuridica e ai tempi di conservazione.
+
+---
+
+# Limite di frequenza sul form
+
+Il modulo è protetto da quattro filtri, in quest'ordine.
+
+| Filtro | Cosa blocca | Risposta |
+|---|---|---|
+| Limite per IP | Oltre **3 invii in 10 minuti** dallo stesso indirizzo | `429` con i secondi di attesa |
+| Tetto globale | Oltre **20 invii in 10 minuti** in totale | `429` |
+| Campo trappola (`website`) | Bot che compilano ogni campo | `200` finto, nessuna email |
+| Trappola temporale | Invii in meno di **3 secondi** dall'apertura | `200` finto, nessuna email |
+
+Le due trappole rispondono `200` di proposito: dire "sei stato scoperto"
+insegnerebbe al bot come aggirarle.
+
+## Due scelte di progetto
+
+**Gli errori di compilazione non consumano tentativi.** Il conteggio scatta
+solo un istante prima di spedire davvero. Chi sbaglia l'email tre volte non
+si ritrova bloccato: sarebbe il modo più rapido per perdere un cliente vero.
+
+**Il tetto globale protegge la quota Resend.** Senza, un attacco potrebbe
+bruciare le 3.000 email mensili in un pomeriggio e lasciarvi muti proprio
+quando arriva una richiesta vera.
+
+## Il limite di questa soluzione — leggetelo
+
+Le funzioni Vercel sono **senza stato e replicate**: il conteggio vive nella
+memoria di una singola istanza, e istanze diverse non si parlano. Quindi:
+
+- non è una barriera invalicabile: chi distribuisce le richieste su molti IP,
+  o colpisce quando Vercel ha più istanze attive, può superare i numeri sopra;
+- ferma però doppi clic, invii ripetuti e bot ingenui, che è praticamente
+  tutto quello che vedrete su un form di contatto di un'attività locale.
+
+È una scelta proporzionata: zero infrastruttura, zero costi, zero manutenzione.
+
+**Se un giorno subirete abusi veri**, il passo successivo è uno store condiviso
+fra le istanze: Upstash Redis ha un'API REST, quindi si integra con la stessa
+`fetch` già usata per Resend, senza aggiungere dipendenze npm. Si sostituiscono
+`controllaLimite` e `registraInvio` con due chiamate a Redis e il resto del
+codice resta identico.
+
+## Regolare i limiti
+
+In cima ad `api/contact.js`:
+
+```js
+const FINESTRA_MS   = 10 * 60 * 1000;  // ampiezza della finestra
+const MAX_PER_IP    = 3;               // invii per IP nella finestra
+const MAX_GLOBALE   = 20;              // invii totali nella finestra
+const ATTESA_MINIMA = 3000;            // ms minimi per compilare
+```
+
+Dopo ogni modifica rilanciate la prova:
+
+```bash
+cd test && node prova-limite.js
+```
+
+Esercita la funzione con richieste finte e `fetch` sostituita: verifica i
+limiti **senza inviare nessuna email**. Copre 12 casi, fra cui che gli errori
+di compilazione non brucino tentativi e che il tetto globale scatti.
+
+La cartella `test/` è esclusa dalla pubblicazione tramite `.vercelignore`.
