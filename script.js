@@ -7,6 +7,69 @@
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  /* ── Intro / schermata di apertura ──────────────────────────────────
+     Contatore 0→100 con barra di avanzamento, poi l'overlay si solleva.
+     Durata volutamente breve: un'intro lunga fa perdere visite.
+     Per mostrarla una sola volta a sessione, mettete UNA_VOLTA a true. */
+  var UNA_VOLTA = false;
+  var DURATA = 3000;   // millisecondi
+
+  (function intro() {
+    var root = document.documentElement;
+    var box  = document.getElementById('intro');
+
+    function chiudi(subito) {
+      root.classList.remove('intro-on');
+      if (box && box.parentNode) box.parentNode.removeChild(box);
+    }
+
+    // reduced-motion, JS parziale, o intro già vista in questa sessione
+    var giaVista = false;
+    try { giaVista = UNA_VOLTA && sessionStorage.getItem('intro') === '1'; } catch (e) {}
+
+    if (!box || !root.classList.contains('intro-on') || reduceMotion.matches || giaVista) {
+      chiudi(true);
+      return;
+    }
+
+    try { if (UNA_VOLTA) sessionStorage.setItem('intro', '1'); } catch (e) {}
+
+    var num  = document.getElementById('intro-num');
+    var fill = document.getElementById('intro-fill');
+    var inizio = null;
+    var chiuso = false;
+
+    function esci() {
+      if (chiuso) return;
+      chiuso = true;
+      box.classList.add('is-done');
+      root.classList.remove('intro-on');           // sblocca subito lo scorrimento
+      setTimeout(function () {
+        if (box.parentNode) box.parentNode.removeChild(box);
+      }, 900);
+    }
+
+    function passo(t) {
+      if (inizio === null) inizio = t;
+      var p = Math.min((t - inizio) / DURATA, 1);
+      var eased = 1 - Math.pow(1 - p, 3);          // decelera verso il 100
+      var v = Math.round(eased * 100);
+
+      num.textContent = v;
+      fill.style.height = v + '%';
+
+      if (p < 1) {
+        requestAnimationFrame(passo);
+      } else {
+        setTimeout(esci, 180);                     // un attimo sul 100%
+      }
+    }
+
+    requestAnimationFrame(passo);
+    setTimeout(esci, DURATA + 2500);               // rete di sicurezza
+  })();
+
+
   /* ── Anno corrente nel footer ───────────────────────────────────── */
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
@@ -170,34 +233,82 @@
       return;
     }
 
-    var v = function (name) {
-      var el = form.elements[name];
-      return el && el.value ? el.value.trim() : '—';
+    var bottone = form.querySelector('button[type="submit"]');
+    var testoOriginale = bottone.textContent;
+
+    function leggi(nome) {
+      var el = form.elements[nome];
+      return el ? el.value.trim() : '';
+    }
+
+    var dati = {
+      nome:      leggi('nome'),
+      azienda:   leggi('azienda'),
+      email:     leggi('email'),
+      telefono:  leggi('telefono'),
+      settore:   leggi('settore'),
+      messaggio: leggi('messaggio'),
+      website:   leggi('website'),          // trappola anti-spam
+      privacy:   form.elements.privacy.checked
     };
 
-    var corpo = [
-      'Nome:      ' + v('nome'),
-      'Azienda:   ' + v('azienda'),
-      'Email:     ' + v('email'),
-      'Telefono:  ' + v('telefono'),
-      'Settore:   ' + v('settore'),
-      '',
-      'Messaggio:',
-      v('messaggio')
-    ].join('\n');
-
-    // ── Senza backend: apre il client di posta col messaggio pronto.
-    //    Per ricevere i moduli via web, sostituite questo blocco con una
-    //    fetch() verso il vostro endpoint (es. Formspree) e mostrate
-    //    l'esito in #form-status.
-    var mailto = 'mailto:info@cantieresocial.com'
-      + '?subject=' + encodeURIComponent('Richiesta sopralluogo — ' + v('nome'))
-      + '&body=' + encodeURIComponent(corpo);
-
-    window.location.href = mailto;
-
+    // stato di attesa: il bottone non è più premibile (evita doppi invii)
+    bottone.disabled = true;
+    bottone.textContent = 'Invio in corso…';
+    form.classList.add('is-sending');
     if (status) {
-      status.textContent = 'Stiamo aprendo il vostro programma di posta con il messaggio già scritto: premete invio per spedirlo.';
+      status.className = 'form__status';
+      status.textContent = 'Stiamo inviando la richiesta…';
     }
+
+    function ripristina() {
+      bottone.disabled = false;
+      bottone.textContent = testoOriginale;
+      form.classList.remove('is-sending');
+    }
+
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dati)
+    })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (corpo) {
+          return { ok: r.ok, corpo: corpo };
+        });
+      })
+      .then(function (esito) {
+        if (esito.ok && esito.corpo.ok) {
+          // successo: il modulo lascia il posto alla conferma
+          form.innerHTML =
+            '<div class="form__done" role="status">' +
+              '<svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" ' +
+                'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                '<circle cx="12" cy="12" r="9"/><path d="M7.5 12.5l3 3 6-6.5"/>' +
+              '</svg>' +
+              '<p class="form__done-t">Richiesta inviata.</p>' +
+              '<p class="form__done-s">Vi rispondiamo entro un giorno lavorativo. ' +
+              'Se avete fretta, scriveteci su WhatsApp.</p>' +
+            '</div>';
+          return;
+        }
+
+        // errore: si resta sul modulo, i dati non si perdono
+        ripristina();
+        if (status) {
+          status.className = 'form__status is-error';
+          status.textContent = (esito.corpo && esito.corpo.errore)
+            ? esito.corpo.errore
+            : 'Non siamo riusciti a inviare la richiesta. Riprovate, oppure scriveteci a info@cantieresocial.com.';
+        }
+      })
+      .catch(function () {
+        ripristina();
+        if (status) {
+          status.className = 'form__status is-error';
+          status.textContent = 'Connessione assente. Controllate la rete e riprovate, ' +
+            'oppure scriveteci a info@cantieresocial.com.';
+        }
+      });
   });
 })();

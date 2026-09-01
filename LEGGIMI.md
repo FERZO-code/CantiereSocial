@@ -22,18 +22,16 @@ inventato numeri né testimonianze.
 
 | Dove | Cosa |
 |---|---|
-| `index.html` — sezione "I risultati" | I quattro numeri (ora `—`) e le due testimonianze. **Se non li avete ancora, cancellate l'intera sezione `<section class="section proof">`**: meglio niente che finti. |
+| `index.html` — sezione "I risultati" | ✅ Già disattivata (commentata). Vedi "Riattivare la sezione Risultati" in fondo. |
 | `index.html` — sezione contatti + footer | Email, numero WhatsApp (`wa.me/39XXXXXXXXXX`), profilo Instagram |
 | `index.html` — footer | Ragione sociale, P.IVA, sede |
 | `index.html` | Pagine Privacy e Cookie: i link puntano a `#privacy` e `#cookie`, vanno create (obbligatorie per legge se raccogliete dati dal form) |
 
 ## Il form contatti
 
-Adesso **apre il programma di posta** dell'utente con il messaggio già
-compilato. Funziona ovunque senza server, ma perde qualche contatto da
-mobile. Per riceverli davvero via web, in `script.js` cercate il commento
-`Senza backend` e sostituite il blocco con una `fetch()` verso un servizio
-tipo Formspree, Basin o Web3Forms.
+Invia a `/api/contact` (funzione Vercel) che inoltra con Resend a
+`info@cantieresocial.com`. Vedi **"Collegare il form all'email"** più sotto
+per l'attivazione.
 
 ## Pubblicazione
 
@@ -173,3 +171,213 @@ Va comunque citato nell'informativa privacy.
 
 Se non vedete dati: quasi sempre è un ad blocker sul vostro browser.
 Provate in finestra anonima o da un altro dispositivo.
+
+---
+
+# Instagram
+
+Il link compare in tre punti, tutti con la stessa URL:
+header (icona sola), menu mobile, footer, più la sezione contatti.
+
+⚠️ **L'handle `cantieresocial` è un segnaposto**: sostituitelo con quello vero.
+Si cambia in un colpo solo:
+
+```bash
+cd "cantieresocial.it"
+sed -i '' 's|instagram.com/cantieresocial/|instagram.com/VOSTRO_HANDLE/|g' index.html
+```
+
+Aggiornate anche `sameAs` nei dati strutturati (stessa URL) e aggiungete
+Facebook, TikTok e LinkedIn se li avete: `sameAs` è ciò che collega il sito
+ai vostri profili agli occhi di Google.
+
+## Nota sulle icone SVG
+
+Gli attributi `fill="none" stroke="currentColor"` stanno **sull'SVG stesso**,
+non solo nel CSS. Se stessero solo nel CSS, quando il foglio di stile non è
+ancora caricato (o è in cache) il browser disegnerebbe le forme con il
+riempimento nero di default: l'icona apparirebbe come un quadrato pieno.
+
+# Cache dei file (importante a ogni deploy)
+
+`styles.css` e `script.js` sono richiamati con `?v=2`. **Alzate quel numero
+ogni volta che li modificate**, altrimenti chi ha già visitato il sito
+continua a vedere la versione vecchia dalla cache del browser.
+
+```html
+<link rel="stylesheet" href="styles.css?v=3">
+<script src="script.js?v=3" defer></script>
+```
+
+---
+
+# Riattivare la sezione "I risultati"
+
+È **commentata**, non cancellata: il codice è ancora dentro `index.html`,
+cercate `SEZIONE DISATTIVATA`. Fuori dal DOM significa che Google non la
+legge e i visitatori non la vedono.
+
+Quando avrete numeri e testimonianze veri:
+
+1. Togliete le due righe `INIZIO BLOCCO DISATTIVATO` e `FINE BLOCCO DISATTIVATO`
+2. Compilate i quattro numeri (`<dd data-todo>—</dd>`) e le due testimonianze
+3. Rinumerate le etichette successive: `05`→`06`, `06`→`07`, `07`→`08`, `08`→`09`
+4. Rimettete il fondo alternato: in `styles.css` riportate
+   `.studio { background: var(--cream-2); }`
+5. Alzate `?v=` su `styles.css` e `script.js`
+
+Il CSS della sezione (`.stats`, `.quotes`, `.proof`) è rimasto: non serve
+riscrivere niente.
+
+## Sulle testimonianze
+
+Raccoglietele subito, non "quando avrete tempo". A fine lavoro, mentre il
+cliente è contento. Chiedete una frase che dica **cosa non funzionava prima**
+e **cosa è cambiato**, possibilmente con un numero. Una testimonianza vaga
+("bravi ragazzi, consigliati") converte molto meno di una concreta
+("prima ricevevamo due richieste al mese, adesso otto").
+
+---
+
+# Intro / schermata di apertura
+
+Contatore da 0 a 100 in basso a destra, barra arancione che cresce sul bordo
+destro, poi l'overlay si solleva e scopre la pagina. Durata **1,3 secondi**.
+
+Il codice è scritto da zero (CSS + `requestAnimationFrame`), nessuna libreria
+e nessun file preso da altri siti: è lo stesso *tipo* di apertura, con i vostri
+colori, il vostro font mono e la griglia da foglio di progetto.
+
+## Regolazioni
+
+In cima a `script.js`:
+
+```js
+var UNA_VOLTA = false;   // true = la mostra una sola volta per sessione
+var DURATA = 1300;       // durata in millisecondi
+```
+
+**Consiglio:** se notate che le visite calano, mettete `UNA_VOLTA = true`.
+Un'intro vista a ogni ricaricamento diverte la prima volta e infastidisce
+dalla terza. E non superate i 1500 ms: oltre, la gente chiude.
+
+## Perché non rallenta la SEO
+
+L'overlay è solo visivo. Il contenuto della pagina esiste già sotto, quindi
+Google lo legge normalmente. L'elemento ha `aria-hidden` e `inert`, così i
+lettori di schermo lo saltano, e si autodistrugge a fine animazione.
+
+## Le protezioni previste
+
+| Situazione | Cosa succede |
+|---|---|
+| Utente con animazioni ridotte di sistema | L'intro non compare affatto (3 livelli: script inline, CSS, JS) |
+| JavaScript non parte | Dopo 6 s una regola CSS solleva l'overlay: il sito non resta mai bloccato |
+| Animazione interrotta a metà | Timeout di sicurezza a 3,8 s che forza l'uscita |
+| Scorrimento | Bloccato durante l'intro, sbloccato appena parte l'uscita |
+
+Verificato: a 1217 ms il contatore è a 100 con l'overlay a piena pagina, a
+1420 ms l'overlay è sollevato e lo scorrimento è già libero, poi l'elemento
+viene rimosso dal DOM.
+
+---
+
+# Collegare il form all'email
+
+Il modulo invia a `/api/contact`, una funzione serverless che gira su Vercel
+e inoltra la richiesta a `info@cantieresocial.com` tramite **Resend**.
+
+## Perché non si invia direttamente da Gmail
+
+Un browser non può parlare con i server SMTP di Google, e le credenziali di
+Google Workspace nel codice del sito sarebbero **leggibili da chiunque**
+apra il sorgente della pagina. Serve sempre un servizio che invii lato
+server, con la chiave protetta. Qui la chiave sta in una variabile
+d'ambiente su Vercel: nel codice scaricato dal browser non compare mai.
+
+## 1. Account Resend
+
+Registratevi su `resend.com` (3.000 email/mese gratis, più che sufficienti).
+
+## 2. Verificate il dominio — ⚠️ usate un SOTTODOMINIO
+
+In Resend → *Domains* → *Add Domain*, inserite:
+
+```
+send.cantieresocial.com
+```
+
+**Non** `cantieresocial.com` da solo. Il motivo è concreto: Resend chiede di
+aggiungere un record SPF, ma sul dominio principale ne avete già uno che
+serve a Google Workspace. Due record SPF sullo stesso dominio **rompono la
+consegna della vostra posta aziendale**: le email di Gmail iniziano a finire
+nello spam. Con un sottodominio dedicato i due sistemi non si toccano.
+
+## 3. Record DNS su Cloudflare
+
+Resend vi mostra 3 record (MX, TXT per SPF, TXT per DKIM). Copiateli
+**esattamente come li dà**, in Cloudflare → DNS → *Add record*.
+
+- Non modificate i valori, nemmeno gli spazi
+- Lasciateli **DNS only** (nuvola grigia), non proxied
+- La propagazione richiede da pochi minuti a qualche ora
+
+Poi in Resend premete *Verify*.
+
+## 4. Chiave API
+
+Resend → *API Keys* → *Create*. Copiatela subito: viene mostrata una volta
+sola. Trattatela come una password.
+
+## 5. Variabili d'ambiente su Vercel
+
+Progetto → *Settings* → *Environment Variables*. Aggiungete:
+
+| Nome | Valore | Ambienti |
+|---|---|---|
+| `RESEND_API_KEY` | la chiave copiata al punto 4 | Production, Preview, Development |
+| `MAIL_TO` | `info@cantieresocial.com` | tutti |
+| `MAIL_FROM` | `Sito Cantiere Social <sito@send.cantieresocial.com>` | tutti |
+
+`MAIL_TO` e `MAIL_FROM` sono facoltative: senza, la funzione usa già questi
+valori come predefiniti. `RESEND_API_KEY` è obbligatoria.
+
+**Le variabili si applicano solo ai deploy successivi**: dopo averle
+aggiunte, ripubblicate.
+
+## 6. Provate
+
+Compilate il modulo dal sito pubblicato. Dovreste ricevere l'email su Gmail
+entro pochi secondi. Premendo *Rispondi* scrivete direttamente al cliente:
+la funzione imposta il suo indirizzo come `reply_to`.
+
+## Se qualcosa non funziona
+
+Vercel → progetto → *Logs*, filtrate su `/api/contact`. La funzione scrive
+in log il motivo esatto.
+
+| Messaggio | Causa |
+|---|---|
+| `RESEND_API_KEY non configurata` | Variabile mancante, o deploy fatto prima di aggiungerla |
+| `Resend ha risposto 403` | Dominio non ancora verificato, o `MAIL_FROM` su un dominio diverso da quello verificato |
+| `Resend ha risposto 422` | `MAIL_FROM` scritto male |
+| Nulla nei log | La richiesta non arriva: controllate che la cartella `api/` sia stata pubblicata |
+
+**In locale il form dà sempre errore**: `python3 -m http.server` serve file
+statici e non esegue funzioni serverless, quindi `/api/contact` risponde 404.
+È previsto. Per provarlo in locale servirebbe `vercel dev`.
+
+## Anti-spam
+
+C'è un campo trappola invisibile (`website`): i bot lo compilano, gli umani
+no. Se arriva pieno, la funzione finge di aver accettato e butta via il
+messaggio, così il bot non impara ad aggirarla.
+
+La validazione è **ripetuta lato server**. Quella nel browser è comodità per
+l'utente, non sicurezza: chiunque può aggirarla in dieci secondi.
+
+## Nota per l'informativa privacy
+
+Con questo collegamento **Vercel** e **Resend** diventano responsabili del
+trattamento dei dati inviati dal modulo. Vanno nominati nell'informativa
+privacy, insieme alla base giuridica e ai tempi di conservazione.

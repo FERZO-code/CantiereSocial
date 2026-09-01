@@ -31,7 +31,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<!-- ⚠️ Alzate ?v= a ogni modifica di CSS/JS: forza il browser a
+     riscaricarli invece di riusare la copia in cache. -->
+<link rel="stylesheet" href="styles.css?v=6">
+
+<script>
+  /* Attiva l'intro prima del primo paint, così non c'è sfarfallio.
+     Chi ha chiesto meno animazioni al sistema operativo la salta del tutto. */
+  (function () {
+    try {
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('intro-on');
+      }
+    } catch (e) {}
+  })();
+</script>
 
 <!-- ⚠️ DA COMPILARE: streetAddress, telephone, sameAs, openingHours.
      La coppia di coordinate è il centro di Rutigliano: sostituitela con
@@ -79,7 +93,7 @@
     { "@type": "Person", "name": "Ferdinando" }
   ],
   "sameAs": [
-    "https://instagram.com/cantieresocial"
+    "https://www.instagram.com/cantieresocial/"
   ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
@@ -118,6 +132,27 @@
 </head>
 <body>
 
+<!-- ══ INTRO ═════════════════════════════════════════════════════════
+     Schermata di apertura. Puramente visiva: il contenuto della pagina
+     esiste già sotto, quindi non ostacola né i lettori di schermo né
+     l'indicizzazione. Si autodistrugge dopo l'animazione. -->
+<div class="intro" id="intro" aria-hidden="true" inert>
+  <div class="intro__grid"></div>
+
+  <div class="intro__side"><span id="intro-fill"></span></div>
+
+  <div class="intro__brand">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+      <path d="M12 1.6l2.9 6.6 7.1.7-5.3 4.8 1.5 7-6.2-3.6-6.2 3.6 1.5-7L2 8.9l7.1-.7z" fill="currentColor"/>
+    </svg>
+    <span>Cantiere Social</span>
+  </div>
+
+  <p class="intro__status">Allestimento del cantiere</p>
+
+  <p class="intro__count"><span id="intro-num">0</span><i>%</i></p>
+</div>
+
 <a class="skip-link" href="#main">Vai al contenuto principale</a>
 
 <!-- ══ NAV ═══════════════════════════════════════════════════════════ -->
@@ -138,6 +173,18 @@
       <li><a href="#zone">Zone</a></li>
     </ul>
 
+    <!-- ⚠️ DA CONFERMARE: handle Instagram reale -->
+    <a class="nav__ig" href="https://www.instagram.com/cantieresocial/" target="_blank" rel="noopener"
+       aria-label="Cantiere Social su Instagram (si apre in una nuova scheda)">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+             stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true" focusable="false">
+        <rect x="3" y="3" width="18" height="18" rx="5"/>
+        <circle cx="12" cy="12" r="4.2"/>
+        <circle cx="17.3" cy="6.7" r="1.2" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+
     <a class="btn btn--dark nav__cta" href="#contatti">Prenota una call</a>
 
     <button class="nav__burger" type="button" aria-expanded="false" aria-controls="nav-mobile" aria-label="Apri il menu">
@@ -152,6 +199,16 @@
     <a href="#studio">Studio</a>
     <a href="#zone">Zone</a>
     <a href="#faq">Domande</a>
+    <a class="link-ig" href="https://www.instagram.com/cantieresocial/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+             stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true" focusable="false">
+        <rect x="3" y="3" width="18" height="18" rx="5"/>
+        <circle cx="12" cy="12" r="4.2"/>
+        <circle cx="17.3" cy="6.7" r="1.2" fill="currentColor" stroke="none"/>
+      </svg>
+      Seguici su Instagram
+    </a>
     <a class="btn btn--orange" href="#contatti">Prenota una call</a>
   </div>
 </header>
@@ -178,7 +235,7 @@
       <p class="hero__sub reveal">
         Pacchetti a <strong>360°</strong> per imprese di costruzione, showroom e agenzie
         immobiliari di <strong>Bari e provincia</strong>. Riprese, social, advertising
-        e sito web: un cantiere solo, un unico responsabile, una data di consegna.
+        e sito web: un cantiere solo, due responsabili, una data di consegna.
       </p>
 
       <div class="hero__actions reveal">
@@ -231,15 +288,17 @@
     <p class="label reveal"><span>01</span> Il problema</p>
 
     <h2 class="h2 problem__claim reveal">
-      Fate un lavoro che si vede.<br>
-      <span class="muted">Online però non si vede per niente.</span>
+      Fate un lavoro che lascia il segno.
+<br>
+      <span class="muted">Dategli la VISIBILITÀ che merita.</span>
     </h2>
 
     <div class="problem__grid">
       <article class="problem__card reveal">
         <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-7h6v7"/></svg>
         <h3>Un cantiere all'anno sui social</h3>
-        <p>Foto scattate col telefono, pubblicate quando capita. Il risultato è un profilo che non racconta nulla e non porta un contatto.</p>
+        <p>Foto scattate al volo, post pubblicati senza strategia. Il risultato? Un profilo che non valorizza il vostro lavoro e non genera contatti.
+</p>
       </article>
 
       <article class="problem__card reveal">
@@ -262,10 +321,10 @@
   <div class="wrap">
     <div class="sec-head">
       <p class="label reveal"><span>02</span> I pacchetti</p>
-      <h2 class="h2 reveal">Il pacchetto 360°,<br><span class="muted">voce per voce.</span></h2>
+      <h2 class="h2 reveal">Il pacchetto 360°,<br><span class="muted">quello che offriamo.</span></h2>
       <p class="sec-head__note reveal">
-        Non vendiamo servizi sciolti. Mettiamo in cantiere tutto quello che serve
-        perché il lavoro che fate diventi lavoro che vi cercano.
+        Non vendiamo servizi sciolti.
+        Mettiamo in cantiere tutto ciò che serve perché il lavoro che fate diventi il lavoro che ricercano.
       </p>
     </div>
 
@@ -345,7 +404,7 @@
           <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 9l1.6-4.5A1 1 0 015.5 4h13a1 1 0 01.9.5L21 9"/><path d="M3 9h18v11a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0"/></svg>
           <h3>Showroom</h3>
         </header>
-        <p class="sector__claim">Chi entra compra. Il problema è farlo entrare.</p>
+        <p class="sector__claim">Il problema non è vendere. È farsi trovare.</p>
         <p>Portiamo online l'esperienza che si vive dentro: materiali, ambientazioni, novità di stagione. Poi mandiamo in showroom le persone giuste della vostra zona.</p>
         <ul role="list"><li>Riprese di prodotto e ambientazioni</li><li>Campagne di prossimità</li><li>Eventi e nuove collezioni</li></ul>
       </article>
@@ -423,11 +482,15 @@
   </div>
 </section>
 
-<!-- ══ NUMERI + TESTIMONIANZE ════════════════════════════════════════
-     ⚠️  DA COMPILARE — sostituite i valori segnaposto qui sotto con i
-     vostri numeri e le vostre testimonianze reali, oppure eliminate
-     l'intera sezione finché non li avete.
-     ═══════════════════════════════════════════════════════════════ -->
+<!-- ══ NUMERI + TESTIMONIANZE — SEZIONE DISATTIVATA ══════════════════
+     Nascosta in attesa di numeri e testimonianze reali.
+
+     PER RIATTIVARLA:
+       1. togliete la riga "INIZIO BLOCCO" qui sotto e la riga "FINE BLOCCO"
+       2. compilate i quattro numeri e le due testimonianze
+       3. rinumerate le etichette successive: 05→06, 06→07, 07→08, 08→09
+     ═══════════════════════════════════════════════════════════════════ -->
+<!-- INIZIO BLOCCO DISATTIVATO
 <section class="section proof">
   <div class="wrap">
     <div class="sec-head">
@@ -466,6 +529,7 @@
     </div>
   </div>
 </section>
+FINE BLOCCO DISATTIVATO -->
 
 <!-- ══ STUDIO ════════════════════════════════════════════════════════ -->
 <section class="section studio" id="studio">
@@ -475,7 +539,7 @@
     </figure>
 
     <div class="studio__copy">
-      <p class="label reveal"><span>06</span> Lo studio</p>
+      <p class="label reveal"><span>05</span> Lo studio</p>
       <h2 class="h2 reveal">Siamo in due.<br><span class="muted">Ed è un vantaggio.</span></h2>
 
       <p class="studio__lead reveal">
@@ -511,7 +575,7 @@
 <section class="section zone" id="zone">
   <div class="wrap">
     <div class="sec-head sec-head--center">
-      <p class="label reveal"><span>07</span> Dove lavoriamo</p>
+      <p class="label reveal"><span>06</span> Dove lavoriamo</p>
       <h2 class="h2 reveal">Da Rutigliano,<br><span class="muted">in tutta la provincia di Bari.</span></h2>
       <p class="sec-head__note reveal">
         Lo studio è a Rutigliano. Per le riprese usciamo in giornata su tutta la
@@ -534,7 +598,7 @@
 <section class="section faq" id="faq">
   <div class="wrap wrap--narrow">
     <div class="sec-head">
-      <p class="label reveal"><span>08</span> Domande</p>
+      <p class="label reveal"><span>07</span> Domande</p>
       <h2 class="h2 reveal">Quelle che ci fanno sempre.</h2>
     </div>
 
@@ -546,7 +610,12 @@
 
       <details class="acc__item reveal">
         <summary>Dobbiamo comparire noi nei video?</summary>
-        <div class="acc__body"><p>Aiuta molto, ma non è obbligatorio. Lavoriamo bene anche riprendendo solo il cantiere, i materiali, le squadre al lavoro e i risultati finiti. Se invece volete metterci la faccia, vi guidiamo noi: non serve essere attori.</p></div>
+        <div class="acc__body"><p><strong>No, non è necessario.</strong>
+
+          <br>Nei video sarà Simona a parlare, presentare e raccontare la vostra azienda, occupandosi direttamente della parte davanti alla telecamera.
+
+          Mostrare anche voi, quando possibile, è un grande valore: vedere le persone dietro un'azienda la rende più autentica, riconoscibile e dà un volto al vostro lavoro.
+</p></div>
       </details>
 
       <details class="acc__item reveal">
@@ -566,7 +635,7 @@
 
       <details class="acc__item reveal">
         <summary>C'è un vincolo di durata?</summary>
-        <div class="acc__body"><p>Lavoriamo su periodi minimi di alcuni mesi, perché sotto quella soglia i risultati non sono valutabili e sarebbe una spesa buttata. Le condizioni esatte sono scritte nel preventivo, prima di firmare.</p></div>
+        <div class="acc__body"><p>Lavoriamo su periodi minimi di alcuni mesi, perché sotto quella soglia i risultati non sono valutabili e sarebbero soldi buttati. Le condizioni esatte sono scritte nel preventivo, prima di firmare.</p></div>
       </details>
     </div>
   </div>
@@ -576,7 +645,7 @@
 <section class="section cta" id="contatti">
   <div class="wrap cta__inner">
     <div class="cta__copy">
-      <p class="label label--inv reveal"><span>09</span> Partiamo</p>
+      <p class="label label--inv reveal"><span>08</span> Partiamo</p>
       <h2 class="h2 reveal">Il primo sopralluogo<br><span class="muted-inv">non lo paga nessuno.</span></h2>
       <p class="cta__lead reveal">
         Quarantacinque minuti, in videochiamata o da voi. Guardiamo come
@@ -593,20 +662,26 @@
         <li>
           <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M20.5 12a8.5 8.5 0 01-12.6 7.4L3.5 20.5l1.2-4.3A8.5 8.5 0 1120.5 12z"/><path d="M8.8 9.2c.3 2.6 3.4 5.7 6 6l1.2-1.4 2 1.1-.6 1.6c-2.6.9-7.9-2.6-9.4-6.6l1.5-.9z" fill="currentColor" stroke="none"/></svg>
           <!-- ⚠️ DA COMPILARE: numero WhatsApp reale, formato 39XXXXXXXXXX -->
-          <a href="https://wa.me/390000000000" rel="noopener">Scrivici su WhatsApp</a>
+          <a href="https://wa.me/+393474068285" rel="noopener">Scrivici su WhatsApp</a>
         </li>
         <li>
           <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
           <!-- ⚠️ DA COMPILARE: profilo Instagram reale -->
-          <a href="https://instagram.com/cantieresocial" rel="noopener">@cantieresocial</a>
+          <a href="https://www.instagram.com/cantieresocial/" target="_blank" rel="noopener">@cantieresocial</a>
         </li>
       </ul>
     </div>
 
-    <!-- ⚠️ Il form apre il client di posta con il messaggio già scritto.
-         Per riceverli via web, sostituite action/method (es. Formspree). -->
+    <!-- L'invio è gestito da script.js verso /api/contact (funzione Vercel). -->
     <form class="form reveal" id="form-contatto" novalidate>
       <p class="form__title">Raccontateci il cantiere</p>
+
+      <!-- Trappola anti-spam: nascosta agli umani e ai lettori di schermo,
+           esclusa dalla tastiera. Se arriva compilata, è un bot. -->
+      <div class="honeypot" aria-hidden="true">
+        <label for="f-website">Non compilare questo campo</label>
+        <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
 
       <div class="field">
         <label for="f-nome">Nome e cognome <span aria-hidden="true">*</span></label>
@@ -688,8 +763,17 @@
     <div class="footer__contact">
       <h2>Contatti</h2>
       <a href="mailto:info@cantieresocial.com">info@cantieresocial.com</a>
-      <a href="https://wa.me/390000000000" rel="noopener">WhatsApp</a>
-      <a href="https://instagram.com/cantieresocial" rel="noopener">Instagram</a>
+      <a href="https://wa.me/+393474068285" rel="noopener">WhatsApp</a>
+      <a class="link-ig" href="https://www.instagram.com/cantieresocial/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+               stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true" focusable="false">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4.2"/>
+          <circle cx="17.3" cy="6.7" r="1.2" fill="currentColor" stroke="none"/>
+        </svg>
+        Instagram
+      </a>
     </div>
 
     <div class="footer__where">
@@ -711,7 +795,7 @@
   </div>
 </footer>
 
-<script src="script.js" defer></script>
+<script src="script.js?v=6" defer></script>
 
 <!-- Vercel Web Analytics — versione per siti statici (niente React/npm).
      Va abilitato prima dal pannello Vercel: progetto → Analytics → Enable.
