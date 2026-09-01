@@ -5,8 +5,9 @@ global.fetch = async () => { emailSpedite++; return { ok: true, text: async () =
 
 const handler = require('../api/contact.js');
 
-function finge(corpo, ip = '1.2.3.4') {
-  const req = { method: 'POST', headers: { 'x-forwarded-for': ip }, body: corpo };
+function finge(corpo, ip = '1.2.3.4', headerExtra = null) {
+  const headers = headerExtra || { 'x-real-ip': ip };
+  const req = { method: 'POST', headers, body: corpo };
   let esito = {};
   const res = {
     setHeader() {},
@@ -66,6 +67,19 @@ const valido = (n = 'Mario Rossi') => ({
     if (r.status === 429 && r.body.errore.includes('troppe richieste')) bloccoGlobale = true;
   }
   dice('il tetto globale scatta', bloccoGlobale);
+
+  console.log('\n— Header IP falsificato dal client —');
+  // Il client dichiara IP finti diversi in x-forwarded-for, ma il proxy
+  // mette il vero IP in x-real-ip. Il limite deve seguire quello vero.
+  let bloccatoNonostanteFinta = false;
+  for (let i = 0; i < 6; i++) {
+    const r = await finge(valido(), null, {
+      'x-forwarded-for': '9.9.9.' + i,        // finto, scelto dall'aggressore
+      'x-real-ip': '203.0.113.7'              // vero, messo dal proxy
+    });
+    if (r.status === 429) bloccatoNonostanteFinta = true;
+  }
+  dice('IP finti in x-forwarded-for non aggirano il limite', bloccatoNonostanteFinta);
 
   console.log(`\nEmail realmente "spedite" nel test: ${emailSpedite}`);
   console.log(ok ? '\n✅ TUTTI I CONTROLLI SUPERATI\n' : '\n❌ QUALCOSA NON VA\n');

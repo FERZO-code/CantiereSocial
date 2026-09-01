@@ -42,9 +42,32 @@ function recenti(lista, ora) {
 }
 
 function ipRichiesta(req) {
+  /* Ordine difensivo. `x-forwarded-for` è un header che il CLIENT può
+     inviare: se la piattaforma lo accodasse invece di sostituirlo, la
+     prima voce sarebbe scelta dall'aggressore, che ruotando IP finti
+     aggirerebbe il limite. Preferiamo quindi gli header impostati dal
+     proxy di Vercel, che il client non può falsificare, e usiamo
+     x-forwarded-for solo come ultima risorsa.
+
+     Su x-forwarded-for prendiamo l'ULTIMA voce, non la prima: le voci
+     iniettate dal client finiscono in testa, quelle aggiunte dai proxy
+     di fiducia in coda. */
+  const reale = req.headers['x-real-ip'];
+  if (reale) return String(reale).trim();
+
+  const vercel = req.headers['x-vercel-forwarded-for'];
+  if (vercel) {
+    const parti = String(vercel).split(',');
+    return parti[parti.length - 1].trim();
+  }
+
   const xff = req.headers['x-forwarded-for'];
-  if (xff) return String(xff).split(',')[0].trim();
-  return req.headers['x-real-ip'] || 'sconosciuto';
+  if (xff) {
+    const parti = String(xff).split(',');
+    return parti[parti.length - 1].trim();
+  }
+
+  return 'sconosciuto';
 }
 
 /* Sola lettura: dice se l'IP è già oltre il limite, senza consumare nulla. */

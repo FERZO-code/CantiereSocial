@@ -448,3 +448,47 @@ limiti **senza inviare nessuna email**. Copre 12 casi, fra cui che gli errori
 di compilazione non brucino tentativi e che il tetto globale scatti.
 
 La cartella `test/` è esclusa dalla pubblicazione tramite `.vercelignore`.
+
+## Client-side o server-side?
+
+**Tutti i limiti sono applicati dal server** (`api/contact.js`). È l'unico
+posto che conta: il browser può mentire su qualsiasi cosa.
+
+| Controllo | Deciso da | Il client può aggirarlo? |
+|---|---|---|
+| Limite 3 invii/IP | server | no |
+| Tetto globale 20/10min | server | no |
+| Campo trappola | server | solo lasciandolo vuoto |
+| Trappola temporale | server, ma il valore arriva dal client | **sì, falsificando `ts`** |
+| Validazione campi | server (ripetuta) | no |
+| Neutralizzazione HTML | server | no |
+| Bottone bloccato | client | sì — è solo comodità |
+| Validazione immediata | client | sì — è solo comodità |
+
+I due controlli lato client servono **soltanto** a rendere l'esperienza
+gradevole, non proteggono nulla. Per questo tutto è ricontrollato dal server.
+
+### La trappola temporale è un filtro, non una barriera
+
+Il valore `ts` lo genera il browser, quindi un aggressore competente può
+scriverci quello che vuole. Taglia i compilatori automatici ingenui, che
+sono la maggioranza del rumore; non fermerebbe un attacco mirato. Il limite
+per IP è la difesa vera.
+
+### Come viene ricavato l'IP
+
+`x-forwarded-for` è un header che **il client può inviare**: se la
+piattaforma lo accodasse invece di sostituirlo, la prima voce sarebbe scelta
+dall'aggressore, che ruotando IP finti aggirerebbe il limite.
+
+Per questo `ipRichiesta()` preferisce, in ordine:
+
+1. `x-real-ip` — impostato dal proxy, non falsificabile
+2. `x-vercel-forwarded-for` — idem
+3. `x-forwarded-for` — ultima risorsa, e prendendo l'**ultima** voce
+   (quelle iniettate dal client finiscono in testa, quelle dei proxy di
+   fiducia in coda)
+
+La prova `test/prova-limite.js` copre anche questo caso: invia IP finti in
+`x-forwarded-for` con un `x-real-ip` reale e verifica che il limite segua
+quello vero.
