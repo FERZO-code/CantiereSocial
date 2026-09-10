@@ -492,3 +492,43 @@ Per questo `ipRichiesta()` preferisce, in ordine:
 La prova `test/prova-limite.js` copre anche questo caso: invia IP finti in
 `x-forwarded-for` con un `x-real-ip` reale e verifica che il limite segua
 quello vero.
+
+---
+
+# SEO lato Vercel (`vercel.json`)
+
+| Regola | Perché |
+|---|---|
+| `cantiere-social.vercel.app` → `www.cantieresocial.com` (308) | L'alias di produzione serviva il sito intero **senza** `noindex`: Google poteva indicizzare un doppione. Gli URL dei singoli deploy invece sono già protetti da login e `noindex`. |
+| `cleanUrls` | `/index.html` rispondeva `200`: seconda copia della home. Ora reindirizza a `/`. |
+| `X-Robots-Tag: noindex` su `/api/` | Gli endpoint non devono mai finire nei risultati. |
+| `Disallow: /api/` in `robots.txt` | Idem, lato crawler. |
+| CSS/JS in cache 1 anno, immagini 7 giorni | Prima tutto aveva `max-age=0`: ogni visita riscaricava tutto. Velocità = Core Web Vitals = posizionamento. |
+| `nosniff`, `Referrer-Policy` | Igiene di sicurezza di base. |
+
+## ⚠️ Conseguenza importante della cache
+
+`styles.css` e `script.js` ora restano **un anno** nel browser di chi visita.
+La regola del `?v=` diventa quindi obbligatoria: **modificate CSS o JS senza
+alzare `?v=` in `index.html`, e chi è già passato vedrà la versione vecchia
+fino all'anno prossimo.**
+
+Le immagini non hanno numero di versione, per questo la cache è di soli 7
+giorni. Se sostituite un'immagine, cambiatele nome.
+
+## Verifica dopo ogni deploy
+
+```bash
+zsh test/verifica-seo.sh
+```
+
+Controlla online 15 punti: doppioni, redirect, robots, sitemap, canonical,
+404, header delle API, cache.
+
+## Google Search Console
+
+Non passa da Vercel: la verifica della *proprietà dominio* si fa con un
+record TXT su **Cloudflare**, che gestisce il vostro DNS. Poi inviate
+`sitemap.xml` da Search Console.
+
+`sitemap.xml` → aggiornate `<lastmod>` quando cambiate contenuti rilevanti.
