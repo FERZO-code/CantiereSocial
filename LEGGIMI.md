@@ -25,7 +25,7 @@ inventato numeri né testimonianze.
 | `index.html` — sezione "I risultati" | ✅ Già disattivata (commentata). Vedi "Riattivare la sezione Risultati" in fondo. |
 | `index.html` — sezione contatti + footer | ✅ Email, WhatsApp (`wa.me/393474068285`) e Instagram compilati |
 | `index.html` — footer | ✅ P.IVA 08895170721. Nessun indirizzo: l'attività non ha sede aperta al pubblico |
-| `privacy.html` | ⚠️ Ragione sociale o nome dell'intestatario della P.IVA nella sezione "Titolare" |
+| `privacy.html` | ✅ Titolare: Ferdinando Romanazzi, libero professionista |
 
 ## Il form contatti
 
@@ -552,9 +552,7 @@ Per questo, fino all'arrivo di Google Ads, non serviva il banner. **Aggiornament
 
 ## ⚠️ Da completare
 
-**Titolare del trattamento** in `privacy.html`: ora c'è "Cantiere Social" con
-la P.IVA. Va indicata la **ragione sociale**, oppure nome e cognome
-dell'intestatario se è una ditta individuale.
+✅ **Titolare del trattamento**: Ferdinando Romanazzi, libero professionista, che opera con il marchio Cantiere Social (P.IVA 08895170721). Lo stesso nome compare nel footer delle tre pagine e come `legalName` nei dati strutturati.
 
 **Conservazione delle richieste**: ho scritto "entro 24 mesi dall'ultimo
 contatto se non nasce un incarico". È una scelta vostra: se preferite un
