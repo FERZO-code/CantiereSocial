@@ -9,3 +9,6 @@ node_modules/
 # variabili d'ambiente — NON devono MAI finire su GitHub
 .env
 .env.*
+
+# configurazione locale dell'editor
+.claude/

@@ -173,7 +173,7 @@
     nome:     { err: 'err-nome',     msg: 'Serve il nome per sapere con chi parliamo.' },
     email:    { err: 'err-email',    msg: 'Controllate l’indirizzo email: sembra incompleto.' },
     settore:  { err: 'err-settore',  msg: 'Scegliete di cosa vi occupate.' },
-    privacy:  { err: 'err-privacy',  msg: 'Serve il consenso per poterci scrivere.' }
+    privacy:  { err: 'err-privacy',  msg: 'Confermate di aver letto l’informativa privacy.' }
   };
 
   function fieldOf(input) { return input.closest('.field'); }
@@ -295,6 +295,8 @@
               '<p class="form__done-s">Vi rispondiamo entro un giorno lavorativo. ' +
               'Se avete fretta, scriveteci su WhatsApp.</p>' +
             '</div>';
+          // conversione Google Ads: parte solo se c'è il consenso
+          if (window.CantiereConsenso) window.CantiereConsenso.conversione('modulo');
           return;
         }
 

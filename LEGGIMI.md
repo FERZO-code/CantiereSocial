@@ -23,9 +23,9 @@ inventato numeri né testimonianze.
 | Dove | Cosa |
 |---|---|
 | `index.html` — sezione "I risultati" | ✅ Già disattivata (commentata). Vedi "Riattivare la sezione Risultati" in fondo. |
-| `index.html` — sezione contatti + footer | Email, numero WhatsApp (`wa.me/39XXXXXXXXXX`), profilo Instagram |
-| `index.html` — footer | Ragione sociale, P.IVA, sede |
-| `index.html` | Pagine Privacy e Cookie: i link puntano a `#privacy` e `#cookie`, vanno create (obbligatorie per legge se raccogliete dati dal form) |
+| `index.html` — sezione contatti + footer | ✅ Email, WhatsApp (`wa.me/393474068285`) e Instagram compilati |
+| `index.html` — footer | ✅ P.IVA 08895170721. Nessun indirizzo: l'attività non ha sede aperta al pubblico |
+| `privacy.html` | ⚠️ Ragione sociale o nome dell'intestatario della P.IVA nella sezione "Titolare" |
 
 ## Il form contatti
 
@@ -179,17 +179,11 @@ Provate in finestra anonima o da un altro dispositivo.
 Il link compare in tre punti, tutti con la stessa URL:
 header (icona sola), menu mobile, footer, più la sezione contatti.
 
-⚠️ **L'handle `cantieresocial` è un segnaposto**: sostituitelo con quello vero.
-Si cambia in un colpo solo:
+✅ **Handle confermato:** `instagram.com/cantieresocial`.
 
-```bash
-cd "cantieresocial.it"
-sed -i '' 's|instagram.com/cantieresocial/|instagram.com/VOSTRO_HANDLE/|g' index.html
-```
-
-Aggiornate anche `sameAs` nei dati strutturati (stessa URL) e aggiungete
-Facebook, TikTok e LinkedIn se li avete: `sameAs` è ciò che collega il sito
-ai vostri profili agli occhi di Google.
+Se aprite altri profili (Facebook, LinkedIn, TikTok), aggiungeteli a
+`sameAs` nei dati strutturati: è ciò che collega il sito ai vostri
+profili agli occhi di Google e aiuta la ricerca per nome.
 
 ## Nota sulle icone SVG
 
@@ -532,3 +526,169 @@ record TXT su **Cloudflare**, che gestisce il vostro DNS. Poi inviate
 `sitemap.xml` da Search Console.
 
 `sitemap.xml` → aggiornate `<lastmod>` quando cambiate contenuti rilevanti.
+
+---
+
+# Informativa privacy e cookie policy
+
+Pagine: `privacy.html` e `cookie.html`, raggiungibili su `/privacy` e `/cookie`
+grazie a `cleanUrls` in `vercel.json`. In locale con `python3 -m http.server`
+aprite `/privacy.html`: gli indirizzi senza estensione funzionano solo su Vercel.
+
+## Su cosa si basano
+
+Non è un modello generico: descrivono ciò che il sito fa davvero, verificato
+sul sito pubblicato il 10 settembre 2026.
+
+- **Nessun cookie**, nessun dato in `localStorage` o `sessionStorage`, nessun
+  iframe, anche con Vercel Analytics e Speed Insights attivi
+- Unico servizio esterno contattato dal browser: **Google Fonts**
+- Modulo: Vercel (funzione) → Resend (invio) → Google Workspace (casella)
+- IP del limitatore: solo in memoria, mai su disco
+- **Google Search Console**: non installa nulla sul sito; è citata per
+  trasparenza, perché i dati che mostra vengono dalla ricerca Google
+
+Per questo, fino all'arrivo di Google Ads, non serviva il banner. **Aggiornamento:** ora il banner c'è, vedi «Cookie e Google Ads».
+
+## ⚠️ Da completare
+
+**Titolare del trattamento** in `privacy.html`: ora c'è "Cantiere Social" con
+la P.IVA. Va indicata la **ragione sociale**, oppure nome e cognome
+dell'intestatario se è una ditta individuale.
+
+**Conservazione delle richieste**: ho scritto "entro 24 mesi dall'ultimo
+contatto se non nasce un incarico". È una scelta vostra: se preferite un
+periodo diverso, cambiatelo nella sezione 07.
+
+## Quando vanno aggiornate — importante
+
+Le due pagine descrivono il sito **con Google Ads attivabile solo su consenso**. Vanno riviste
+prima di aggiungere, per esempio:
+
+| Se aggiungete… | Cosa cambia |
+|---|---|
+| Meta Pixel, Google Ads, LinkedIn Insight | Serve il **banner con consenso preventivo**, rifiuto facile quanto l'accettazione |
+| Google Analytics | Idem: usa cookie |
+| Video YouTube o mappe Google incorporate | Idem, a meno di caricarli solo dopo il consenso |
+| Un nuovo fornitore che riceve dati (CRM, newsletter) | Va aggiunto alla tabella fornitori della privacy |
+
+A ogni modifica aggiornate anche la data "Ultimo aggiornamento" in cima.
+
+## Google Business Profile senza sede
+
+Non avendo una sede aperta al pubblico, create la scheda come **attività che
+raggiunge i clienti**: nascondete l'indirizzo e impostate come zona servita i
+comuni della sezione "Dove lavoriamo". Coerente con il sito, che ora indica
+solo "Rutigliano (BA)" senza via né coordinate.
+
+---
+
+# Cookie, Google Analytics e Google Ads (`consenso.js`)
+
+Banner di consenso e tag di Google Ads in un unico file, senza servizi esterni.
+
+## Come funziona
+
+- **Prima del consenso il tag non viene caricato**: nessun cookie pubblicitario,
+  nessuna richiesta a Google. È il Consent Mode di Google in modalità "base",
+  la più prudente rispetto alle regole del Garante.
+- **Rifiuta** e **Accetta** hanno la stessa evidenza; la × equivale a rifiutare.
+- La scelta resta nel browser (`cs_consenso`, memoria locale) per **6 mesi**.
+- **Accetta** concede solo `ad_storage` e `ad_user_data` (misurare le
+  conversioni). `ad_personalization` resta negato: **niente remarketing**.
+- **Preferenze cookie** nel footer riapre le scelte; la revoca cancella i cookie
+  `_gcl*` e ricarica la pagina senza tag.
+- Conversioni inviate: **invio riuscito del modulo** e **clic su WhatsApp**.
+
+## ⚠️ Per attivarlo: tre valori in cima a `consenso.js`
+
+```js
+var GOOGLE_ADS_ID      = 'AW-XXXXXXXXXX';
+var ETICHETTA_MODULO   = '';
+var ETICHETTA_WHATSAPP = '';
+```
+
+**Finché `GOOGLE_ADS_ID` resta `AW-XXXXXXXXXX` il file non fa nulla**: niente
+banner, niente tag. Si può pubblicare senza rischi anche prima di averlo.
+
+Dove trovarli in Google Ads:
+
+1. **Obiettivi → Conversioni → Nuova azione di conversione → Sito web**
+2. Create due azioni: *Invio modulo* (categoria "Invia modulo per i lead") e
+   *Clic su WhatsApp* (categoria "Contatto")
+3. Scegliete la configurazione **manuale con codice**
+4. Nello snippet dell'evento trovate `send_to: 'AW-123456789/AbCdEfGhIj'`:
+   - `AW-123456789` → `GOOGLE_ADS_ID`
+   - `AbCdEfGhIj` (dopo la `/`) → l'etichetta di quella conversione
+
+**Non incollate lo snippet di Google nelle pagine**: caricherebbe il tag senza
+consenso. Bastano i tre valori qui sopra.
+
+Le campagne create da Business Profile (campagne "Smart") a volte non mostrano
+le azioni di conversione personalizzate: in quel caso passate alla
+**modalità esperta** di Google Ads.
+
+`consenso.js` non ha `?v=` perché non è nella regola di cache lunga di
+`vercel.json`: il browser lo ricontrolla a ogni visita.
+
+## Provarlo
+
+In locale, `test/consenso-prova.html` usa un ID finto (`AW-000000000`) e
+permette di provare banner, preferenze e caricamento del tag senza toccare il
+file vero. La cartella `test/` non viene pubblicata.
+
+Sul sito pubblicato, dopo aver inserito l'ID: aprite il sito in una finestra
+anonima → Strumenti per sviluppatori → **Applicazione → Cookie**. Prima di
+premere Accetta non deve esserci nessun cookie `_gcl`; nella scheda **Rete** non
+deve comparire `googletagmanager.com`.
+
+## Quando va aggiornato — importante
+
+| Se cambiate… | Cosa fare |
+|---|---|
+| Aggiungete remarketing, Meta Pixel, Google Analytics, LinkedIn Insight | Nuova categoria nel banner, aggiornare privacy e cookie policy, **alzare `VERSIONE`** |
+| Aggiungete video YouTube o mappe Google incorporate | Idem: caricarli solo dopo il consenso |
+| Cambiano i cookie elencati nella cookie policy | Aggiornare la tabella e **alzare `VERSIONE`** |
+
+Alzare `VERSIONE` fa ricomparire il banner a tutti: il consenso dato per
+finalità diverse non vale per quelle nuove.
+
+## Google Analytics 4 — `G-Y99687KHVT`
+
+Già configurato in `consenso.js`, nella categoria **Statistiche**: il banner è
+quindi **attivo da subito**, anche senza l'ID di Google Ads.
+
+**⚠️ Non incollate lo snippet "Google tag (gtag.js)"** che Google mostra
+nell'installazione: carica Analytics *prima* del consenso e imposta i cookie
+`_ga` a tutti i visitatori, in violazione delle regole del Garante. Il file
+`consenso.js` fa lo stesso lavoro, ma solo dopo "Accetta".
+
+Eventi inviati ad Analytics (solo con consenso alle statistiche):
+
+| Evento | Quando |
+|---|---|
+| `page_view` | automatico, a ogni pagina |
+| `generate_lead` | invio riuscito del modulo |
+| `clic_whatsapp` | clic su un link WhatsApp |
+
+### Impostazioni da fare in Google Analytics
+
+1. **Amministrazione → Raccolta e conservazione dei dati → Conservazione dei
+   dati**: scegliete 2 o 14 mesi. L'informativa dice "al massimo 14 mesi".
+2. **Amministrazione → Raccolta dei dati → Google Signals**: lasciatelo
+   **disattivato**. Il sito lo spegne già, e l'informativa lo dichiara.
+3. **Amministrazione → Eventi**: segnate `generate_lead` e `clic_whatsapp` come
+   **eventi chiave** (compaiono dopo il primo invio registrato).
+
+### Conversioni su Google Ads senza l'ID `AW-`
+
+Collegando Analytics a Google Ads potete importare gli eventi chiave come
+conversioni, senza compilare `GOOGLE_ADS_ID`:
+
+**Analytics → Amministrazione → Collegamenti ai prodotti → Google Ads → Collega**,
+poi in **Google Ads → Obiettivi → Conversioni → Importa → Google Analytics 4**.
+
+Limite da conoscere: le conversioni importate da Analytics si registrano solo
+per chi accetta le **statistiche**. Se in futuro compilate anche
+`GOOGLE_ADS_ID`, nel banner comparirà la categoria **Pubblicità** e le
+informative la descrivono già.

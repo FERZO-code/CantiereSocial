@@ -23,6 +23,17 @@ controlla "sitemap.xml 200"                         '[ "$(code $U/sitemap.xml)" 
 controlla "canonical sulla home"                    'curl -sS $U/ | grep -q "rel=\"canonical\" href=\"https://www.cantieresocial.com/\""'
 controlla "pagina inesistente → 404 vero"           '[ "$(code $U/xyz-non-esiste)" = 404 ]'
 
+echo "— Pagine legali —"
+controlla "/privacy 200"                             '[ "$(code $U/privacy)" = 200 ]'
+controlla "/cookie 200"                              '[ "$(code $U/cookie)" = 200 ]'
+controlla "/privacy.html reindirizza a /privacy"     '[ "$(code $U/privacy.html)" = 308 ]'
+controlla "footer linka la privacy"                  'curl -sS $U/ | grep -q "href=\"/privacy\""'
+controlla "WhatsApp nel formato ufficiale"           'curl -sS $U/ | grep -q "wa.me/393474068285"'
+
+controlla "consenso.js 200"                          '[ "$(code $U/consenso.js)" = 200 ]'
+controlla "nessun tag Google nell’HTML (solo su consenso)" '! curl -sS $U/ | grep -q googletagmanager'
+controlla "nessun Set-Cookie dal server"             '! curl -sSI $U/ | grep -qi "^set-cookie"'
+
 echo "— API e sicurezza —"
 controlla "diagnostica rimossa"                     '[ "$(code "$U/api/diagnostica?k=cantiere")" = 404 ]'
 controlla "/api con X-Robots-Tag noindex"           'header $U/api/contact x-robots-tag | grep -qi noindex'
