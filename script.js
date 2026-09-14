@@ -12,7 +12,7 @@
      Durata volutamente breve: un'intro lunga fa perdere visite.
      Per mostrarla una sola volta a sessione, mettete UNA_VOLTA a true. */
   var UNA_VOLTA = false;
-  var DURATA = 3000;   // millisecondi
+  var DURATA = 2000;   // millisecondi
 
   (function intro() {
     var root = document.documentElement;

@@ -236,7 +236,7 @@ e **cosa è cambiato**, possibilmente con un numero. Una testimonianza vaga
 # Intro / schermata di apertura
 
 Contatore da 0 a 100 in basso a destra, barra arancione che cresce sul bordo
-destro, poi l'overlay si solleva e scopre la pagina. Durata **1,3 secondi**.
+destro, poi l'overlay si solleva e scopre la pagina. Durata **2 secondi**.
 
 Il codice è scritto da zero (CSS + `requestAnimationFrame`), nessuna libreria
 e nessun file preso da altri siti: è lo stesso *tipo* di apertura, con i vostri
@@ -248,7 +248,7 @@ In cima a `script.js`:
 
 ```js
 var UNA_VOLTA = false;   // true = la mostra una sola volta per sessione
-var DURATA = 1300;       // durata in millisecondi
+var DURATA = 2000;       // durata in millisecondi
 ```
 
 **Consiglio:** se notate che le visite calano, mettete `UNA_VOLTA = true`.
