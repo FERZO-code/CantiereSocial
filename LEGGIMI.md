@@ -690,3 +690,33 @@ Limite da conoscere: le conversioni importate da Analytics si registrano solo
 per chi accetta le **statistiche**. Se in futuro compilate anche
 `GOOGLE_ADS_ID`, nel banner comparirà la categoria **Pubblicità** e le
 informative la descrivono già.
+
+---
+
+# Finestra di contatto WhatsApp
+
+Pulsante verde in basso a destra, su tutte le pagine. Apre una piccola
+finestra con la scelta del settore e un pulsante che apre WhatsApp con il
+messaggio già scritto. Il codice è in fondo a `script.js`, gli stili in fondo a
+`styles.css`.
+
+- **Nessuno script di WhatsApp**: è un normale link `wa.me`. A WhatsApp non
+  arriva nulla finché la persona non invia il messaggio, per questo
+  l'informativa privacy non cambia.
+- Il clic su **Apri la chat su WhatsApp** conta come `clic_whatsapp` in
+  Analytics e Google Ads, solo con il consenso alle statistiche.
+- Con il banner dei cookie aperto il pulsante sale sopra il banner; il footer
+  ha spazio in più in fondo, così i link finali non restano coperti.
+- Verde `#0F7A6D` invece del verde WhatsApp originale `#25D366`: con il testo
+  bianco l'originale ha contrasto 2:1, illeggibile per molti.
+
+## Cambiare numero o messaggi
+
+In fondo a `script.js`:
+
+```js
+var NUMERO = '393474068285';          // prefisso 39, senza + e senza spazi
+var MESSAGGI = { edile: "...", showroom: "...", immobiliare: "...", altro: "..." };
+```
+
+Dopo la modifica alzate `?v=` di `script.js` in tutte e tre le pagine.

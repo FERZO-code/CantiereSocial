@@ -1578,3 +1578,143 @@ label.consenso-pref__nome { cursor: pointer; }
 @media print {
   .consenso, .consenso-pref { display: none !important; }
 }
+
+/* ── FINESTRA WHATSAPP ───────────────────────────────────────────── */
+/* Verde WhatsApp scurito: il #25D366 originale con testo bianco è 2:1,
+   questo supera 4,5:1 e resta riconoscibile accanto al logo. */
+:root { --wa: #0F7A6D; --wa-scuro: #0B6358; }
+
+.wa {
+  position: fixed;
+  right: var(--sp-4);
+  bottom: max(var(--sp-4), env(safe-area-inset-bottom));
+  z-index: 240;                 /* sotto il banner cookie (250) e l'intro (300) */
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: var(--sp-3);
+  transition: bottom .25s var(--ease);
+}
+/* con il banner cookie aperto, il pulsante sale sopra il banner */
+body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
+
+.wa__lancia {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--sp-2);
+  min-width: 56px; height: 56px;
+  padding: 0 var(--sp-5) 0 var(--sp-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--wa);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700; font-size: .95rem; letter-spacing: -.01em;
+  box-shadow: 0 8px 24px rgba(15, 122, 109, .35), 0 2px 6px rgba(23, 18, 14, .15);
+  cursor: pointer;
+  transition: background-color .18s var(--ease), transform .18s var(--ease);
+}
+.wa__lancia:hover, .wa.is-aperta .wa__lancia { background: var(--wa-scuro); }
+.wa__lancia:hover { transform: translateY(-2px); }
+.wa__lancia:active { transform: translateY(0); }
+
+.wa__pannello {
+  width: min(360px, calc(100vw - 2 * var(--sp-4)));
+  max-height: calc(100dvh - 120px);
+  overflow-y: auto;
+  background: var(--cream-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 48px rgba(23, 18, 14, .22);
+}
+.wa__pannello[hidden] { display: none; }
+
+.wa__testa {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-2) var(--sp-3) var(--sp-4);
+  background: var(--ink);
+  color: var(--fg-inv);
+}
+.wa__avatar {
+  flex: 0 0 auto;
+  width: 40px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--ink);
+}
+.wa__chi { flex: 1 1 auto; min-width: 0; }
+.wa__titolo {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 1rem;
+  letter-spacing: -.02em; line-height: 1.2;
+}
+.wa__stato { margin-top: 2px; font-size: .78rem; line-height: 1.35; color: #C4B5A8; }
+.wa__chiudi {
+  flex: 0 0 auto;
+  width: 44px; height: 44px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: 0;
+  border-radius: var(--radius-pill);
+  color: #C4B5A8;
+  cursor: pointer;
+  transition: color .18s var(--ease), background-color .18s var(--ease);
+}
+.wa__chiudi:hover { color: var(--fg-inv); background: rgba(255, 248, 243, .08); }
+
+.wa__corpo {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  padding: var(--sp-4);
+}
+.wa__fumetto {
+  align-self: flex-start;
+  max-width: 92%;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface);
+  border-radius: 4px 16px 16px 16px;
+  box-shadow: var(--shadow-sm);
+  font-size: .92rem; line-height: 1.5;
+  color: var(--ink);
+}
+.wa__scelte { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.wa__scelta {
+  min-height: 44px;
+  padding: 0 var(--sp-3);
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: .85rem; font-weight: 600;
+  cursor: pointer;
+  transition: border-color .18s var(--ease), background-color .18s var(--ease);
+}
+.wa__scelta:hover { border-color: var(--ink); }
+.wa__scelta[aria-pressed="true"] { background: var(--orange-soft); border-color: var(--orange-deep); }
+
+.wa__apri {
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-2);
+  min-height: 48px;
+  padding: 0 var(--sp-4);
+  border-radius: var(--radius-pill);
+  background: var(--wa);
+  color: #fff;
+  font-weight: 700; font-size: .95rem;
+  text-decoration: none;
+  transition: background-color .18s var(--ease);
+}
+.wa__apri:hover { background: var(--wa-scuro); }
+.wa__nota { font-size: .76rem; line-height: 1.4; color: var(--fg-muted); text-align: center; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .wa__pannello:not([hidden]) { animation: wa-apri .22s var(--ease) both; transform-origin: bottom right; }
+}
+@keyframes wa-apri { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 720px) {
+  .wa { right: var(--sp-3); }
+  .wa__lancia { width: 56px; padding: 0; }
+  .wa__etichetta { display: none; }
+}
+
+/* il pulsante non deve coprire i link in fondo al footer */
+.footer { padding-bottom: calc(max(var(--sp-5), env(safe-area-inset-bottom)) + 88px); }
+
+@media print { .wa { display: none !important; } }
