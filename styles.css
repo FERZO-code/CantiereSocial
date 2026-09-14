@@ -961,10 +961,21 @@ ul, ol { list-style: none; padding: 0; }
   .footer__inner { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 860px) {
+/* Barra completa solo da 1025px: con "Chiedeteci informazioni" la pillola
+   richiede 867px di contenuto, cioè ~915px di schermo. Il margine serve se
+   il carattere di riserva, senza Google Fonts, è più largo. */
+@media (max-width: 1024px) {
   .nav__links, .nav__cta { display: none; }
   .nav__burger { display: flex; }
   .nav { padding-right: var(--sp-2); }
+}
+/* pagine legali: niente hamburger e poche voci, il pulsante ci sta */
+@media (min-width: 861px) and (max-width: 1024px) {
+  .nav:not(:has(.nav__burger)) .nav__cta { display: inline-flex; }
+}
+
+@media (max-width: 860px) {
+  .nav:not(:has(.nav__burger)) .nav__cta { display: none; }
 
   .phase { grid-template-columns: 56px 1fr; }
   .phase__n { font-size: 1.7rem; }
@@ -1080,7 +1091,7 @@ ul, ol { list-style: none; padding: 0; }
 .nav-mobile .link-ig:hover { background: rgba(23, 18, 14, .05); }
 .footer .link-ig:hover { color: var(--orange); }
 
-@media (max-width: 860px) {
+@media (max-width: 1024px) {
   .nav__ig { display: none; }   /* nel menu mobile c'è già la voce dedicata */
 }
 

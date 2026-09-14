@@ -121,7 +121,7 @@
     });
 
     // torna alla nav completa quando si passa a desktop
-    var wide = window.matchMedia('(min-width: 861px)');
+    var wide = window.matchMedia('(min-width: 1025px)');
     var onWide = function (e) { if (e.matches) setMenu(false); };
     wide.addEventListener ? wide.addEventListener('change', onWide)
                           : wide.addListener(onWide);
