@@ -430,27 +430,47 @@ ul, ol { list-style: none; padding: 0; }
 @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ── PROBLEMA ────────────────────────────────────────────────────── */
+/* le righe entrano di lato: la sezione taglia ciò che esce, niente scroll orizzontale */
+.problem { overflow-x: hidden; overflow-x: clip; }
 .problem__claim { margin-bottom: var(--sp-8); max-width: 26ch; }
 
-.problem__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.problem__list {
+  list-style: none;
+  padding: 0;
+  border-bottom: 1px solid var(--line-strong);
+}
+.problem__row {
+  display: flex; align-items: baseline;
   gap: var(--sp-5);
+  padding-block: clamp(24px, 3.5vw, 40px);
+  border-top: 1px solid var(--line-strong);
 }
-.problem__card {
-  padding: var(--sp-6);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
+.problem__row--destra { flex-direction: row-reverse; text-align: right; }
+
+.problem__n {
+  flex: 0 0 auto;
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: .85rem; font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--orange-ink);
 }
-.problem__card .ico { color: var(--orange); margin-bottom: var(--sp-4); }
-.problem__card h3 {
+.problem__n::before {
+  content: "";
+  width: 28px; height: 3px;
+  border-radius: 2px;
+  background: var(--orange);
+}
+.problem__row--destra .problem__n { flex-direction: row-reverse; }
+
+.problem__t {
   font-family: var(--font-display);
-  font-size: 1.14rem; font-weight: 700;
-  letter-spacing: -.02em;
-  margin-bottom: var(--sp-2);
+  font-size: clamp(1.6rem, 4.2vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -.035em;
+  text-wrap: balance;
 }
-.problem__card p { color: var(--fg-muted); font-size: .97rem; }
 
 /* ── SERVIZI ─────────────────────────────────────────────────────── */
 .services { background: var(--cream-2); }
@@ -953,7 +973,7 @@ ul, ol { list-style: none; padding: 0; }
   .hero__media img { max-width: 420px; }
   .hero__badge { left: 0; bottom: 24px; }
 
-  .problem__grid, .cards, .sectors__grid { grid-template-columns: repeat(2, 1fr); }
+  .cards, .sectors__grid { grid-template-columns: repeat(2, 1fr); }
   .studio__inner { grid-template-columns: 1fr; }
   .studio__media { max-width: 460px; }
   .cta__inner { grid-template-columns: 1fr; }
@@ -986,7 +1006,7 @@ ul, ol { list-style: none; padding: 0; }
   body { font-size: 16px; }
   html { scroll-padding-top: 88px; }
 
-  .problem__grid, .cards, .sectors__grid, .quotes, .people {
+  .cards, .sectors__grid, .quotes, .people {
     grid-template-columns: 1fr;
   }
   .hero__actions .btn { flex: 1 1 auto; }
@@ -1729,3 +1749,25 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 .footer { padding-bottom: calc(max(var(--sp-5), env(safe-area-inset-bottom)) + 88px); }
 
 @media print { .wa { display: none !important; } }
+
+/* ── COMPARSA LATERALE ALTERNATA (sezione "Il problema") ─────────── */
+.reveal--sinistra { transform: translateX(-80px); }
+.reveal--destra   { transform: translateX(80px); }
+.reveal--sinistra, .reveal--destra { transition-duration: .8s, .8s; }
+.reveal--sinistra.is-in, .reveal--destra.is-in { transform: none; }
+
+@media (max-width: 720px) {
+  .problem__row,
+  .problem__row--destra {
+    flex-direction: column; align-items: flex-start;
+    gap: var(--sp-2);
+    text-align: left;
+  }
+  .problem__row--destra .problem__n { flex-direction: row; }
+  .reveal--sinistra { transform: translateX(-40px); }
+  .reveal--destra   { transform: translateX(40px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal--sinistra, .reveal--destra { transform: none; }
+}

@@ -31,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- ⚠️ Alzate ?v= a ogni modifica di CSS/JS: forza il browser a
      riscaricarli invece di riusare la copia in cache. -->
-<link rel="stylesheet" href="styles.css?v=11">
+<link rel="stylesheet" href="styles.css?v=12">
 
 <script>
   /* Attiva l'intro prima del primo paint, così non c'è sfarfallio.
@@ -290,26 +290,20 @@
       <span class="muted">Dategli la VISIBILITÀ che merita.</span>
     </h2>
 
-    <div class="problem__grid">
-      <article class="problem__card reveal">
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-7h6v7"/></svg>
-        <h3>Un cantiere all'anno sui social</h3>
-        <p>Foto scattate al volo, post pubblicati senza strategia. Il risultato? Un profilo che non valorizza il vostro lavoro e non genera contatti.
-</p>
-      </article>
-
-      <article class="problem__card reveal">
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/><path d="M8 11h6"/></svg>
-        <h3>Vi cercano e non vi trovano</h3>
-        <p>Chi vi ha visto dal vivo poi vi cerca su Google e su Instagram. Se non trova niente di aggiornato, il preventivo lo chiede a un altro.</p>
-      </article>
-
-      <article class="problem__card reveal">
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M7 20V9"/><path d="M12 20V4"/><path d="M17 20v-6"/></svg>
-        <h3>Tre fornitori, zero regia</h3>
-        <p>Uno per il video, uno per le sponsorizzate, uno per il sito. Ognuno tira da una parte e nessuno risponde dei risultati.</p>
-      </article>
-    </div>
+    <ol class="problem__list" role="list">
+      <li class="problem__row reveal reveal--sinistra">
+        <span class="problem__n" aria-hidden="true">01</span>
+        <h3 class="problem__t">Postate un cantiere all'anno <span class="muted">sui social.</span></h3>
+      </li>
+      <li class="problem__row problem__row--destra reveal reveal--destra">
+        <span class="problem__n" aria-hidden="true">02</span>
+        <h3 class="problem__t">Vi cercano, <span class="muted">e non vi trovano.</span></h3>
+      </li>
+      <li class="problem__row reveal reveal--sinistra">
+        <span class="problem__n" aria-hidden="true">03</span>
+        <h3 class="problem__t">Video, social e sito: <span class="muted">ognuno per conto suo.</span></h3>
+      </li>
+    </ol>
   </div>
 </section>
 
