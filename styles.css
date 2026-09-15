@@ -571,57 +571,6 @@ ul, ol { list-style: none; padding: 0; }
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
-/* ── SETTORI ─────────────────────────────────────────────────────── */
-.sectors__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--sp-4);
-}
-.sector {
-  display: flex; flex-direction: column;
-  padding: var(--sp-6);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  border-top: 4px solid var(--orange);
-}
-.sector header {
-  display: flex; align-items: center; gap: var(--sp-3);
-  padding-bottom: var(--sp-4);
-  margin-bottom: var(--sp-4);
-  border-bottom: 1px solid var(--line);
-}
-.sector header .ico { color: var(--orange); }
-.sector h3 {
-  font-family: var(--font-display);
-  font-size: 1.1rem; font-weight: 700;
-  letter-spacing: -.02em;
-}
-.sector__claim {
-  font-family: var(--font-display);
-  font-size: 1.28rem; font-weight: 700;
-  line-height: 1.2; letter-spacing: -.03em;
-  margin-bottom: var(--sp-3);
-  text-wrap: balance;
-}
-.sector > p { color: var(--fg-muted); font-size: .96rem; }
-.sector ul {
-  margin-top: var(--sp-5); padding-top: var(--sp-4);
-  border-top: 1px dashed var(--line-strong);
-  display: flex; flex-direction: column; gap: var(--sp-2);
-}
-.sector li {
-  display: flex; align-items: flex-start; gap: var(--sp-2);
-  font-family: var(--font-mono);
-  font-size: .85rem; color: var(--fg-muted);
-  line-height: 1.45;
-}
-.sector li::before {
-  content: ""; flex: 0 0 auto;
-  width: 5px; height: 5px; margin-top: 8px;
-  background: var(--orange); transform: rotate(45deg);
-}
-
 /* ── METODO (blocco scuro) ───────────────────────────────────────── */
 .method {
   background: var(--ink);
@@ -1017,7 +966,7 @@ ul, ol { list-style: none; padding: 0; }
   .hero__media img { max-width: 420px; }
   .hero__badge { left: 0; bottom: 24px; }
 
-  .cards, .sectors__grid { grid-template-columns: repeat(2, 1fr); }
+  .cards { grid-template-columns: repeat(2, 1fr); }
   .studio__inner { grid-template-columns: 1fr; }
   .studio__media { max-width: 460px; }
   .cta__inner { grid-template-columns: 1fr; }
@@ -1050,7 +999,7 @@ ul, ol { list-style: none; padding: 0; }
   body { font-size: 16px; }
   html { scroll-padding-top: 88px; }
 
-  .cards, .sectors__grid, .quotes, .people {
+  .cards, .quotes, .people {
     grid-template-columns: 1fr;
   }
   .hero__actions .btn { flex: 1 1 auto; }
@@ -1852,33 +1801,6 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 .pack-confronto p { color: var(--fg-muted); max-width: 56ch; }
 .pack-confronto strong { color: var(--ink); }
 
-/* ── Settori: da dove partire ────────────────────────────────────── */
-.sector ul { margin-bottom: var(--sp-5); }
-.sector__link {
-  position: relative;
-  display: flex; flex-direction: column; gap: 2px;
-  margin-top: auto;
-  padding: var(--sp-4) 48px var(--sp-4) var(--sp-4);
-  background: var(--cream-2);
-  border-radius: var(--radius);
-  font-weight: 700; font-size: .98rem; letter-spacing: -.01em; line-height: 1.35;
-  text-decoration: none;
-  transition: background-color .18s var(--ease);
-}
-.sector__link span {
-  font-family: var(--font-mono);
-  font-size: .68rem; font-weight: 500;
-  letter-spacing: .14em; text-transform: uppercase;
-  color: var(--orange-ink);
-}
-.sector__link .ico {
-  position: absolute; right: var(--sp-4); top: 50%;
-  width: 20px; height: 20px; margin-top: -10px;
-  transition: transform .2s var(--ease);
-}
-.sector__link:hover { background: var(--orange-soft); }
-.sector__link:hover .ico { transform: translateX(4px); }
-
 /* ── Metodo: avanzamento lavori ──────────────────────────────────── */
 .avanzamento { position: relative; padding-left: 44px; }
 .avanzamento__binario {
@@ -1966,409 +1888,174 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
   .studio__azioni .btn { width: 100%; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .sector__link:hover .ico { transform: none; }
-}
-
 /* ═══════════════════════════════════════════════════════════════════
-   IL PROBLEMA — racconto a scene
-   Il palco resta fermo mentre si scorre; script.js imposta data-attiva
-   (0–3) e da lì cambiano titolo e schermata del telefono.
-   Senza JavaScript: scene una sotto l'altra, telefono sulla prima.
+   PER CHI LAVORIAMO — schede per settore
+   Linguette in stile targa (scritta stretta), indicatore che scorre sotto
+   quella attiva, scheda con "Da dove partire". Senza JavaScript le schede
+   sono una sotto l'altra e le linguette non compaiono.
    ═══════════════════════════════════════════════════════════════════ */
-.problema { padding-bottom: var(--sp-7); }
-.problema__claim { max-width: 18ch; }
-
-.racconto { position: relative; }
-/* 300vh: ogni scena ~50vh di scorrimento. Più alto = scene più lunghe. */
-.racconto--attivo { height: 300vh; }
-
-/* Aggancio: il browser si ferma al centro di una scena quando si smette di
-   scorrere lì vicino ("proximity"), e uno scorrimento veloce non può
-   attraversare più scene in un colpo ("scroll-snap-stop: always").
-   Fuori dalla sezione non ci sono punti di aggancio: lo scorrimento è libero. */
-html.aggancio-racconto { scroll-snap-type: y proximity; }
-.racconto__tappe { position: absolute; inset: 0; pointer-events: none; }
-.racconto__tappe i {
-  position: absolute; left: 0;
-  width: 1px; height: 1px;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-}
-.racconto:not(.racconto--attivo) .racconto__tappe { display: none; }
-
-.racconto__palco { padding-block: var(--sp-7); }
-.racconto__area {
+.settori__testa {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--sp-8);
-  align-items: center;
+  grid-template-columns: 1.2fr .8fr;
+  gap: var(--sp-5) var(--sp-8);
+  align-items: end;
+  margin-bottom: var(--sp-7);
 }
-.racconto--attivo .racconto__palco {
-  position: sticky; top: 0;
-  display: flex; flex-direction: column;
-  height: 100vh;
-  padding-top: 96px; padding-bottom: var(--sp-6);
-}
-.racconto--attivo .racconto__area { flex: 1 1 auto; min-height: 0; align-items: stretch; }
-.racconto--attivo .racconto__testi { position: relative; }
-.racconto--attivo .telefono { align-self: center; }
-@supports (height: 100svh) {
-  .racconto--attivo .racconto__palco { height: 100svh; }
-}
+.settori__nota { font-size: 1.08rem; color: var(--fg-muted); max-width: 40ch; }
 
-/* ── titoli ──────────────────────────────────────────────────────── */
-.racconto__indice { display: flex; gap: 6px; margin-bottom: var(--sp-5); }
-.racconto__indice button {
+/* ── linguette ───────────────────────────────────────────────────── */
+.settori__tab {
   position: relative;
-  flex: 1 1 0; max-width: 128px;
-  min-height: 40px;
-  padding: 13px 0 0;
+  display: inline-flex; gap: 4px;
+  max-width: 100%;
+  margin-bottom: var(--sp-5);
+  padding: 5px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+}
+.settori__tab[hidden] { display: none; }
+.settori__tab button {
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  min-height: 52px;
+  padding: 0 var(--sp-5);
   background: none; border: 0;
-  text-align: left;
-  font-family: var(--font-mono);
-  font-size: .66rem; letter-spacing: .12em; text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800; font-size: 1.15rem; line-height: 1;
+  letter-spacing: .01em; text-transform: uppercase;
+  white-space: nowrap;
   color: var(--fg-muted);
   cursor: pointer;
   transition: color .25s var(--ease);
 }
-/* binario grigio + riempimento arancione che segue lo scorrimento */
-.racconto__indice button::before,
-.racconto__indice button::after {
-  content: ""; position: absolute; top: 0; left: 0; right: 0;
-  height: 3px; border-radius: 2px;
+.settori__tab button .ico { width: 22px; height: 22px; color: var(--orange-ink); transition: color .25s var(--ease); }
+.settori__tab button:hover { color: var(--ink); }
+.settori__tab button[aria-selected="true"] { color: var(--cream); }
+.settori__tab button[aria-selected="true"] .ico { color: var(--orange); }
+.settori__cursore {
+  position: absolute; z-index: 0;
+  top: 5px; bottom: 5px; left: 0;
+  width: 0;
+  background: var(--ink);
+  border-radius: var(--radius-pill);
 }
-.racconto__indice button::before { background: var(--line-strong); }
-.racconto__indice button::after {
-  background: var(--orange);
-  transform-origin: left;
-  transform: scaleX(var(--riempi, 0));
+.settori--pronte .settori__cursore { transition: transform .4s var(--ease), width .4s var(--ease); }
+
+/* ── scheda del settore ──────────────────────────────────────────── */
+.settori__schede:not(.settori--attive) .settore + .settore { margin-top: var(--sp-5); }
+.settore {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, .9fr);
+  gap: var(--sp-7);
+  padding: var(--sp-7);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
 }
-.racconto__indice button.is-su,
-.racconto__indice button:hover { color: var(--ink); }
-
-.racconto__scene { display: flex; flex-direction: column; gap: var(--sp-7); }
-
-/* Scene alterne: la 1ª e la 3ª in alto, la 2ª e la 4ª in basso.
-   Ognuna entra dalla sua parte, così il cambio si vede subito. */
-.racconto--attivo .racconto__scene { position: absolute; inset: 0; display: block; }
-.racconto--attivo .racconto__scena {
-  position: absolute; left: 0; right: 0; top: 0;
-  opacity: 0;
-  transform: translateY(-40px);
-  transition: opacity .45s var(--ease), transform .6s var(--ease);
-  pointer-events: none;
+.settore[hidden] { display: none; }
+.settore:focus-visible { outline-offset: 4px; }
+.settore.is-entra { animation: settore-entra .45s var(--ease); }
+@keyframes settore-entra {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
 }
-.racconto--attivo .racconto__scena:nth-child(even) { top: auto; bottom: 0; transform: translateY(40px); }
-.racconto--attivo .racconto__scena.is-attiva { opacity: 1; transform: none; pointer-events: auto; }
-.racconto--attivo .racconto__scena:not(.is-attiva) .racconto__cta { visibility: hidden; }
 
-.racconto__n {
+.settore__chi {
   display: inline-flex; align-items: center; gap: var(--sp-2);
   margin-bottom: var(--sp-4);
   font-family: var(--font-mono);
-  font-size: .8rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
   color: var(--orange-ink);
 }
-.racconto__n::before { content: ""; width: 28px; height: 3px; border-radius: 2px; background: var(--orange); }
-
-.racconto__t {
+.settore__chi .ico { width: 20px; height: 20px; }
+.settore__claim {
+  margin-bottom: var(--sp-5);
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(2.3rem, 5vw, 4.4rem);
-  line-height: .98;
-  letter-spacing: -.045em;
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+  line-height: 1.04; letter-spacing: -.04em;
   text-wrap: balance;
 }
-.racconto__t span { display: block; font-weight: 700; color: var(--fg-faint); }
-.racconto__scena--svolta .racconto__t span { color: var(--orange-ink); }
-.racconto__cta { margin-top: var(--sp-6); }
-
-.racconto__scorri {
-  display: inline-flex; align-items: center; gap: var(--sp-3);
-  margin-top: var(--sp-7);
+.settore__claim span { display: block; font-weight: 700; color: var(--fg-faint); }
+.settore__testo { margin-bottom: var(--sp-6); font-size: 1.06rem; color: var(--fg-muted); max-width: 56ch; }
+.settore__sub {
+  margin-bottom: var(--sp-3);
   font-family: var(--font-mono);
-  font-size: .72rem; letter-spacing: .16em; text-transform: uppercase;
+  font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
   color: var(--fg-muted);
-  transition: opacity .3s var(--ease);
 }
-.racconto__scorri i {
-  width: 9px; height: 9px;
-  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
-  transform: rotate(45deg);
-  animation: racconto-scorri 1.4s ease-in-out infinite;
-}
-@keyframes racconto-scorri {
-  0%, 100% { transform: translateY(-3px) rotate(45deg); }
-  50%      { transform: translateY(3px) rotate(45deg); }
-}
-.racconto--attivo .racconto__scorri { position: absolute; left: 0; bottom: 0; margin: 0; }
-.racconto:not([data-attiva="0"]) .racconto__scorri { opacity: 0; }
-.racconto:not(.racconto--attivo) .racconto__indice,
-.racconto:not(.racconto--attivo) .racconto__scorri { display: none; }
-
-/* ── il telefono (tutto in em: si ridimensiona con --tel-w) ─────── */
-.telefono {
-  --tel-w: clamp(240px, calc((100vh - 240px) * .47), 320px);
-  position: relative;
-  width: var(--tel-w);
-  aspect-ratio: 9 / 19.2;
-  padding: calc(var(--tel-w) * .034);
-  justify-self: center;
-  background: var(--ink);
-  border-radius: calc(var(--tel-w) * .16);
-  box-shadow:
-    inset 0 0 0 1.5px #3A2E25,
-    0 44px 80px -34px rgba(23, 18, 14, .6),
-    0 18px 30px -18px rgba(23, 18, 14, .35);
-  font-size: calc(var(--tel-w) / 27);
-  line-height: 1.3;
-}
-@supports (height: 100svh) {
-  .telefono { --tel-w: clamp(240px, calc((100svh - 240px) * .47), 320px); }
-}
-/* Il telefono sale piano lungo la sezione (riscontro continuo) e cambia
-   inclinazione a ogni problema; alla svolta torna dritto: prima il caos,
-   poi l'ordine. */
-.racconto--attivo .telefono {
-  --tilt: -3deg;
-  transform: translateY(calc((.5 - var(--corsa, .5)) * 48px)) rotate(var(--tilt));
-  transition: transform .6s var(--ease), top .6s var(--ease);
-}
-.racconto[data-attiva="1"] .telefono { --tilt: 3deg; }
-.racconto[data-attiva="3"] .telefono { --tilt: 0deg; }
-
-.telefono__isola {
-  position: absolute; z-index: 3;
-  top: calc(var(--tel-w) * .06); left: 35%;
-  width: 30%; height: calc(var(--tel-w) * .075);
-  background: var(--ink); border-radius: 99px;
-}
-.telefono__schermo {
-  position: relative; height: 100%;
-  overflow: hidden;
-  background: #fff;
-  border-radius: calc(var(--tel-w) * .126);
-}
-
-.schermo {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; gap: .8em;
-  padding: 3.4em 1.1em 1.1em;
-  color: var(--ink);
-  opacity: 0;
-  transform: translateY(1em) scale(.98);
-  transition: opacity .45s var(--ease), transform .5s var(--ease);
-}
-.racconto[data-attiva="0"] [data-schermo="0"],
-.racconto[data-attiva="1"] [data-schermo="1"],
-.racconto[data-attiva="2"] [data-schermo="2"],
-.racconto[data-attiva="3"] [data-schermo="3"] { opacity: 1; transform: none; }
-
-/* profilo social */
-.ig__barra { display: flex; align-items: center; justify-content: space-between; font-size: 1.05em; }
-.ig__barra b { font-weight: 700; letter-spacing: -.01em; }
-.ig__barra i {
-  width: 1.3em; height: .32em;
-  background: radial-gradient(circle, var(--ink) 45%, transparent 50%) 0 0 / .44em .32em repeat-x;
-}
-.ig__testa { display: flex; align-items: center; gap: 1em; }
-.ig__avatar {
-  position: relative; flex: 0 0 auto;
-  width: 4.6em; height: 4.6em; border-radius: 50%;
+.settore__formati { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.settore__formati li {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  padding: 8px 14px;
   background: var(--cream-2);
-  box-shadow: 0 0 0 .2em #fff, 0 0 0 .34em #E4D8CD;
+  border-radius: var(--radius-pill);
+  font-size: .92rem; font-weight: 600; line-height: 1.3;
 }
-.ig__avatar::after {
-  content: ""; position: absolute; inset: 28%;
-  background: var(--fg-faint);
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-}
-.ig__avatar--storia { box-shadow: 0 0 0 .2em #fff, 0 0 0 .42em var(--orange); }
-.ig__avatar--storia::after { background: var(--orange); }
-.ig__righe { flex: 1; display: flex; flex-direction: column; gap: .45em; }
-.ig__righe i { height: .55em; border-radius: 99px; background: #EFE6DD; }
-.ig__righe i.corta { width: 58%; }
-.ig__avviso {
-  align-self: flex-start;
-  padding: .35em .8em;
-  border-radius: 99px;
-  background: var(--orange-soft); color: var(--orange-ink);
-  font-family: var(--font-mono); font-size: .85em; font-weight: 500;
-}
-.ig__avviso--oggi { background: var(--ink); color: var(--cream); }
-.ig__griglia { display: grid; grid-template-columns: repeat(3, 1fr); gap: .25em; }
-.ig__cella { aspect-ratio: 1; border: .1em dashed #E0D3C7; border-radius: .2em; }
-.ig__cella--piena { border: 0; background: repeating-linear-gradient(-45deg, #EFE5DB 0 .5em, #E6D9CC .5em 1em); }
-.ig__cella--dopo {
-  position: relative; border: 0;
-  opacity: 0; transform: scale(.7);
-  transition: opacity .35s var(--ease), transform .45s var(--ease);
-  transition-delay: calc(var(--i) * 60ms + .2s);
-}
-.ig__cella--dopo:nth-child(3n+1) { background: var(--orange); }
-.ig__cella--dopo:nth-child(3n+2) { background: var(--ink); }
-.ig__cella--dopo:nth-child(3n)   { background: #F3C9A4; }
-.ig__cella--dopo:nth-child(odd)::after {
-  content: ""; position: absolute; top: .55em; right: .55em;
-  border-left: .6em solid #fff;
-  border-top: .38em solid transparent; border-bottom: .38em solid transparent;
-}
-.racconto[data-attiva="3"] .ig__cella--dopo { opacity: 1; transform: none; }
-
-/* ricerca su Google */
-.g__cerca {
-  display: flex; align-items: center; gap: .7em;
-  padding: .8em 1em;
-  border-radius: 99px;
-  box-shadow: 0 .1em .6em rgba(23, 18, 14, .16);
-  font-size: .95em;
-}
-.g__cerca i {
-  position: relative; flex: 0 0 auto;
-  width: .85em; height: .85em;
-  border: .16em solid var(--fg-muted); border-radius: 50%;
-}
-.g__cerca i::after {
-  content: ""; position: absolute; right: -.42em; bottom: -.22em;
-  width: .45em; height: .16em;
-  background: var(--fg-muted); transform: rotate(45deg);
-}
-.g__mappa {
-  position: relative; height: 8.5em; flex: 0 0 auto;
-  border-radius: .7em;
-  background-color: #ECEFE6;
-  background-image:
-    linear-gradient(90deg, #fff .28em, transparent .28em),
-    linear-gradient(0deg, #fff .28em, transparent .28em);
-  background-size: 4.4em 3.2em;
-}
-.g__pin {
-  position: absolute; width: 1.1em; height: 1.1em;
-  background: #D9483B;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-}
-.g__pin:nth-child(1) { left: 22%; top: 28%; }
-.g__pin:nth-child(2) { left: 56%; top: 54%; }
-.g__pin:nth-child(3) { left: 76%; top: 20%; }
-.g__scheda {
-  position: relative;
-  display: flex; flex-direction: column; gap: .12em;
-  padding: .7em .9em;
-  border: .1em solid #ECE3DA; border-radius: .7em;
-}
-.g__scheda b { font-size: 1.05em; }
-.g__scheda span { font-size: .85em; color: var(--fg-muted); }
-.g__scheda em { font-style: normal; font-size: .8em; font-weight: 600; color: #1F5FBF; }
-.g__scheda--voi { border: .13em dashed var(--orange); background: var(--cream); }
-.g__scheda--voi b, .g__scheda--voi span, .g__scheda--voi em { color: var(--fg-faint); }
-.g__scheda--voi small {
-  position: absolute; top: -.75em; right: .8em;
-  padding: .1em .6em;
-  background: var(--orange); color: var(--ink);
-  border-radius: 99px;
-  font-family: var(--font-mono); font-size: .75em; font-weight: 500;
+.settore__formati li::before {
+  content: ""; flex: 0 0 auto;
+  width: 6px; height: 6px;
+  background: var(--orange); transform: rotate(45deg);
 }
 
-/* schermo bloccato con le notifiche */
-.schermo--blocco {
-  padding-top: 4.2em;
-  background: linear-gradient(170deg, #33271E, #120D0A 72%);
-  color: var(--cream);
-  text-align: center;
+/* da dove partire: il pacchetto consigliato */
+.settore__partenza {
+  position: relative; align-self: start;
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  padding: calc(var(--sp-6) + 8px) var(--sp-6) var(--sp-5);
+  background: var(--ink); color: var(--fg-inv);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
-.blocco__giorno { font-size: 1.05em; opacity: .75; }
-.blocco__ora {
-  margin-bottom: .5em;
+.settore__partenza::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 8px; background: var(--nastro); }
+.settore__partenza .settore__sub { margin-bottom: 0; color: var(--fg-inv-muted); }
+.settore__pacchetto { font-weight: 700; font-size: 1.12rem; letter-spacing: -.015em; }
+.settore__prezzo {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 var(--sp-2);
   font-family: var(--font-display);
   font-stretch: var(--stretto);
-  font-weight: 800; font-size: 5.6em; line-height: .9;
-  letter-spacing: -.02em;
+  font-weight: 800; font-size: clamp(3rem, 5vw, 4rem); line-height: .9;
+  color: var(--orange);
 }
-.notifica {
-  display: flex; flex-direction: column; gap: .15em;
-  padding: .75em .95em;
-  border-radius: 1em;
-  background: rgba(255, 248, 243, .14);
-  text-align: left;
-  font-size: .95em; line-height: 1.3;
-  opacity: 0; transform: translateY(-.8em);
-  transition: opacity .4s var(--ease), transform .45s var(--ease);
+.settore__prezzo small {
+  font-family: var(--font-mono); font-stretch: 100%;
+  font-size: .78rem; font-weight: 500; letter-spacing: .04em;
+  color: var(--fg-inv-muted);
 }
-.notifica b { font-size: .9em; }
-.notifica span { opacity: .85; }
-.schermo--blocco .notifica:nth-of-type(1) { transition-delay: .2s; }
-.schermo--blocco .notifica:nth-of-type(2) { transition-delay: .55s; }
-.schermo--blocco .notifica:nth-of-type(3) { transition-delay: .9s; }
-.racconto[data-attiva="2"] .schermo--blocco .notifica { opacity: 1; transform: none; }
-
-.notifica--nuova {
-  background: var(--ink); color: var(--cream);
-  border-left: .3em solid var(--orange);
-  box-shadow: 0 .6em 1.4em -.6em rgba(23, 18, 14, .5);
-  transition-delay: .9s;
+.settore__perche { margin-bottom: var(--sp-2); font-size: .95rem; color: #DCCFC4; }
+.settore__altri { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--sp-5); font-size: .9rem; }
+.settore__altri a {
+  display: inline-flex; align-items: center; min-height: 40px;
+  font-weight: 600; color: var(--fg-inv);
+  text-underline-offset: 3px;
 }
-.racconto[data-attiva="3"] .notifica--nuova { opacity: 1; transform: none; }
+.settore__altri a:hover { color: var(--orange); }
 
-/* ── telefono e titoli su schermi stretti ────────────────────────── */
-@media (max-width: 860px) {
-  .racconto--attivo { height: 280vh; }
-  .racconto__area { grid-template-columns: 1fr; gap: var(--sp-6); }
-  .racconto--attivo .racconto__palco { padding-top: 92px; padding-bottom: var(--sp-4); }
+.settori__fuori { margin-top: var(--sp-5); text-align: center; color: var(--fg-muted); }
+.settori__fuori a { color: var(--orange-ink); font-weight: 600; text-underline-offset: 3px; }
+.settori__fuori a:hover { color: var(--ink); }
 
-  /* Testi e telefono si scambiano di posto a ogni scena:
-     titolo in alto e telefono sotto, poi telefono in alto e titolo sotto. */
-  .racconto--attivo .racconto__area { display: block; position: relative; }
-  .racconto--attivo .racconto__testi { position: absolute; inset: 0; }
-  .racconto--attivo .telefono {
-    position: absolute; left: 50%;
-    margin-left: calc(var(--tel-w) / -2);
-    top: calc(100% - var(--tel-w) * 2.1334);
-    transform: rotate(var(--tilt));
+@media (max-width: 1024px) {
+  .settori__testa { grid-template-columns: 1fr; }
+  .settore { grid-template-columns: 1fr; gap: var(--sp-6); padding: var(--sp-6); }
+}
+@media (max-width: 720px) {
+  .settori__tab { display: flex; width: 100%; }
+  .settori__tab button {
+    flex: 1 1 0; min-width: 0;
+    flex-direction: column; justify-content: center; gap: 5px;
+    min-height: 66px;
+    padding: 6px 4px;
+    font-size: .9rem; line-height: 1.05;
+    white-space: normal; text-align: center;
   }
-  .racconto[data-attiva="1"] .telefono,
-  .racconto[data-attiva="3"] .telefono { top: 0; }
-  .racconto__indice { margin-bottom: var(--sp-4); }
-  .racconto__n { margin-bottom: var(--sp-2); font-size: .72rem; }
-  .racconto__t { font-size: clamp(1.7rem, 7.2vw, 2.6rem); }
-  .racconto__cta { margin-top: var(--sp-4); }
-  .racconto__scorri { display: none; }
-  .telefono { --tel-w: clamp(160px, calc((100vh - 410px) * .47), 280px); }
-  @supports (height: 100svh) {
-    .telefono { --tel-w: clamp(160px, calc((100svh - 410px) * .47), 280px); }
-  }
+  .settore { padding: var(--sp-5); }
+  .settore__partenza { padding: calc(var(--sp-5) + 8px) var(--sp-5) var(--sp-4); }
 }
-/* Schermi bassi (su iPhone la barra di Safari toglie spazio): l'indice
-   resta sempre visibile, si rimpiccioliscono per gradi titoli e telefono. */
-@media (max-width: 860px) and (max-height: 760px) {
-  .racconto__t { font-size: 1.55rem; }
-  .racconto__n { margin-bottom: 6px; }
-  .racconto__cta { margin-top: var(--sp-3); }
-  .telefono { --tel-w: clamp(140px, calc((100vh - 410px) * .47), 280px); }
-  @supports (height: 100svh) {
-    .telefono { --tel-w: clamp(140px, calc((100svh - 410px) * .47), 280px); }
-  }
-}
-@media (max-width: 860px) and (max-height: 640px) {
-  .racconto__indice { margin-bottom: 10px; }
-  .racconto__indice button { min-height: 30px; padding-top: 9px; font-size: .6rem; }
-  .racconto__t { font-size: 1.35rem; }
-  .racconto__cta { min-height: 46px; padding-block: 10px; }
-  .telefono, .racconto--attivo .telefono { --tel-w: 130px; }
-}
-@media (max-width: 860px) and (max-height: 580px) {
-  .telefono, .racconto--attivo .telefono { --tel-w: 112px; }
-  .racconto__t { font-size: 1.25rem; }
-}
-
-/* il pulsante WhatsApp si fa da parte durante il racconto (script.js),
-   tranne se la finestra è aperta */
-.wa { transition: bottom .25s var(--ease), opacity .3s var(--ease), transform .3s var(--ease); }
-body.racconto-in-vista .wa:not(.is-aperta) { opacity: 0; transform: translateY(16px); pointer-events: none; }
-
 @media (prefers-reduced-motion: reduce) {
-  .racconto__scorri i { animation: none; }
-  .racconto--attivo .racconto__scena { transform: none; }
-  .racconto--attivo .telefono { transform: none; }
+  .settore.is-entra { animation: none; }
 }

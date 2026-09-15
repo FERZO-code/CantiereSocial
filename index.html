@@ -31,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- ⚠️ Alzate ?v= a ogni modifica di CSS/JS: forza il browser a
      riscaricarli invece di riusare la copia in cache. -->
-<link rel="stylesheet" href="styles.css?v=19">
+<link rel="stylesheet" href="styles.css?v=20">
 
 <script>
   /* Attiva l'intro prima del primo paint, così non c'è sfarfallio.
@@ -288,105 +288,88 @@
   </div>
 </div>
 
-<!-- ══ PROBLEMA ══════════════════════════════════════════════════════
-     Racconto a scene: scorrendo, il palco resta fermo e il telefono cambia
-     schermata a ogni problema (script.js, blocco "Il problema").
-     Il telefono è un'illustrazione: i lettori di schermo leggono solo i titoli.
-     Senza JavaScript le scene compaiono una sotto l'altra. -->
-<section class="section problema" aria-labelledby="problema-t">
+<!-- ══ PER CHI LAVORIAMO ═════════════════════════════════════════════
+     Schede per settore: chi visita sceglie il proprio mestiere e vede cosa
+     facciamo e da dove conviene partire. "Richiedi un preventivo" precompila
+     settore e interesse nel modulo (script.js). Senza JavaScript le tre
+     schede compaiono una sotto l'altra e le linguette restano nascoste. -->
+<section class="section settori" id="settori" aria-labelledby="settori-t">
   <div class="wrap">
-    <p class="label reveal"><span>01</span> Il problema</p>
-    <h2 class="h2 problema__claim reveal" id="problema-t">Il lavoro lo sapete fare.<br><span class="muted">Online non si vede.</span></h2>
-  </div>
-
-  <div class="racconto" data-racconto data-attiva="0">
-    <!-- punti di aggancio: uno al centro di ogni scena (posizionati da script.js) -->
-    <div class="racconto__tappe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <div class="wrap racconto__palco">
-
-      <div class="racconto__indice" role="group" aria-label="Scene della sezione">
-        <button type="button" class="is-su" data-vai="0">Social</button>
-        <button type="button" data-vai="1">Google</button>
-        <button type="button" data-vai="2">Fornitori</button>
-        <button type="button" data-vai="3">Regia</button>
+    <div class="settori__testa">
+      <div>
+        <p class="label reveal"><span>01</span> Per chi lavoriamo</p>
+        <h2 class="h2 reveal" id="settori-t">Tre mestieri.<br><span class="muted">Tre modi diversi di raccontarli.</span></h2>
       </div>
-
-      <!-- area: testi e telefono. Su telefono si scambiano di posto a ogni scena -->
-      <div class="racconto__area">
-      <div class="racconto__testi">
-        <ol class="racconto__scene" role="list">
-          <li class="racconto__scena is-attiva" data-scena>
-            <span class="racconto__n" aria-hidden="true">01</span>
-            <h3 class="racconto__t">Un cantiere all'anno sui social. <span>Il resto non lo vede nessuno.</span></h3>
-          </li>
-          <li class="racconto__scena" data-scena>
-            <span class="racconto__n" aria-hidden="true">02</span>
-            <h3 class="racconto__t">Vi cercano su Google. <span>Trovano gli altri.</span></h3>
-          </li>
-          <li class="racconto__scena" data-scena>
-            <span class="racconto__n" aria-hidden="true">03</span>
-            <h3 class="racconto__t">Video, social e sito: <span>ognuno per conto suo.</span></h3>
-          </li>
-          <li class="racconto__scena racconto__scena--svolta" data-scena>
-            <span class="racconto__n" aria-hidden="true">La svolta</span>
-            <h3 class="racconto__t">Con noi è un cantiere solo. <span>Due responsabili, una regia.</span></h3>
-            <a class="btn btn--orange btn--lg racconto__cta" href="#servizi">Vedi i pacchetti</a>
-          </li>
-        </ol>
-
-        <p class="racconto__scorri" aria-hidden="true">Scorrete <i></i></p>
-      </div>
-
-      <div class="telefono" aria-hidden="true">
-        <div class="telefono__isola"></div>
-        <div class="telefono__schermo">
-
-          <!-- 1 · profilo fermo -->
-          <div class="schermo" data-schermo="0">
-            <div class="ig__barra"><b>la_vostra_impresa</b><i></i></div>
-            <div class="ig__testa">
-              <span class="ig__avatar"></span>
-              <div class="ig__righe"><i></i><i></i><i class="corta"></i></div>
-            </div>
-            <p class="ig__avviso">Ultimo post · 11 mesi fa</p>
-            <div class="ig__griglia"><span class="ig__cella ig__cella--piena"></span><span class="ig__cella ig__cella--piena"></span><span class="ig__cella ig__cella--piena"></span><span class="ig__cella"></span><span class="ig__cella"></span><span class="ig__cella"></span><span class="ig__cella"></span><span class="ig__cella"></span><span class="ig__cella"></span></div>
-          </div>
-
-          <!-- 2 · ricerca su Google -->
-          <div class="schermo" data-schermo="1">
-            <div class="g__cerca"><i></i>impresa edile vicino a me</div>
-            <div class="g__mappa"><i class="g__pin"></i><i class="g__pin"></i><i class="g__pin"></i></div>
-            <div class="g__scheda"><b>Concorrente A</b><span>4,8 ★★★★★ · Impresa edile</span><em>Sito · Indicazioni · Chiama</em></div>
-            <div class="g__scheda"><b>Concorrente B</b><span>4,6 ★★★★★ · Ristrutturazioni</span><em>Sito · Indicazioni · Chiama</em></div>
-            <div class="g__scheda g__scheda--voi"><b>La vostra impresa</b><span>Nessuna recensione</span><em>Nessun sito · nessuna foto</em><small>Voi</small></div>
-          </div>
-
-          <!-- 3 · fornitori scollegati -->
-          <div class="schermo schermo--blocco" data-schermo="2">
-            <p class="blocco__giorno">lunedì</p>
-            <p class="blocco__ora">18:47</p>
-            <div class="notifica"><b>Videomaker</b><span>Il montaggio slitta alla prossima settimana.</span></div>
-            <div class="notifica"><b>Grafico</b><span>Mi rimandate le foto del cantiere?</span></div>
-            <div class="notifica"><b>Agenzia web</b><span>Per aggiornare il sito serve un nuovo preventivo.</span></div>
-          </div>
-
-          <!-- 4 · la svolta -->
-          <div class="schermo schermo--dopo" data-schermo="3">
-            <div class="notifica notifica--nuova"><b>Nuova richiesta dal sito</b><span>“Vorrei un preventivo per una ristrutturazione…”</span></div>
-            <div class="ig__barra"><b>la_vostra_impresa</b><i></i></div>
-            <div class="ig__testa">
-              <span class="ig__avatar ig__avatar--storia"></span>
-              <div class="ig__righe"><i></i><i></i><i class="corta"></i></div>
-            </div>
-            <p class="ig__avviso ig__avviso--oggi">Ultimo post · oggi</p>
-            <div class="ig__griglia"><span class="ig__cella ig__cella--dopo" style="--i:0"></span><span class="ig__cella ig__cella--dopo" style="--i:1"></span><span class="ig__cella ig__cella--dopo" style="--i:2"></span><span class="ig__cella ig__cella--dopo" style="--i:3"></span><span class="ig__cella ig__cella--dopo" style="--i:4"></span><span class="ig__cella ig__cella--dopo" style="--i:5"></span><span class="ig__cella ig__cella--dopo" style="--i:6"></span><span class="ig__cella ig__cella--dopo" style="--i:7"></span><span class="ig__cella ig__cella--dopo" style="--i:8"></span></div>
-          </div>
-
-        </div>
-      </div>
-      </div>
-
+      <p class="settori__nota reveal">Scegliete il vostro: vi mostriamo cosa facciamo e da dove conviene partire.</p>
     </div>
+
+    <div class="settori__schede reveal" data-settori>
+      <div class="settori__tab" role="tablist" aria-label="Di cosa vi occupate" hidden>
+        <button type="button" role="tab" id="tab-edile" aria-controls="settore-edile" aria-selected="true"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-5h6v5"/><path d="M9 11h2M13 11h2"/></svg><span>Imprese edili</span></button>
+        <button type="button" role="tab" id="tab-showroom" aria-controls="settore-showroom" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 9l1.6-4.5A1 1 0 015.5 4h13a1 1 0 01.9.5L21 9"/><path d="M3 9h18v11a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0"/></svg><span>Showroom</span></button>
+        <button type="button" role="tab" id="tab-immobiliare" aria-controls="settore-immobiliare" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/><path d="M16.5 3.5h3v3"/></svg><span>Agenzie immobiliari</span></button>
+        <span class="settori__cursore" aria-hidden="true"></span>
+      </div>
+
+      <article class="settore" id="settore-edile" role="tabpanel" aria-labelledby="tab-edile" tabindex="0">
+        <div class="settore__corpo">
+          <p class="settore__chi"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-5h6v5"/><path d="M9 11h2M13 11h2"/></svg>Imprese di costruzione</p>
+          <h3 class="settore__claim">Il cantiere è il contenuto migliore che avete. <span>Ed è l'unico che non pubblicate.</span></h3>
+          <p class="settore__testo">Trasformiamo le fasi di lavoro in una serie: si parte dal grezzo e si arriva alla consegna. Chi vi segue vede come lavorate, non solo com'è venuto.</p>
+          <p class="settore__sub">Cosa realizziamo</p>
+          <ul class="settore__formati" role="list"><li>Serie “dal grezzo alla consegna”</li><li>Timelapse e riprese con drone</li><li>Prima e dopo</li><li>Ricerca di personale e fornitori</li></ul>
+        </div>
+
+        <div class="settore__partenza">
+          <p class="settore__sub">Da dove partire</p>
+          <p class="settore__pacchetto">Per commessa · Completa</p>
+          <p class="settore__prezzo">€990 <small>4 video</small></p>
+          <p class="settore__perche">Una serie di quattro video sullo stesso cantiere, dal grezzo alla consegna.</p>
+          <a class="btn btn--orange btn--lg btn--block" href="#contatti" data-settore="Impresa di costruzione" data-interesse="commessa">Richiedi un preventivo</a>
+          <p class="settore__altri"><a href="/pacchetti#commessa">Vedi cosa include</a><a href="https://wa.me/393474068285?text=Ciao%20Cantiere%20Social%2C%20ho%20un%27impresa%20edile%20e%20vorrei%20informazioni%20sui%20vostri%20pacchetti." target="_blank" rel="noopener">Scrivici su WhatsApp</a></p>
+        </div>
+      </article>
+
+      <article class="settore" id="settore-showroom" role="tabpanel" aria-labelledby="tab-showroom" tabindex="0">
+        <div class="settore__corpo">
+          <p class="settore__chi"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 9l1.6-4.5A1 1 0 015.5 4h13a1 1 0 01.9.5L21 9"/><path d="M3 9h18v11a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0"/></svg>Showroom</p>
+          <h3 class="settore__claim">Il problema non è vendere. <span>È farsi trovare.</span></h3>
+          <p class="settore__testo">Portiamo online l'esperienza che si vive dentro: materiali, ambientazioni, novità di stagione. Poi mandiamo in showroom le persone giuste della vostra zona.</p>
+          <p class="settore__sub">Cosa realizziamo</p>
+          <ul class="settore__formati" role="list"><li>Riprese di prodotto e ambientazioni</li><li>Campagne di prossimità</li><li>Eventi e nuove collezioni</li></ul>
+        </div>
+
+        <div class="settore__partenza">
+          <p class="settore__sub">Da dove partire</p>
+          <p class="settore__pacchetto">Pacchetto social</p>
+          <p class="settore__prezzo"><small>da</small> €1.490<small>/mese</small></p>
+          <p class="settore__perche">Contenuti ogni mese e campagne locali che portano in showroom le persone della vostra zona.</p>
+          <a class="btn btn--orange btn--lg btn--block" href="#contatti" data-settore="Showroom" data-interesse="social">Richiedi un preventivo</a>
+          <p class="settore__altri"><a href="/pacchetti#social">Vedi cosa include</a><a href="https://wa.me/393474068285?text=Ciao%20Cantiere%20Social%2C%20ho%20uno%20showroom%20e%20vorrei%20informazioni%20sui%20vostri%20pacchetti." target="_blank" rel="noopener">Scrivici su WhatsApp</a></p>
+        </div>
+      </article>
+
+      <article class="settore" id="settore-immobiliare" role="tabpanel" aria-labelledby="tab-immobiliare" tabindex="0">
+        <div class="settore__corpo">
+          <p class="settore__chi"><svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/><path d="M16.5 3.5h3v3"/></svg>Agenzie immobiliari</p>
+          <h3 class="settore__claim">Un immobile raccontato bene <span>si vende prima. Sempre.</span></h3>
+          <p class="settore__testo">Video tour, foto curate e schede immobile che rispondono alle domande prima della visita. Meno appuntamenti a vuoto, più visite di chi è davvero interessato.</p>
+          <p class="settore__sub">Cosa realizziamo</p>
+          <ul class="settore__formati" role="list"><li>Video tour e foto professionali</li><li>Annunci e schede immobile</li><li>Campagne per acquisizione incarichi</li></ul>
+        </div>
+
+        <div class="settore__partenza">
+          <p class="settore__sub">Da dove partire</p>
+          <p class="settore__pacchetto">Per commessa · Essenziale</p>
+          <p class="settore__prezzo">€390 <small>a immobile</small></p>
+          <p class="settore__perche">Un video per l'immobile da vendere, pronto da pubblicare e sponsorizzare.</p>
+          <a class="btn btn--orange btn--lg btn--block" href="#contatti" data-settore="Agenzia immobiliare" data-interesse="commessa">Richiedi un preventivo</a>
+          <p class="settore__altri"><a href="/pacchetti#commessa">Vedi cosa include</a><a href="https://wa.me/393474068285?text=Ciao%20Cantiere%20Social%2C%20ho%20un%27agenzia%20immobiliare%20e%20vorrei%20informazioni%20sui%20vostri%20pacchetti." target="_blank" rel="noopener">Scrivici su WhatsApp</a></p>
+        </div>
+      </article>
+    </div>
+
+    <p class="settori__fuori reveal">Lavorate in un settore vicino all'edilizia? <a href="#contatti">Raccontateci il vostro lavoro</a>.</p>
   </div>
 </section>
 
@@ -461,56 +444,11 @@
   </div>
 </section>
 
-<!-- ══ SETTORI ═══════════════════════════════════════════════════════ -->
-<section class="section sectors" id="settori">
-  <div class="wrap">
-    <div class="sec-head">
-      <p class="label reveal"><span>03</span> Per chi lavoriamo</p>
-      <h2 class="h2 reveal">Tre mestieri.<br><span class="muted">Tre modi diversi di raccontarli.</span></h2>
-    </div>
-
-    <div class="sectors__grid">
-      <article class="sector reveal">
-        <header>
-          <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-5h6v5"/><path d="M9 11h2M13 11h2"/></svg>
-          <h3>Imprese di costruzione</h3>
-        </header>
-        <p class="sector__claim">Il cantiere è il contenuto migliore che avete. Ed è l'unico che non pubblicate.</p>
-        <p>Trasformiamo le fasi di lavoro in una serie: si parte dal grezzo e si arriva alla consegna. Chi vi segue vede come lavorate, non solo com'è venuto.</p>
-        <ul role="list"><li>Serie “dal grezzo alla consegna”</li><li>Timelapse e riprese drone</li><li>Ricerca di personale e fornitori</li></ul>
-        <a class="sector__link" href="/pacchetti#commessa"><span>Da dove partire</span>Per commessa · Completa, 4 video da €990 <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
-      </article>
-
-      <article class="sector reveal">
-        <header>
-          <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 9l1.6-4.5A1 1 0 015.5 4h13a1 1 0 01.9.5L21 9"/><path d="M3 9h18v11a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0"/></svg>
-          <h3>Showroom</h3>
-        </header>
-        <p class="sector__claim">Il problema non è vendere. È farsi trovare.</p>
-        <p>Portiamo online l'esperienza che si vive dentro: materiali, ambientazioni, novità di stagione. Poi mandiamo in showroom le persone giuste della vostra zona.</p>
-        <ul role="list"><li>Riprese di prodotto e ambientazioni</li><li>Campagne di prossimità</li><li>Eventi e nuove collezioni</li></ul>
-        <a class="sector__link" href="/pacchetti#social"><span>Da dove partire</span>Pacchetto social, da €1.490/mese <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
-      </article>
-
-      <article class="sector reveal">
-        <header>
-          <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/><path d="M16.5 3.5h3v3"/></svg>
-          <h3>Agenzie immobiliari</h3>
-        </header>
-        <p class="sector__claim">Un immobile raccontato bene si vende prima. Sempre.</p>
-        <p>Video tour, foto curate e schede immobile che rispondono alle domande prima della visita. Meno appuntamenti a vuoto, più visite di chi è davvero interessato.</p>
-        <ul role="list"><li>Video tour e foto professionali</li><li>Annunci e schede immobile</li><li>Campagne per acquisizione incarichi</li></ul>
-        <a class="sector__link" href="/pacchetti#commessa"><span>Da dove partire</span>Per commessa, da €390 a immobile <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
-      </article>
-    </div>
-  </div>
-</section>
-
 <!-- ══ METODO ════════════════════════════════════════════════════════ -->
 <section class="section method" id="metodo">
   <div class="wrap">
     <div class="sec-head sec-head--center">
-      <p class="label label--inv reveal"><span>04</span> Il metodo</p>
+      <p class="label label--inv reveal"><span>03</span> Il metodo</p>
       <h2 class="h2 reveal">Cinque fasi.<br><span class="muted-inv">Come un cantiere vero.</span></h2>
       <p class="sec-head__note sec-head__note--inv reveal">
         Sapete sempre a che punto siamo, cosa esce questa settimana e chi lo sta facendo.
@@ -577,13 +515,13 @@
      PER RIATTIVARLA:
        1. togliete la riga "INIZIO BLOCCO" qui sotto e la riga "FINE BLOCCO"
        2. compilate i quattro numeri e le due testimonianze
-       3. rinumerate le etichette successive: 05→06, 06→07, 07→08, 08→09
+       3. rinumerate le etichette successive: 04→05, 05→06, 06→07, 07→08
      ═══════════════════════════════════════════════════════════════════ -->
 <!-- INIZIO BLOCCO DISATTIVATO
 <section class="section proof">
   <div class="wrap">
     <div class="sec-head">
-      <p class="label reveal"><span>05</span> I risultati</p>
+      <p class="label reveal"><span>04</span> I risultati</p>
       <h2 class="h2 reveal">I numeri li portiamo noi.<br><span class="muted">Le parole le lasciamo a loro.</span></h2>
     </div>
 
@@ -628,7 +566,7 @@ FINE BLOCCO DISATTIVATO -->
     </figure>
 
     <div class="studio__copy">
-      <p class="label reveal"><span>05</span> Lo studio</p>
+      <p class="label reveal"><span>04</span> Lo studio</p>
       <h2 class="h2 reveal">Siamo in due.<br><span class="muted">Ed è un vantaggio.</span></h2>
 
       <p class="studio__lead reveal">
@@ -641,13 +579,13 @@ FINE BLOCCO DISATTIVATO -->
       <div class="people">
         <article class="person reveal">
           <h3>Simona</h3>
-          <p class="person__role">Strategia &amp; progetto</p>
-          <p>Definisce l'obiettivo, costruisce il piano editoriale, tiene le campagne e i numeri. È quella che dice “questo non lo pubblichiamo, non serve”.</p>
+          <p class="person__role">Contenuti &amp; storytelling</p>
+          <p>Si occupa dell'ideazione e della comunicazione dei contenuti: sviluppa gli script, racconta le aziende davanti alla camera e cura il montaggio e lo storytelling dei video. Segue le performance dei contenuti e studia nuove strategie per far crescere la presenza online delle aziende.</p>
         </article>
         <article class="person reveal">
           <h3>Ferdinando</h3>
-          <p class="person__role">Riprese &amp; produzione</p>
-          <p>Gira, monta, fotografa e sviluppa i siti. È quello che sale sul ponteggio alle sette per prendere la luce giusta.</p>
+          <p class="person__role">Siti, video &amp; advertising</p>
+          <p>Si occupa della realizzazione dei siti web, della produzione video e della gestione delle campagne pubblicitarie online, tra social e Google Ads. Analizza dati e performance per ottimizzare le strategie e valorizzare la presenza digitale delle aziende.</p>
         </article>
       </div>
 
@@ -669,7 +607,7 @@ FINE BLOCCO DISATTIVATO -->
 <section class="section zone" id="zone">
   <div class="wrap">
     <div class="sec-head sec-head--center">
-      <p class="label reveal"><span>06</span> Dove lavoriamo</p>
+      <p class="label reveal"><span>05</span> Dove lavoriamo</p>
       <h2 class="h2 reveal">Da Rutigliano,<br><span class="muted">in tutta la provincia di Bari.</span></h2>
       <p class="sec-head__note reveal">
         Partiamo da Rutigliano e veniamo noi da voi: per riprese e sopralluoghi
@@ -694,7 +632,7 @@ FINE BLOCCO DISATTIVATO -->
 <section class="section faq" id="faq">
   <div class="wrap wrap--narrow">
     <div class="sec-head">
-      <p class="label reveal"><span>07</span> Domande</p>
+      <p class="label reveal"><span>06</span> Domande</p>
       <h2 class="h2 reveal">Quelle che ci fanno sempre.</h2>
     </div>
 
@@ -751,7 +689,7 @@ FINE BLOCCO DISATTIVATO -->
 <section class="section cta" id="contatti">
   <div class="wrap cta__inner">
     <div class="cta__copy">
-      <p class="label label--inv reveal"><span>08</span> Partiamo</p>
+      <p class="label label--inv reveal"><span>07</span> Partiamo</p>
       <h2 class="h2 reveal">Il primo sopralluogo<br><span class="muted-inv">non lo paga nessuno.</span></h2>
       <p class="cta__lead reveal">
         Quarantacinque minuti, in videochiamata o da voi. Guardiamo come
@@ -905,7 +843,7 @@ FINE BLOCCO DISATTIVATO -->
   </div>
 </footer>
 
-<script src="script.js?v=18" defer></script>
+<script src="script.js?v=20" defer></script>
 
 <!-- Banner cookie e tag Google Ads. Resta inattivo finché in consenso.js
      non è compilato GOOGLE_ADS_ID (vedi LEGGIMI.md). -->

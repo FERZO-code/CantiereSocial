@@ -797,55 +797,18 @@ a ogni modifica. La pagina carica Archivo con l'asse della larghezza
   fasi e ogni fase si accende quando la si raggiunge (`script.js`, blocco
   "Metodo: avanzamento lavori"). Senza JavaScript o con "riduci animazioni"
   la barra resta piena e tutte le fasi accese.
-- **Settori**: ogni settore suggerisce da quale pacchetto partire, con il
-  prezzo. Se cambiate i prezzi, aggiornate anche questi tre link.
+- **Per chi lavoriamo** (sezione 01, subito dopo il ticker): linguette per
+  settore (Imprese edili · Showroom · Agenzie immobiliari). Ogni scheda ha
+  "Da dove partire" con pacchetto e prezzo: Completa €990, Pacchetto social
+  da €1.490/mese, Essenziale €390. **Se cambiate i prezzi, aggiornate anche
+  queste tre schede.** "Richiedi un preventivo" precompila nel modulo il
+  settore (`data-settore`, deve coincidere con il testo dell'opzione) e
+  l'interesse (`data-interesse`).
 - **FAQ**: le domande visibili e quelle nei dati strutturati (`FAQPage`)
   devono dire la stessa cosa: Google lo richiede.
 - **Modulo · "Cosa vi interessa"**: pulsanti che scrivono la riga
   "Mi interessa: …" in cima al messaggio. Non aggiungono campi: la funzione
   `api/contact.js` non va toccata.
 
----
-
-# Home — sezione "Il problema" (racconto a scene)
-
-Scorrendo, la sezione resta ferma sullo schermo e cambia scena quattro
-volte: a sinistra il titolo, a destra un telefono disegnato in HTML/CSS.
-
-| Scena | Titolo | Telefono |
-|---|---|---|
-| 0 | Un cantiere all'anno sui social. | Profilo fermo, "Ultimo post · 11 mesi fa" |
-| 1 | Vi cercano su Google. | Ricerca "impresa edile vicino a me", la vostra scheda vuota |
-| 2 | Video, social e sito: ognuno per conto suo. | Schermo bloccato con tre notifiche di fornitori |
-| 3 | Con noi è un cantiere solo. | Profilo pieno e "Nuova richiesta dal sito" |
-
-- **Dove si cambia**: testi in `index.html` (blocco "PROBLEMA"), stile in
-  `styles.css` (blocco "IL PROBLEMA — racconto a scene"), logica in
-  `script.js` (blocco "Il problema: racconto a scene").
-- **Durata dello scorrimento**: `.racconto--attivo { height: 300vh; }`
-  (280vh su telefono). Più alto = ogni scena resta più a lungo.
-- **Aggancio alle scene**: al centro di ogni scena c'è un punto di aggancio
-  (`scroll-snap-type: y proximity` + `scroll-snap-stop: always`). Chi smette
-  di scorrere vicino a una scena ci si ferma sopra, e uno scorrimento veloce
-  (rotella, trackpad, dito sul telefono) si ferma alla scena successiva invece
-  di saltarle. Fuori dalla sezione lo scorrimento è libero. I punti sono
-  posizionati da `script.js` e tengono conto di `scroll-padding-top`.
-- **Riscontro continuo**: la barra dell'indice si riempie a ogni movimento e
-  il telefono sale leggermente, così non sembra mai di restare fermi.
-- **Indice cliccabile**: Social · Google · Fornitori · Regia portano dritti
-  alla scena.
-- **Scene alterne**: la 1ª e la 3ª scena hanno il titolo in alto, la 2ª e la
-  4ª in basso, e ogni titolo entra dalla sua parte. Su telefono il mockup si
-  sposta dalla parte opposta al titolo. Il telefono si inclina a sinistra e a
-  destra nelle scene dei problemi e torna dritto alla svolta.
-- **Pulsante WhatsApp**: mentre il racconto occupa lo schermo si nasconde
-  (coprirebbe titoli e telefono) e ricompare appena si esce dalla sezione.
-  Se la finestra WhatsApp è aperta, resta visibile.
-- **Schermi bassi** (iPhone con la barra di Safari): l'indice resta sempre
-  visibile; titoli e telefono si rimpiccioliscono per gradi sotto 760px,
-  640px e 580px di altezza. Non nascondete l'indice per guadagnare spazio:
-  su un iPhone reale quasi tutti gli schermi rientrano in quella fascia.
-- **Il telefono è un'illustrazione**: è nascosto ai lettori di schermo, che
-  leggono i quattro titoli. "Concorrente A/B" sono segnaposto generici, di
-  proposito: non usate nomi di imprese reali.
-- **Senza JavaScript** le scene compaiono una sotto l'altra.
+> La sezione "Il problema" (racconto a scene) è stata rimossa su richiesta:
+> toglieva troppa visibilità al resto della pagina.

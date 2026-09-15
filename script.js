@@ -150,88 +150,63 @@
     revealables.forEach(function (el) { io.observe(el); });
   }
 
-  /* ── Il problema: racconto a scene ──────────────────────────────────
-     La sezione è alta più schermi e il palco resta fermo: in base a quanto
-     si è scorso si attiva una delle quattro scene.
+  /* ── Per chi lavoriamo: schede per settore ──────────────────────────
+     Linguette accessibili (frecce, Home, Fine). L'indicatore scuro scorre
+     sotto la linguetta attiva. Senza JavaScript le schede restano tutte
+     visibili, una sotto l'altra. */
+  var settori = document.querySelector('[data-settori]');
 
-     Perché non si saltino e non sembri di restare fermi:
-     - ogni scena ha un punto di aggancio al suo centro (.racconto__tappe,
-       vedi styles.css): uno scorrimento veloce si ferma alla scena dopo;
-     - la barra dell'indice si riempie a ogni movimento e il telefono sale
-       piano, così si vede sempre che si sta scendendo;
-     - l'indice è cliccabile e porta dritti a una scena.
-     Nessuno scorrimento forzato: decide sempre chi legge. */
-  var racconto = document.querySelector('[data-racconto]');
+  if (settori) {
+    var listaTab = settori.querySelector('[role="tablist"]');
+    var tabs = Array.prototype.slice.call(settori.querySelectorAll('[role="tab"]'));
+    var pannelli = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+    var cursore = settori.querySelector('.settori__cursore');
+    var attivo = 0;
 
-  if (racconto) {
-    var radice = document.documentElement;
-    var sceneR = Array.prototype.slice.call(racconto.querySelectorAll('[data-scena]'));
-    var vociR = Array.prototype.slice.call(racconto.querySelectorAll('[data-vai]'));
-    var tappeR = Array.prototype.slice.call(racconto.querySelectorAll('.racconto__tappe i'));
-    var nR = sceneR.length;
-    var attualeR = -1;
-    var inCodaR = false;
-
-    var corsaR = function () { return racconto.offsetHeight - window.innerHeight; };
-
-    // centro della scena k, in pixel dall'inizio della sezione
-    var centroR = function (k) { return corsaR() * (k + 0.5) / nR; };
-
-    // l'aggancio tiene conto di scroll-padding-top (spazio per la nav)
-    var posizionaTappe = function () {
-      var margine = parseFloat(getComputedStyle(radice).scrollPaddingTop) || 0;
-      tappeR.forEach(function (t, k) { t.style.top = (centroR(k) + margine) + 'px'; });
+    var muoviCursore = function () {
+      var t = tabs[attivo];
+      if (!cursore || !t) return;
+      cursore.style.width = t.offsetWidth + 'px';
+      cursore.style.transform = 'translateX(' + t.offsetLeft + 'px)';
     };
 
-    var mostraScena = function (i) {
-      if (i === attualeR) return;
-      attualeR = i;
-      racconto.setAttribute('data-attiva', String(i));
-      sceneR.forEach(function (s, k) { s.classList.toggle('is-attiva', k === i); });
-    };
-
-    var calcolaScena = function () {
-      inCodaR = false;
-      var corsa = corsaR();
-      var p = corsa > 0 ? Math.min(Math.max(-racconto.getBoundingClientRect().top / corsa, 0), 0.9999) : 0;
-      var posizione = p * nR;
-      var i = Math.floor(posizione);
-
-      mostraScena(i);
-
-      // mentre il palco occupa lo schermo, il pulsante WhatsApp si fa da parte
-      // (coprirebbe titoli e telefono); ricompare appena si esce dalla sezione
-      var r = racconto.getBoundingClientRect();
-      document.body.classList.toggle('racconto-in-vista', r.top <= 0 && r.bottom >= window.innerHeight);
-
-      vociR.forEach(function (b, k) {
-        var riempi = k < i ? 1 : (k === i ? posizione - i : 0);
-        b.style.setProperty('--riempi', riempi.toFixed(3));
-        b.classList.toggle('is-su', k <= i);
+    var seleziona = function (i, conFocus, conAnimazione) {
+      attivo = i;
+      tabs.forEach(function (t, k) {
+        var on = k === i;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        pannelli[k].hidden = !on;
       });
-      racconto.style.setProperty('--corsa', p.toFixed(3));
+      if (conAnimazione) {
+        pannelli[i].classList.remove('is-entra');
+        void pannelli[i].offsetWidth;               // riavvia l'animazione
+        pannelli[i].classList.add('is-entra');
+      }
+      muoviCursore();
+      if (conFocus) tabs[i].focus();
     };
 
-    var chiediScena = function () {
-      if (inCodaR) return;
-      inCodaR = true;
-      requestAnimationFrame(calcolaScena);
-    };
-
-    vociR.forEach(function (b) {
-      b.addEventListener('click', function () {
-        var k = parseInt(b.getAttribute('data-vai'), 10);
-        var inizio = racconto.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top: inizio + centroR(k), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { if (i !== attivo) seleziona(i, false, true); });
+      t.addEventListener('keydown', function (e) {
+        var n = tabs.length;
+        var j = e.key === 'ArrowRight' ? (i + 1) % n
+              : e.key === 'ArrowLeft'  ? (i - 1 + n) % n
+              : e.key === 'Home' ? 0
+              : e.key === 'End'  ? n - 1 : null;
+        if (j === null) return;
+        e.preventDefault();
+        seleziona(j, true, true);
       });
     });
 
-    racconto.classList.add('racconto--attivo');
-    radice.classList.add('aggancio-racconto');
-    posizionaTappe();
-    calcolaScena();
-    window.addEventListener('scroll', chiediScena, { passive: true });
-    window.addEventListener('resize', function () { posizionaTappe(); chiediScena(); });
+    listaTab.hidden = false;
+    settori.classList.add('settori--attive');
+    seleziona(0, false, false);
+    requestAnimationFrame(function () { settori.classList.add('settori--pronte'); });
+    window.addEventListener('resize', muoviCursore);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(muoviCursore);
   }
 
   /* ── Nav: evidenzia la sezione in vista ─────────────────────────── */
@@ -372,6 +347,21 @@
       });
     });
   })();
+
+  /* "Richiedi un preventivo" dalle schede Per chi lavoriamo: il modulo è
+     su questa pagina, quindi si precompilano settore e interesse. */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-settore]'), function (a) {
+    a.addEventListener('click', function () {
+      var campo = form.elements.settore;
+      if (campo) {
+        campo.value = a.getAttribute('data-settore');
+        campo.dispatchEvent(new Event('change'));
+      }
+      var interesse = a.getAttribute('data-interesse');
+      var scelta = interesse && form.querySelector('.interessi__scelta[data-interesse="' + interesse + '"]');
+      if (scelta && scelta.getAttribute('aria-pressed') !== 'true') scelta.click();
+    });
+  });
 
   // Istante di apertura: il server rifiuta gli invii troppo rapidi,
   // che nessun umano riesce a produrre compilando davvero i campi.
