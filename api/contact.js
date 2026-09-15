@@ -131,6 +131,40 @@ function pulisci(v) {
 
 const EMAIL_OK = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/* Cellulare italiano: 3xx seguito da 8-9 cifre, con +39 o 0039 facoltativi.
+   Spazi, punti, trattini e parentesi vengono tolti prima del controllo. */
+const CELLULARE_OK = /^(?:\+39|0039)?3\d{8,9}$/;
+function soloCifre(v) { return String(v || '').replace(/[\s.\-()\/]/g, ''); }
+
+/* Spedisce l'email con Resend. Il tentativo conta per il limite solo da
+   qui in poi: chi sbaglia a compilare non consuma i propri invii. */
+async function spedisci(res, ip, email) {
+  registraInvio(ip);
+
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + CHIAVE,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(Object.assign({ from: MITTENTE, to: [DESTINATARIO] }, email))
+    });
+
+    if (!r.ok) {
+      const dettaglio = await r.text();
+      console.error('Resend ha risposto', r.status, dettaglio);
+      return res.status(502).json({ ok: false, errore: 'Invio non riuscito. Riprovate tra poco.' });
+    }
+
+    return res.status(200).json({ ok: true });
+
+  } catch (err) {
+    console.error('Errore di rete verso Resend:', err);
+    return res.status(502).json({ ok: false, errore: 'Invio non riuscito. Riprovate tra poco.' });
+  }
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -177,6 +211,49 @@ module.exports = async function handler(req, res) {
   const apertura = Number(d.ts);
   if (apertura && Date.now() - apertura < ATTESA_MINIMA) {
     return res.status(200).json({ ok: true });
+  }
+
+  /* ── Offerta speciale dal pop-up: solo nome e cellulare ── */
+  if (d.tipo === 'offerta') {
+    const nomeO = String(d.nome || '').trim();
+    const cell  = soloCifre(d.telefono);
+    const pagina = String(d.pagina || '').slice(0, 100);
+
+    const erroriO = [];
+    if (nomeO.length < 2 || nomeO.length > 100) erroriO.push('nome');
+    if (!CELLULARE_OK.test(cell))               erroriO.push('telefono');
+    if (d.privacy !== true)                     erroriO.push('privacy');
+    if (erroriO.length) {
+      return res.status(400).json({ ok: false, errore: 'Alcuni campi non sono validi.', campi: erroriO });
+    }
+
+    const internazionale = cell.replace(/^(?:\+39|0039)?/, '+39');
+    const htmlO = ''
+      + '<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;'
+      +   'background:#FFF8F3;padding:28px;border-radius:14px">'
+      +   '<p style="margin:0 0 4px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;'
+      +     'color:#A94B0B">Offerta speciale · 3 video a €390</p>'
+      +   '<h1 style="margin:0 0 22px;font-size:22px;color:#17120E">Da richiamare</h1>'
+      +   '<table style="border-collapse:collapse;font-size:15px">'
+      +     '<tr><td style="padding:6px 16px 6px 0;color:#6B5B4E">Nome</td>'
+      +       '<td style="padding:6px 0;color:#17120E;font-weight:600">' + pulisci(nomeO) + '</td></tr>'
+      +     '<tr><td style="padding:6px 16px 6px 0;color:#6B5B4E">Cellulare</td>'
+      +       '<td style="padding:6px 0;font-weight:600"><a href="tel:' + pulisci(internazionale) + '" style="color:#A94B0B">'
+      +       pulisci(cell) + '</a></td></tr>'
+      +     '<tr><td style="padding:6px 16px 6px 0;color:#6B5B4E">Pagina</td>'
+      +       '<td style="padding:6px 0;color:#17120E">' + pulisci(pagina || '—') + '</td></tr>'
+      +   '</table>'
+      +   '<p style="margin:22px 0 0;font-size:13px;color:#6B5B4E">'
+      +     'Ha chiesto di essere richiamato per l\'offerta. Sul sito promettiamo risposta entro un giorno lavorativo.'
+      +   '</p>'
+      + '</div>';
+
+    return spedisci(res, ip, {
+      subject: 'Offerta 3 video — ' + nomeO + ' · ' + cell,
+      html: htmlO,
+      text: 'Offerta speciale 3 video a €390\n\nNome: ' + nomeO + '\nCellulare: ' + cell
+        + '\nPagina: ' + (pagina || '-') + '\n\nDa richiamare entro un giorno lavorativo.'
+    });
   }
 
   /* ── Validazione lato server. Quella nel browser è comodità per
@@ -234,36 +311,10 @@ module.exports = async function handler(req, res) {
     + '\nTelefono: ' + (telefono || '-') + '\nSettore: ' + settore
     + '\n\nMessaggio:\n' + (messaggio || '-');
 
-  // da qui in poi si spedisce davvero: ora il tentativo conta
-  registraInvio(ip);
-
-  try {
-    const r = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + CHIAVE,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        from: MITTENTE,
-        to: [DESTINATARIO],
-        reply_to: email,        // "Rispondi" in Gmail scrive al cliente
-        subject: 'Sopralluogo — ' + nome + (azienda ? ' (' + azienda + ')' : ''),
-        html: html,
-        text: testo
-      })
-    });
-
-    if (!r.ok) {
-      const dettaglio = await r.text();
-      console.error('Resend ha risposto', r.status, dettaglio);
-      return res.status(502).json({ ok: false, errore: 'Invio non riuscito. Riprovate tra poco.' });
-    }
-
-    return res.status(200).json({ ok: true });
-
-  } catch (err) {
-    console.error('Errore di rete verso Resend:', err);
-    return res.status(502).json({ ok: false, errore: 'Invio non riuscito. Riprovate tra poco.' });
-  }
+  return spedisci(res, ip, {
+    reply_to: email,        // "Rispondi" in Gmail scrive al cliente
+    subject: 'Sopralluogo — ' + nome + (azienda ? ' (' + azienda + ')' : ''),
+    html: html,
+    text: testo
+  });
 };

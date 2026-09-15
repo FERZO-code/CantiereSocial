@@ -737,12 +737,12 @@ File: `pacchetti.html`, `pacchetti.css`, `pacchetti.js`. Usa anche `styles.css`,
   Completa è quello messo in evidenza; il risparmio è calcolato su 1 video
   Essenziale (2 × 390 − 690 = €90; 4 × 390 − 990 = €570).
 - **02 Pacchetto social**: da €1.490/mese, cinque fasi.
-- **03 Pacchetto sito web**: da €1.590 una tantum.
+- **03 Pacchetto sito web**: da €1.590 una tantum, foto professionali incluse.
 - **Servizi singoli**: produzione €490 · social media management €790/mese ·
   advertising €490/mese · sito €990 · SEO €390/mese · brand identity €890.
   I singoli sono prezzati apposta sopra i pacchetti: social + advertising
   separati fanno €1.280/mese, il Pacchetto social €1.490 con molto di più;
-  il solo sito €990, il Pacchetto sito web €1.590 con SEO e Google Ads.
+  il solo sito €990, il Pacchetto sito web €1.590 con foto professionali, SEO e Google Ads.
 - **04 Servizi singoli**: si selezionano i servizi e compare il totale di
   partenza (una tantum e mensile separati). Se la combinazione somiglia a un
   pacchetto, compare un consiglio.
@@ -812,3 +812,37 @@ a ogni modifica. La pagina carica Archivo con l'asse della larghezza
 
 > La sezione "Il problema" (racconto a scene) è stata rimossa su richiesta:
 > toglieva troppa visibilità al resto della pagina.
+
+---
+
+# Offerta speciale — pop-up "3 video al prezzo di 1"
+
+Pop-up a forma di cartello dei lavori: **3 video a €390 fino al 1° ottobre
+2026**, con nome, cellulare e casella privacy. Compare su home e `/pacchetti`,
+non sulle pagine legali.
+
+- **Dove si cambia**: logica e testi in `script.js` (blocco "OFFERTA
+  SPECIALE", in fondo), stile in `styles.css` (blocco omonimo, in fondo).
+- **Impostazioni** in cima al blocco di `script.js`:
+  - `FINE`: ultimo istante valido. Dopo, il pop-up non compare più da solo.
+  - `ATTESA_MS` (10 s) e `SOGLIA_SCORRIMENTO` (un terzo di pagina): quando compare.
+  - `RIPROPONI_GIORNI` (3): dopo quanto si ripropone a chi l'ha chiuso.
+- **Quando non compare**: sopra l'intro, il banner cookie, un'altra finestra
+  aperta, la chat WhatsApp aperta, mentre si scrive in un campo, a chi arriva
+  già sul modulo (`#contatti` o `?richiesta=`), a chi l'ha già inviato.
+- **Cosa arriva**: un'email a info@cantieresocial.com con oggetto
+  "Offerta 3 video — Nome · cellulare", nome, cellulare cliccabile e pagina
+  di provenienza. Non c'è un indirizzo a cui rispondere: si richiama.
+- **Server** (`api/contact.js`): con `tipo: 'offerta'` valida solo nome e
+  cellulare italiano (3xx, con +39 facoltativo) e la privacy. Stesse
+  protezioni del modulo: trappola anti-spam, trappola temporale, limite di
+  invii (condiviso con il modulo).
+- **Conversione**: l'invio conta come `generate_lead`, come il modulo, e solo
+  con il consenso.
+- **Privacy e cookie**: l'informativa cita il modulo dell'offerta; la cookie
+  policy elenca `cs_offerta` (memoria locale, tecnica, senza consenso).
+- **Per rivedere il pop-up in prova**: dalla console del browser
+  `localStorage.removeItem('cs_offerta')` e ricaricate.
+- **A offerta finita**: si può lasciare così (non compare più) o togliere il
+  blocco da `script.js` e `styles.css`, la riga `cs_offerta` dalla cookie
+  policy e il paragrafo dall'informativa.

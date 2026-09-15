@@ -95,7 +95,7 @@
               'drone e report mensile.';
     } else if (scelte.sito && (scelte.seo || scelte.advertising)) {
       testo = 'Con il <a href="#sito-web">Pacchetto sito web</a>, da €1.590 una tantum, ' +
-              'sito, SEO professionale e impostazione di Google Ads sono già compresi.';
+              'sito, foto professionali, SEO e impostazione di Google Ads sono già compresi.';
     }
     consiglio.innerHTML = testo;
     consiglio.hidden = !testo;

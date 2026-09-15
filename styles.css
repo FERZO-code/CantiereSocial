@@ -2059,3 +2059,188 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 @media (prefers-reduced-motion: reduce) {
   .settore.is-entra { animation: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   OFFERTA SPECIALE — pop-up a forma di cartello dei lavori
+   Lo costruisce script.js (blocco "OFFERTA SPECIALE"). È un <dialog>:
+   il browser gestisce focus, tasto Esc e sfondo scuro.
+   ═══════════════════════════════════════════════════════════════════ */
+.offerta {
+  width: min(440px, calc(100vw - 24px));
+  max-width: none;
+  max-height: calc(100vh - 24px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@supports (height: 100dvh) {
+  .offerta { max-height: calc(100dvh - 24px); }
+}
+.offerta::backdrop {
+  background: rgba(23, 18, 14, .62);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.offerta__cartello {
+  position: relative;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  overflow: hidden;
+  transform-origin: 50% 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .offerta[open] .offerta__cartello { animation: offerta-appendi .9s var(--ease) both; }
+}
+@keyframes offerta-appendi {
+  0%   { opacity: 0; transform: translateY(-24px) rotate(-2deg); }
+  55%  { opacity: 1; transform: translateY(0) rotate(.8deg); }
+  80%  { transform: rotate(-.3deg); }
+  100% { transform: none; }
+}
+
+.offerta__nastro { height: 14px; background: var(--nastro); border-bottom: 2px solid var(--ink); }
+.offerta__bullone {
+  position: absolute; top: 26px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0 18%, #B7A89C 30%, #6B5B4E 100%);
+  box-shadow: 0 0 0 1px rgba(23, 18, 14, .35);
+}
+.offerta__bullone--sx { left: 12px; }
+.offerta__bullone--dx { right: 12px; }
+
+.offerta__chiudi {
+  position: absolute; top: 22px; right: 28px;
+  display: grid; place-items: center;
+  width: 40px; height: 40px;
+  padding: 0; border: 0; border-radius: 50%;
+  background: var(--cream-2); color: var(--ink);
+  cursor: pointer;
+  transition: background-color .18s var(--ease);
+}
+.offerta__chiudi:hover { background: var(--orange-soft); }
+.offerta__chiudi svg { width: 18px; height: 18px; }
+
+.offerta__testa { padding: var(--sp-4) 72px; text-align: center; }
+.offerta__ente {
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  font-size: .66rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--orange-ink);
+}
+.offerta__t {
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800;
+  font-size: clamp(2rem, 8.4vw, 2.6rem);
+  line-height: .95; letter-spacing: -.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.offerta__dati { border-top: 2px solid var(--ink); }
+.offerta__dati > div {
+  display: grid; grid-template-columns: 92px 1fr; gap: var(--sp-3);
+  align-items: baseline;
+  padding: 9px var(--sp-5);
+  border-bottom: 1px solid var(--line);
+}
+.offerta__dati dt {
+  font-family: var(--font-mono);
+  font-size: .64rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.offerta__dati dd { font-weight: 600; font-size: .95rem; line-height: 1.35; }
+.offerta__dati dd strong { color: var(--orange-ink); }
+.offerta__prezzo { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 var(--sp-2); }
+.offerta__prezzo b {
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800; font-size: 2.6rem; line-height: .9;
+  color: var(--orange-deep);
+}
+.offerta__prezzo small { font-family: var(--font-mono); font-size: .7rem; font-weight: 400; color: var(--fg-muted); }
+
+.offerta__sub {
+  padding: 7px var(--sp-5);
+  background: var(--ink); color: var(--cream);
+  font-family: var(--font-mono);
+  font-size: .66rem; letter-spacing: .14em; text-transform: uppercase;
+}
+
+.offerta__form { padding: var(--sp-4) var(--sp-5) var(--sp-5); }
+.offerta__campo { margin-bottom: var(--sp-3); }
+.offerta__campo label { display: block; margin-bottom: 5px; font-size: .84rem; font-weight: 600; }
+.offerta__campo input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px var(--sp-4);
+  background: var(--surface);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 10px;
+  font-size: 16px;   /* evita lo zoom automatico su iOS */
+  transition: border-color .18s var(--ease), box-shadow .18s var(--ease);
+}
+.offerta__campo input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(234, 118, 33, .3); }
+.offerta__campo input[aria-invalid="true"] { border-color: #C0281E; }
+.offerta__err { margin-top: 5px; font-size: .8rem; line-height: 1.35; color: #C0281E; }
+.offerta__err[hidden] { display: none; }
+.offerta__check {
+  display: grid; grid-template-columns: 22px 1fr; gap: 4px var(--sp-2);
+  align-items: start;
+  margin: var(--sp-2) 0 var(--sp-4);
+}
+.offerta__check input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--ink); }
+.offerta__check label { font-size: .86rem; line-height: 1.4; color: var(--fg-muted); }
+.offerta__check a { color: var(--orange-ink); font-weight: 600; }
+.offerta__check .offerta__err { grid-column: 1 / -1; margin-top: 0; }
+.offerta__stato:not(:empty) { margin-top: var(--sp-3); font-size: .86rem; line-height: 1.4; color: #C0281E; text-align: center; }
+.offerta__nota { margin-top: var(--sp-3); font-size: .78rem; text-align: center; color: var(--fg-muted); }
+
+.offerta__fatto { padding: var(--sp-6) var(--sp-5); text-align: center; }
+.offerta__fatto-t {
+  margin-bottom: var(--sp-3);
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800; font-size: 2.2rem; line-height: .95;
+  text-transform: uppercase;
+}
+.offerta__fatto p { color: var(--fg-muted); }
+.offerta__fatto .btn { margin-top: var(--sp-5); }
+.offerta__wa {
+  display: inline-flex; align-items: center; min-height: 44px;
+  margin-top: var(--sp-2);
+  font-weight: 600; color: var(--orange-ink);
+  text-underline-offset: 3px;
+}
+
+/* schermi bassi (telefoni con la barra del browser): il pulsante deve
+   restare visibile senza scorrere */
+@media (max-height: 760px) {
+  .offerta__nastro { height: 10px; }
+  .offerta__bullone { top: 20px; }
+  .offerta__chiudi { top: 16px; }
+  .offerta__testa { padding-block: 10px; }
+  .offerta__t { font-size: 1.85rem; }
+  .offerta__dati > div { padding-block: 6px; }
+  .offerta__prezzo b { font-size: 2.1rem; }
+  .offerta__sub { padding-block: 5px; }
+  .offerta__form { padding-top: var(--sp-3); padding-bottom: var(--sp-4); }
+  .offerta__campo { margin-bottom: 10px; }
+  .offerta__campo label { margin-bottom: 3px; }
+  .offerta__campo input { min-height: 42px; padding-block: 8px; }
+  .offerta__check { margin: 6px 0 var(--sp-3); }
+  .offerta__nota { margin-top: 8px; }
+}
+
+@media (max-width: 420px) {
+  .offerta__testa { padding-inline: 56px; }
+  .offerta__chiudi { right: 22px; width: 36px; height: 36px; }
+  .offerta__dati > div { grid-template-columns: 78px 1fr; padding-inline: var(--sp-4); }
+  .offerta__sub, .offerta__form { padding-inline: var(--sp-4); }
+}

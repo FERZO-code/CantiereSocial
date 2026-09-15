@@ -635,3 +635,253 @@
     if (!pannello.hidden && !wa.contains(e.target)) chiudiPannello(false);
   });
 })();
+
+/* ═══════════════════════════════════════════════════════════════════
+   OFFERTA SPECIALE — pop-up a forma di cartello dei lavori
+   "3 video al prezzo di 1": €390 fino al 1° ottobre 2026.
+
+   Quando compare: dopo ATTESA_MS oppure a un terzo di pagina, mai sopra
+   l'intro, il banner cookie, un'altra finestra aperta o mentre si scrive
+   in un campo. Non compare sulle pagine legali né a chi arriva già sul
+   modulo (#contatti o ?richiesta=…).
+   Chiuso: si ripropone dopo RIPROPONI_GIORNI. Inviato: non torna più.
+   Dopo FINE sparisce da solo. La scelta resta nel browser (cs_offerta).
+   ═══════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var FINE = new Date('2026-10-01T23:59:59+02:00');   // ultimo istante valido
+  var RIPROPONI_GIORNI = 3;
+  var ATTESA_MS = 10000;
+  var SOGLIA_SCORRIMENTO = 0.33;
+  var MEMORIA = 'cs_offerta';
+  var GIORNO = 86400000;
+
+  var ora = new Date();
+  if (ora > FINE) return;
+  if (document.querySelector('.legal')) return;
+  if (!('HTMLDialogElement' in window)) return;
+  if (location.hash === '#contatti' || /[?&]richiesta=/.test(location.search)) return;
+
+  function leggi() { try { return JSON.parse(localStorage.getItem(MEMORIA) || 'null'); } catch (e) { return null; } }
+  function salva(v) { try { localStorage.setItem(MEMORIA, JSON.stringify(v)); } catch (e) {} }
+
+  var memoria = leggi();
+  if (memoria && memoria.stato === 'inviata') return;
+  if (memoria && memoria.stato === 'chiusa' && ora - memoria.il < RIPROPONI_GIORNI * GIORNO) return;
+
+  var giorni = Math.ceil((FINE - ora) / GIORNO);
+  var mancano = giorni <= 1 ? 'ultimo giorno' : 'mancano ' + giorni + ' giorni';
+
+  var X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" ' +
+    'aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+  var dlg = document.createElement('dialog');
+  dlg.className = 'offerta';
+  dlg.setAttribute('aria-labelledby', 'offerta-t');
+  dlg.setAttribute('aria-describedby', 'offerta-d');
+  dlg.innerHTML =
+    '<div class="offerta__cartello">' +
+      '<div class="offerta__nastro" aria-hidden="true"></div>' +
+      '<span class="offerta__bullone offerta__bullone--sx" aria-hidden="true"></span>' +
+      '<span class="offerta__bullone offerta__bullone--dx" aria-hidden="true"></span>' +
+      '<button type="button" class="offerta__chiudi" aria-label="Chiudi l’offerta">' + X + '</button>' +
+
+      '<div class="offerta__testa">' +
+        '<p class="offerta__ente">Offerta speciale</p>' +
+        '<h2 class="offerta__t" id="offerta-t">3 video al prezzo di 1</h2>' +
+      '</div>' +
+
+      '<dl class="offerta__dati" id="offerta-d">' +
+        '<div><dt>Oggetto</dt><dd>3 video per la vostra commessa</dd></div>' +
+        '<div><dt>Importo</dt><dd class="offerta__prezzo"><b>€390</b><small>il prezzo di un solo video</small></dd></div>' +
+        '<div><dt>Scadenza</dt><dd>1° ottobre · <strong>' + mancano + '</strong></dd></div>' +
+      '</dl>' +
+
+      '<div class="offerta__corpo">' +
+        '<p class="offerta__sub">Bloccate l’offerta · vi richiamiamo noi</p>' +
+        '<form class="offerta__form" novalidate>' +
+          '<div class="honeypot" aria-hidden="true">' +
+            '<label for="o-website">Non compilare questo campo</label>' +
+            '<input id="o-website" name="website" type="text" tabindex="-1" autocomplete="off">' +
+          '</div>' +
+          '<div class="offerta__campo">' +
+            '<label for="o-nome">Nome e cognome</label>' +
+            '<input id="o-nome" name="nome" type="text" autocomplete="name" maxlength="100" required>' +
+            '<p class="offerta__err" id="o-err-nome" hidden></p>' +
+          '</div>' +
+          '<div class="offerta__campo">' +
+            '<label for="o-tel">Cellulare</label>' +
+            '<input id="o-tel" name="telefono" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" required>' +
+            '<p class="offerta__err" id="o-err-telefono" hidden></p>' +
+          '</div>' +
+          '<div class="offerta__check">' +
+            '<input id="o-privacy" name="privacy" type="checkbox" required>' +
+            '<label for="o-privacy">Ho letto l’<a href="/privacy" target="_blank" rel="noopener">informativa privacy</a>.</label>' +
+            '<p class="offerta__err" id="o-err-privacy" hidden></p>' +
+          '</div>' +
+          '<button class="btn btn--orange btn--lg btn--block" type="submit">Blocca l’offerta</button>' +
+          '<p class="offerta__stato" role="status" aria-live="polite"></p>' +
+          '<p class="offerta__nota">Vi richiamiamo entro un giorno lavorativo. Nessun impegno.</p>' +
+        '</form>' +
+      '</div>' +
+    '</div>';
+
+  document.body.appendChild(dlg);
+
+  var form = dlg.querySelector('form');
+  var stato = dlg.querySelector('.offerta__stato');
+  var apertoIl = 0;
+  var inviata = false;
+  var mostrato = false;
+
+  /* ── chiusura: pulsante, Esc (nativo), clic sullo sfondo ─────────── */
+  function chiudi() { if (dlg.open) dlg.close(); }
+  dlg.querySelector('.offerta__chiudi').addEventListener('click', chiudi);
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) chiudi(); });
+  dlg.addEventListener('close', function () {
+    if (!inviata) salva({ stato: 'chiusa', il: Date.now() });
+  });
+
+  /* ── quando mostrarlo ────────────────────────────────────────────── */
+  function libero() {
+    var attivo = document.activeElement;
+    return !document.documentElement.classList.contains('intro-on') &&
+      !document.body.classList.contains('consenso-aperto') &&
+      !document.querySelector('dialog[open]') &&
+      !document.querySelector('.wa.is-aperta') &&
+      !(attivo && /^(INPUT|TEXTAREA|SELECT)$/.test(attivo.tagName));
+  }
+
+  function prova() {
+    if (mostrato) return;
+    if (!libero()) { setTimeout(prova, 3000); return; }
+    mostrato = true;
+    window.removeEventListener('scroll', suScroll);
+    apertoIl = Date.now();
+    dlg.showModal();
+  }
+
+  function suScroll() {
+    var corsa = document.documentElement.scrollHeight - window.innerHeight;
+    if (corsa > 0 && window.scrollY / corsa >= SOGLIA_SCORRIMENTO) prova();
+  }
+
+  setTimeout(prova, ATTESA_MS);
+  window.addEventListener('scroll', suScroll, { passive: true });
+
+  /* ── validazione (il server ricontrolla tutto) ───────────────────── */
+  var CELLULARE_OK = /^(?:\+39|0039)?3\d{8,9}$/;
+  var REGOLE = {
+    nome: function (el) {
+      return el.value.trim().length >= 2 ? '' : 'Scriveteci il nome, così sappiamo chi chiamare.';
+    },
+    telefono: function (el) {
+      return CELLULARE_OK.test(el.value.replace(/[\s.\-()\/]/g, '')) ? ''
+        : 'Controllate il numero: serve un cellulare italiano, per esempio 333 123 4567.';
+    },
+    privacy: function (el) {
+      return el.checked ? '' : 'Confermate di aver letto l’informativa privacy.';
+    }
+  };
+
+  function controlla(nome) {
+    var el = form.elements[nome];
+    var box = dlg.querySelector('#o-err-' + nome);
+    var msg = REGOLE[nome](el);
+    box.textContent = msg;
+    box.hidden = !msg;
+    if (msg) {
+      el.setAttribute('aria-invalid', 'true');
+      el.setAttribute('aria-describedby', box.id);
+    } else {
+      el.removeAttribute('aria-invalid');
+      el.removeAttribute('aria-describedby');
+    }
+    return !msg;
+  }
+
+  // al blur solo se il campo è stato toccato; dopo un errore, correzione immediata
+  ['nome', 'telefono'].forEach(function (n) {
+    var el = form.elements[n];
+    el.addEventListener('blur', function () { if (el.value) controlla(n); });
+    el.addEventListener('input', function () { if (el.getAttribute('aria-invalid')) controlla(n); });
+  });
+  form.elements.privacy.addEventListener('change', function () {
+    if (form.elements.privacy.getAttribute('aria-invalid')) controlla('privacy');
+  });
+
+  /* ── invio ───────────────────────────────────────────────────────── */
+  function conferma(nome) {
+    var corpo = dlg.querySelector('.offerta__corpo');
+    corpo.innerHTML =
+      '<div class="offerta__fatto" role="status">' +
+        '<p class="offerta__fatto-t">Offerta bloccata</p>' +
+        '<p data-grazie></p>' +
+        '<button type="button" class="btn btn--dark btn--lg btn--block" data-chiudi>Chiudi</button>' +
+        '<a class="offerta__wa" href="https://wa.me/393474068285?text=' +
+          encodeURIComponent('Ciao Cantiere Social, ho appena richiesto l’offerta 3 video a €390.') +
+          '" target="_blank" rel="noopener">Oppure scriveteci subito su WhatsApp</a>' +
+      '</div>';
+    corpo.querySelector('[data-grazie]').textContent =
+      'Grazie ' + nome + ', vi richiamiamo entro un giorno lavorativo.';
+    var bottone = corpo.querySelector('[data-chiudi]');
+    bottone.addEventListener('click', chiudi);
+    bottone.focus();
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    stato.textContent = '';
+
+    var primo = null;
+    ['nome', 'telefono', 'privacy'].forEach(function (n) {
+      if (!controlla(n) && !primo) primo = form.elements[n];
+    });
+    if (primo) { primo.focus(); return; }
+
+    var bottone = form.querySelector('button[type="submit"]');
+    var testo = bottone.textContent;
+    var nome = form.elements.nome.value.trim();
+    bottone.disabled = true;
+    bottone.textContent = 'Invio in corso…';
+
+    function ripristina(messaggio) {
+      bottone.disabled = false;
+      bottone.textContent = testo;
+      stato.textContent = messaggio;
+    }
+
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo: 'offerta',
+        nome: nome,
+        telefono: form.elements.telefono.value.trim(),
+        privacy: true,
+        website: form.elements.website.value,   // trappola anti-spam
+        ts: apertoIl,                           // trappola temporale
+        pagina: location.pathname
+      })
+    })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (c) { return { ok: r.ok, corpo: c }; });
+      })
+      .then(function (esito) {
+        if (esito.ok && esito.corpo.ok) {
+          inviata = true;
+          salva({ stato: 'inviata', il: Date.now() });
+          conferma(nome);
+          // conversione Google Ads / Analytics: parte solo con il consenso
+          if (window.CantiereConsenso) window.CantiereConsenso.conversione('modulo');
+          return;
+        }
+        ripristina((esito.corpo && esito.corpo.errore) ||
+          'Non siamo riusciti a inviare la richiesta. Riprovate, oppure scriveteci su WhatsApp.');
+      })
+      .catch(function () {
+        ripristina('Connessione assente. Controllate la rete e riprovate.');
+      });
+  });
+})();
