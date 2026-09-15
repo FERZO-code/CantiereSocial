@@ -31,14 +31,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- ⚠️ Alzate ?v= a ogni modifica di CSS/JS: forza il browser a
      riscaricarli invece di riusare la copia in cache. -->
-<link rel="stylesheet" href="styles.css?v=12">
+<link rel="stylesheet" href="styles.css?v=13">
 
 <script>
   /* Attiva l'intro prima del primo paint, così non c'è sfarfallio.
-     Chi ha chiesto meno animazioni al sistema operativo la salta del tutto. */
+     Chi ha chiesto meno animazioni al sistema operativo la salta del tutto,
+     e così chi arriva da un'altra pagina del sito o su un'ancora (#contatti):
+     rivedere l'intro a ogni passaggio farebbe solo perdere tempo. */
   (function () {
     try {
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var interno = document.referrer.indexOf(location.origin) === 0;
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash && !interno) {
         document.documentElement.classList.add('intro-on');
       }
     } catch (e) {}
@@ -95,13 +98,15 @@
   ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
-    "name": "Pacchetti 360°",
+    "name": "Pacchetti",
     "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Riprese video e foto in cantiere", "serviceType": "Video making" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gestione social media", "serviceType": "Social media management" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Campagne Meta e Google Ads", "serviceType": "Advertising" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Siti web e landing page", "serviceType": "Web design" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand identity", "serviceType": "Graphic design" } }
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Video per commessa", "serviceType": "Video making" },
+        "priceSpecification": { "@type": "PriceSpecification", "minPrice": 390, "priceCurrency": "EUR" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pacchetto social", "serviceType": "Social media management" },
+        "priceSpecification": { "@type": "PriceSpecification", "minPrice": 1490, "priceCurrency": "EUR", "description": "al mese" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pacchetto sito web", "serviceType": "Web design" },
+        "priceSpecification": { "@type": "PriceSpecification", "minPrice": 1590, "priceCurrency": "EUR", "description": "una tantum" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Servizi singoli: riprese, social, advertising, siti web, SEO, brand identity", "serviceType": "Marketing services" } }
     ]
   }
 }
@@ -112,8 +117,8 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "Quanto costa un pacchetto 360°?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Dipende da quante uscite servono al mese e da quanto budget pubblicitario mettete. Dopo il sopralluogo consegniamo un preventivo scritto con tutte le voci separate: sapete esattamente cosa pagate e perché." } },
+    { "@type": "Question", "name": "Quanto costano i pacchetti?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Per commessa si parte da €390 per un video, il pacchetto social parte da €1.490 al mese e il pacchetto sito web da €1.590 una tantum. Il prezzo finale dipende da quante uscite servono e da quanto budget pubblicitario mettete: dopo il sopralluogo consegniamo un preventivo scritto con tutte le voci separate." } },
     { "@type": "Question", "name": "Dobbiamo comparire noi nei video?",
       "acceptedAnswer": { "@type": "Answer", "text": "Aiuta molto, ma non è obbligatorio. Lavoriamo bene anche riprendendo solo il cantiere, i materiali, le squadre al lavoro e i risultati finiti." } },
     { "@type": "Question", "name": "In quanto tempo si vedono i risultati?",
@@ -312,60 +317,61 @@
   <div class="wrap">
     <div class="sec-head">
       <p class="label reveal"><span>02</span> I pacchetti</p>
-      <h2 class="h2 reveal">Il pacchetto 360°,<br><span class="muted">quello che offriamo.</span></h2>
+      <h2 class="h2 reveal">Scegliete da dove partire.<br><span class="muted">Il resto lo costruiamo insieme.</span></h2>
       <p class="sec-head__note reveal">
-        Non vendiamo servizi sciolti.
-        Mettiamo in cantiere tutto ciò che serve perché il lavoro che fate diventi il lavoro che ricercano.
+        Prezzi di partenza chiari, senza sorprese. Dopo il sopralluogo ricevete un
+        preventivo scritto con tutte le voci separate.
       </p>
     </div>
 
-    <div class="cards">
-      <article class="card reveal">
+    <!-- I link portano ai dettagli dei pacchetti, nella pagina /pacchetti. -->
+    <div class="cards cards--pacchetti">
+      <article class="card pack reveal">
         <span class="card__n" aria-hidden="true">01</span>
         <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3z"/></svg>
-        <h3>Riprese in cantiere</h3>
-        <p>Veniamo sul posto con la nostra attrezzatura. Video, foto, timelapse, before&nbsp;/&nbsp;after, drone. Materiale girato una volta, montato per tutto il mese.</p>
-        <ul role="list"><li>Uscita mensile</li><li>Reel &amp; formati verticali</li><li>Foto per sito e brochure</li></ul>
+        <h3>Per commessa</h3>
+        <p>Avete un progetto da raccontare? Partiamo da quello.</p>
+        <dl class="pack__prezzi">
+          <div><dt>Essenziale <span class="pack__qta">1 video</span></dt><dd>€390</dd></div>
+          <div><dt>Racconto <span class="pack__qta">2 video</span></dt><dd>€690</dd></div>
+          <div><dt>Completa <span class="pack__qta">4 video</span></dt><dd>€990</dd></div>
+        </dl>
+        <a class="pack__link" href="/pacchetti#commessa">Scopri il pacchetto<span class="sr-only"> per commessa</span> <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
       </article>
 
-      <article class="card reveal">
+      <article class="card pack pack--in-evidenza reveal">
         <span class="card__n" aria-hidden="true">02</span>
         <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
-        <h3>Social management</h3>
-        <p>Piano editoriale, copy, grafiche, pubblicazione e risposte in direct. Instagram, Facebook, TikTok e LinkedIn gestiti da noi, con un calendario che approvate prima.</p>
-        <ul role="list"><li>Piano editoriale mensile</li><li>Community management</li><li>Format ricorrenti riconoscibili</li></ul>
+        <h3>Pacchetto social</h3>
+        <p>Tutta la comunicazione, dalla produzione alla pubblicità.</p>
+        <p class="pack__prezzo"><span class="pack__da">Da</span> €1.490<span class="pack__per">/mese</span></p>
+        <ul class="pack__tag" role="list">
+          <li>Riprese</li><li>Storytelling</li><li>Foto</li><li>Drone</li><li>Social</li><li>Meta Ads</li><li>Google Ads</li><li>Report</li>
+        </ul>
+        <a class="pack__link" href="/pacchetti#social">Scopri il pacchetto<span class="sr-only"> social</span> <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
       </article>
 
-      <article class="card reveal">
+      <article class="card pack reveal">
         <span class="card__n" aria-hidden="true">03</span>
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
-        <h3>Advertising</h3>
-        <p>Campagne Meta e Google costruite per farvi arrivare richieste vere, non like. Budget dichiarato, targeting sulla vostra zona, risultati misurati al contatto.</p>
-        <ul role="list"><li>Meta &amp; Google Ads</li><li>Targeting locale</li><li>Costo per contatto sotto controllo</li></ul>
-      </article>
-
-      <article class="card reveal">
-        <span class="card__n" aria-hidden="true">04</span>
         <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><rect x="2.5" y="4" width="19" height="14" rx="2"/><path d="M2.5 8.5h19"/><path d="M9 21h6"/></svg>
-        <h3>Sito web &amp; landing</h3>
-        <p>Un sito veloce, chiaro e fatto per una cosa sola: trasformare chi vi guarda in chi vi scrive. Ottimizzato per Google e leggibile dal telefono.</p>
-        <ul role="list"><li>Sito vetrina o landing</li><li>SEO locale</li><li>Form, WhatsApp e tracciamento</li></ul>
+        <h3>Pacchetto sito web</h3>
+        <p>Un sito professionale costruito per farvi trovare e contattare.</p>
+        <p class="pack__prezzo"><span class="pack__da">Da</span> €1.590<span class="pack__per">una tantum</span></p>
+        <ul class="pack__tag" role="list">
+          <li>Sito</li><li>SEO</li><li>Analytics</li><li>Search Console</li><li>Google Ads</li>
+        </ul>
+        <a class="pack__link" href="/pacchetti#sito-web">Scopri il pacchetto<span class="sr-only"> sito web</span> <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
       </article>
 
-      <article class="card reveal">
-        <span class="card__n" aria-hidden="true">05</span>
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M12 2.5l2.4 5.6 6 .6-4.5 4 1.3 5.9L12 15.5 6.8 18.6l1.3-5.9-4.5-4 6-.6z"/></svg>
-        <h3>Brand identity</h3>
-        <p>Logo, colori, caratteri e format grafici. Quello che serve perché un vostro post si riconosca prima ancora di leggere il nome.</p>
-        <ul role="list"><li>Logo e sistema colore</li><li>Template per social</li><li>Mezzi e cartellonistica di cantiere</li></ul>
-      </article>
-
-      <article class="card reveal">
-        <span class="card__n" aria-hidden="true">06</span>
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M4 5h16"/><path d="M6 5v6a6 6 0 0012 0V5"/><path d="M12 17v3"/><path d="M8 20h8"/></svg>
-        <h3>Contatti &amp; follow-up</h3>
-        <p>I contatti che arrivano non si perdono. Form, WhatsApp e notifiche collegate, così sapete sempre chi vi ha scritto e a chi dovete ancora rispondere.</p>
-        <ul role="list"><li>Form e WhatsApp Business</li><li>Notifiche immediate</li><li>Report mensile dei contatti</li></ul>
+      <article class="card pack reveal">
+        <span class="card__n" aria-hidden="true">04</span>
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>
+        <h3>Servizi singoli</h3>
+        <p>Avete già un'esigenza precisa? Costruiamo il servizio intorno a quella.</p>
+        <ul class="pack__tag" role="list">
+          <li>Riprese</li><li>Social</li><li>Advertising</li><li>Siti web</li><li>SEO</li><li>Brand identity</li>
+        </ul>
+        <a class="pack__link" href="/pacchetti#servizi-singoli">Vedi tutti i servizi <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
       </article>
     </div>
   </div>
@@ -595,8 +601,8 @@ FINE BLOCCO DISATTIVATO -->
 
     <div class="acc">
       <details class="acc__item reveal">
-        <summary>Quanto costa un pacchetto 360°?</summary>
-        <div class="acc__body"><p>Dipende da quante uscite servono al mese e da quanto budget pubblicitario mettete. Dopo il sopralluogo vi consegniamo un preventivo scritto con tutte le voci separate: sapete esattamente cosa pagate e perché. Nessun costo compare dopo la firma.</p></div>
+        <summary>Quanto costano i pacchetti?</summary>
+        <div class="acc__body"><p>Per commessa si parte da <strong>€390</strong> per un video, il pacchetto social parte da <strong>€1.490 al mese</strong> e il pacchetto sito web da <strong>€1.590 una tantum</strong>. Il prezzo finale dipende da quante uscite servono e da quanto budget pubblicitario mettete: dopo il sopralluogo vi consegniamo un preventivo scritto con tutte le voci separate: sapete esattamente cosa pagate e perché. Nessun costo compare dopo la firma.</p></div>
       </details>
 
       <details class="acc__item reveal">
@@ -741,6 +747,7 @@ FINE BLOCCO DISATTIVATO -->
     <nav class="footer__nav" aria-label="Navigazione footer">
       <h2>Sito</h2>
       <a href="#servizi">Servizi</a>
+      <a href="/pacchetti">Pacchetti e prezzi</a>
       <a href="#settori">Per chi</a>
       <a href="#metodo">Metodo</a>
       <a href="#studio">Studio</a>
@@ -776,7 +783,7 @@ FINE BLOCCO DISATTIVATO -->
   </div>
 </footer>
 
-<script src="script.js?v=12" defer></script>
+<script src="script.js?v=14" defer></script>
 
 <!-- Banner cookie e tag Google Ads. Resta inattivo finché in consenso.js
      non è compilato GOOGLE_ADS_ID (vedi LEGGIMI.md). -->

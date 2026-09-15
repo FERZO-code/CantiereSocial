@@ -720,3 +720,69 @@ var MESSAGGI = { edile: "...", showroom: "...", immobiliare: "...", altro: "..."
 ```
 
 Dopo la modifica alzate `?v=` di `script.js` in tutte e tre le pagine.
+
+---
+
+# Pagina Pacchetti (`/pacchetti`)
+
+File: `pacchetti.html`, `pacchetti.css`, `pacchetti.js`. Usa anche `styles.css`,
+`script.js` e `consenso.js` come la home.
+
+## Com'è fatta
+
+- **Cartello dei lavori** in apertura: fa da indice dei 4 pacchetti.
+- **Barra dei lotti** che resta in alto mentre si scorre ed evidenzia la
+  sezione in cui ci si trova.
+- **01 Per commessa**: Essenziale €390 · Racconto €690 · Completa €990.
+  Completa è quello messo in evidenza; il risparmio è calcolato su 1 video
+  Essenziale (2 × 390 − 690 = €90; 4 × 390 − 990 = €570).
+- **02 Pacchetto social**: da €1.490/mese, cinque fasi.
+- **03 Pacchetto sito web**: da €1.590 una tantum.
+- **Servizi singoli**: produzione €490 · social media management €790/mese ·
+  advertising €490/mese · sito €990 · SEO €390/mese · brand identity €890.
+  I singoli sono prezzati apposta sopra i pacchetti: social + advertising
+  separati fanno €1.280/mese, il Pacchetto social €1.490 con molto di più;
+  il solo sito €990, il Pacchetto sito web €1.590 con SEO e Google Ads.
+- **04 Servizi singoli**: si selezionano i servizi e compare il totale di
+  partenza (una tantum e mensile separati). Se la combinazione somiglia a un
+  pacchetto, compare un consiglio.
+
+## Cambiare un prezzo — punti da toccare tutti
+
+1. `pacchetti.html`: testo visibile, cartello in apertura, dati strutturati
+   (`application/ld+json`) e, per i servizi singoli, l'attributo
+   `data-prezzo` della casella.
+2. Se cambiano i tagli per commessa, ricalcolate "€… a video" e "risparmiate €…".
+3. `pacchetti.js`: i testi del consiglio citano €1.280, €210 e €1.590.
+   `pacchetti.html` cita €1.280 (Pacchetto social) ed €990 (Pacchetto sito web)
+   nelle righe di confronto.
+4. `script.js`: i messaggi precompilati (`RICHIESTE`) citano i prezzi.
+5. `index.html`: card della sezione pacchetti, FAQ "Quanto costano i
+   pacchetti?" (sia nel testo sia nel JSON-LD) e catalogo nel JSON-LD.
+
+## Richiesta precompilata
+
+I pulsanti della pagina portano al modulo in home con un parametro, per
+esempio `/?richiesta=commessa-completa#contatti`. `script.js` legge il
+parametro e scrive nel campo "Cosa vi serve" un testo fisso già previsto
+(solo valori noti: nulla dell'indirizzo finisce nel modulo così com'è).
+
+Valori: `sopralluogo`, `commessa`, `commessa-essenziale`, `commessa-racconto`,
+`commessa-completa`, `social`, `sito-web`, `servizi` (con
+`&servizi=produzione|social|advertising|sito|seo|brand`, anche più volte).
+
+Il configuratore dei servizi singoli funziona anche senza JavaScript: è un
+normale modulo che porta alla home con i servizi scelti.
+
+## Intro della home
+
+Chi arriva in home da un'altra pagina del sito, o su un'ancora come
+`#contatti`, non vede l'intro: altrimenti ogni clic su "Richiedi un
+preventivo" costerebbe due secondi di attesa.
+
+## Versioni dei file
+
+`pacchetti.css` e `pacchetti.js` hanno la stessa cache di un anno di
+`styles.css` e `script.js` (`vercel.json`): alzate `?v=` in `pacchetti.html`
+a ogni modifica. La pagina carica Archivo con l'asse della larghezza
+(`wdth`), usato per la scritta stretta di prezzi e cartello.

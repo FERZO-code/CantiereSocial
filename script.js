@@ -165,6 +165,43 @@
 
   var status = document.getElementById('form-status');
 
+  /* Richiesta precompilata: i pulsanti di /pacchetti portano qui con
+     ?richiesta=… (e ?servizi=… per i servizi singoli). Solo valori noti:
+     nulla di ciò che è nell'indirizzo finisce nel modulo così com'è. */
+  (function precompila() {
+    var msg = form.elements.messaggio;
+    if (!msg || msg.value || !window.URLSearchParams) return;
+
+    var q = new URLSearchParams(location.search);
+    var RICHIESTE = {
+      'sopralluogo':         'Vorrei prenotare il sopralluogo gratuito.',
+      'commessa':            'Vorrei un preventivo per una commessa (video senza abbonamento).',
+      'commessa-essenziale': 'Mi interessa il pacchetto Per commessa · Essenziale (1 video, €390).',
+      'commessa-racconto':   'Mi interessa il pacchetto Per commessa · Racconto (2 video, €690).',
+      'commessa-completa':   'Mi interessa il pacchetto Per commessa · Completa (4 video, €990).',
+      'social':              'Mi interessa il Pacchetto social (da €1.490 al mese).',
+      'sito-web':            'Mi interessa il Pacchetto sito web (da €1.590 una tantum).'
+    };
+    var SERVIZI = {
+      produzione: 'Produzione contenuti', social: 'Social media management',
+      advertising: 'Advertising', sito: 'Sito web', seo: 'SEO', brand: 'Brand identity'
+    };
+
+    var tipo = q.get('richiesta');
+    var testo = RICHIESTE[tipo];
+
+    if (tipo === 'servizi') {
+      var nomi = q.getAll('servizi')
+        .filter(function (s) { return SERVIZI.hasOwnProperty(s); })
+        .map(function (s) { return SERVIZI[s]; });
+      testo = nomi.length
+        ? 'Vorrei un preventivo per: ' + nomi.join(', ') + '.'
+        : 'Vorrei un preventivo per uno o più servizi singoli.';
+    }
+
+    if (testo) msg.value = testo + '\n\n';
+  })();
+
   // Istante di apertura: il server rifiuta gli invii troppo rapidi,
   // che nessun umano riesce a produrre compilando davvero i campi.
   var apertoIl = Date.now();

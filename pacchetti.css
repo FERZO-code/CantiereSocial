@@ -1,0 +1,670 @@
+/* ═══════════════════════════════════════════════════════════════════
+   CANTIERE SOCIAL — pagina /pacchetti
+   Si appoggia ai token e ai componenti di styles.css.
+   Segno distintivo: il cartello dei lavori, con la scritta stretta
+   "da cartello" (Archivo, asse wdth) usata solo per nomi dei lotti e prezzi.
+   ═══════════════════════════════════════════════════════════════════ */
+
+html.pk { scroll-padding-top: 148px; }
+
+.pk {
+  --nastro: repeating-linear-gradient(-45deg, var(--orange) 0 14px, var(--ink) 14px 28px);
+  --stretto: 72%;
+}
+
+.nav__links a[aria-current="page"] { color: var(--ink); background: rgba(23, 18, 14, .06); }
+.nav-mobile a[aria-current="page"] { color: var(--orange-ink); }
+
+/* prezzo "da cartello", condiviso da tutte le sezioni */
+.pk-prezzo {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 6px;
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800;
+  font-size: clamp(3rem, 5.4vw, 4.4rem);
+  line-height: .92;
+  letter-spacing: -.02em;
+  font-variant-numeric: lining-nums;
+}
+.pk-prezzo small {
+  font-family: var(--font-mono);
+  font-stretch: 100%;
+  font-size: .8rem; font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--fg-muted);
+}
+
+.pk-azioni { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+
+/* lista con spunta */
+.pk-lista { display: flex; flex-direction: column; gap: 9px; }
+.pk-lista li {
+  position: relative;
+  padding-left: 26px;
+  font-size: .94rem; line-height: 1.45;
+}
+.pk-lista li::before {
+  content: "";
+  position: absolute; left: 2px; top: .28em;
+  width: 13px; height: 7px;
+  border-left: 2px solid var(--orange);
+  border-bottom: 2px solid var(--orange);
+  transform: rotate(-45deg);
+}
+
+/* intestazione delle sezioni: titolo a sinistra, introduzione a destra */
+.pk-testa {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: var(--sp-5) var(--sp-8);
+  align-items: end;
+  margin-bottom: var(--sp-8);
+}
+.pk-testa .h2 { max-width: 18ch; }
+.pk-testa__intro p { font-size: 1.08rem; color: var(--fg-muted); max-width: 46ch; }
+.pk-testa__intro strong { color: var(--ink); font-weight: 700; }
+
+/* ── HERO ────────────────────────────────────────────────────────── */
+.pk-hero {
+  position: relative;
+  padding-top: clamp(120px, 15vw, 164px);
+  padding-bottom: clamp(56px, 7vw, 88px);
+  overflow: hidden;
+}
+.pk-hero__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 500px);
+  gap: var(--sp-8);
+  align-items: center;
+}
+.pk-hero__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.7rem, 6.2vw, 4.9rem);
+  line-height: .98;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+  margin-bottom: var(--sp-5);
+}
+.pk-hero__title .muted { display: block; margin-top: .12em; font-size: .62em; line-height: 1.06; letter-spacing: -.035em; }
+.pk-hero__lead {
+  font-size: clamp(1.04rem, 1.35vw, 1.16rem);
+  color: var(--fg-muted);
+  max-width: 54ch;
+  margin-bottom: var(--sp-6);
+}
+.pk-hero__lead strong { color: var(--ink); font-weight: 700; }
+.pk-hero .pk-azioni { margin-bottom: var(--sp-6); }
+
+/* ── IL CARTELLO DEI LAVORI ──────────────────────────────────────── */
+.pk-cartello {
+  position: relative;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 0 2px 0 var(--ink), 0 30px 60px -24px rgba(23, 18, 14, .35);
+  overflow: hidden;
+  transform-origin: 50% 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pk-cartello { animation: pk-appendi 1s var(--ease) .15s both; }
+}
+@keyframes pk-appendi {
+  0%   { opacity: 0; transform: translateY(-28px) rotate(-2.2deg); }
+  55%  { opacity: 1; transform: translateY(0) rotate(.9deg); }
+  80%  { transform: rotate(-.35deg); }
+  100% { transform: none; }
+}
+
+.pk-cartello__nastro { height: 16px; background: var(--nastro); border-bottom: 2px solid var(--ink); }
+
+.pk-bullone {
+  position: absolute; top: 30px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0 18%, #B7A89C 30%, #6B5B4E 100%);
+  box-shadow: 0 0 0 1px rgba(23, 18, 14, .35);
+}
+.pk-bullone--sx { left: 12px; }
+.pk-bullone--dx { right: 12px; }
+
+.pk-cartello__testa { padding: var(--sp-5) var(--sp-6) var(--sp-4); text-align: center; }
+.pk-cartello__ente {
+  font-family: var(--font-mono);
+  font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 6px;
+}
+.pk-cartello__t {
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800;
+  font-size: clamp(2rem, 3.6vw, 2.7rem);
+  line-height: .95;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+}
+
+.pk-cartello__dati { border-top: 2px solid var(--ink); }
+.pk-cartello__dati > div {
+  display: grid; grid-template-columns: 118px 1fr; gap: var(--sp-3);
+  align-items: baseline;
+  padding: 9px var(--sp-6);
+  border-bottom: 1px solid var(--line);
+}
+.pk-cartello__dati dt {
+  font-family: var(--font-mono);
+  font-size: .66rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.pk-cartello__dati dd { font-weight: 600; font-size: .95rem; }
+
+.pk-cartello__sub {
+  padding: 7px var(--sp-6);
+  background: var(--ink); color: var(--cream);
+  font-family: var(--font-mono);
+  font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+}
+
+.pk-cartello__lotti li + li { border-top: 1px dashed var(--line-strong); }
+.pk-cartello__lotti a {
+  display: grid;
+  grid-template-columns: 26px 1fr auto 18px;
+  gap: var(--sp-3);
+  align-items: center;
+  min-height: 66px;
+  padding: var(--sp-2) var(--sp-5) var(--sp-2) var(--sp-6);
+  text-decoration: none;
+  transition: background-color .18s var(--ease);
+}
+.pk-cartello__lotti a:hover { background: var(--orange-soft); }
+.pk-cartello__n { font-family: var(--font-mono); font-size: .74rem; color: var(--orange-ink); }
+.pk-cartello__corpo { display: flex; flex-direction: column; min-width: 0; }
+.pk-cartello__nome {
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800; font-size: 1.32rem; line-height: 1.05;
+  text-transform: uppercase;
+}
+.pk-cartello__formula {
+  font-family: var(--font-mono);
+  font-size: .68rem; letter-spacing: .06em;
+  color: var(--fg-muted);
+}
+.pk-cartello__prezzo {
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800; font-size: 1.5rem;
+  white-space: nowrap;
+}
+.pk-cartello__prezzo small {
+  font-family: var(--font-mono); font-stretch: 100%;
+  font-size: .66rem; font-weight: 500;
+  color: var(--fg-muted);
+}
+.pk-cartello__lotti .ico { width: 18px; height: 18px; color: var(--ink); transition: transform .2s var(--ease); }
+.pk-cartello__lotti a:hover .ico { transform: translateX(4px); }
+
+/* ── BARRA DEI LOTTI ─────────────────────────────────────────────── */
+/* sotto la pillola della nav (che finisce a ~78px). Altezza zero: la barra
+   galleggia sopra l'inizio della sezione invece di spingerla giù. */
+.pk-lotti {
+  position: sticky; top: 90px; z-index: 60;
+  display: flex; justify-content: center; align-items: flex-start;
+  padding-inline: var(--sp-4);
+  height: 0;
+  overflow: visible;
+}
+.pk-lotti__lista {
+  display: flex; gap: 2px;
+  max-width: 100%;
+  padding: 4px;
+  background: rgba(255, 248, 243, .9);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pk-lotti__lista::-webkit-scrollbar { display: none; }
+.pk-lotti a {
+  display: flex; align-items: center; gap: 6px;
+  min-height: 40px;
+  padding: 0 var(--sp-4);
+  border-radius: var(--radius-pill);
+  font-size: .86rem; font-weight: 600;
+  color: var(--fg-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color .18s var(--ease), background-color .18s var(--ease);
+}
+.pk-lotti a span { font-family: var(--font-mono); font-size: .7rem; font-weight: 500; color: var(--orange-ink); }
+.pk-lotti a:hover { color: var(--ink); background: rgba(23, 18, 14, .05); }
+.pk-lotti a[aria-current] { background: var(--ink); color: var(--cream); }
+.pk-lotti a[aria-current] span { color: var(--orange); }
+
+/* ── 01 PER COMMESSA ─────────────────────────────────────────────── */
+.pk-commessa { background: var(--cream-2); }
+
+.pk-tagli {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+  align-items: stretch;
+}
+.pk-taglio {
+  position: relative;
+  display: flex; flex-direction: column;
+  padding: var(--sp-6);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+.pk-taglio__testa { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.pk-taglio__nome { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; letter-spacing: -.025em; }
+.pk-taglio__qta {
+  padding: 3px 10px;
+  border: 1px solid var(--line-strong); border-radius: var(--radius-pill);
+  font-family: var(--font-mono); font-size: .74rem;
+  color: var(--fg-muted); white-space: nowrap;
+}
+.pk-unitario {
+  margin-top: var(--sp-3);
+  font-family: var(--font-mono); font-size: .78rem;
+  color: var(--fg-muted);
+}
+.pk-unitario strong { color: var(--orange-ink); font-weight: 500; }
+.pk-taglio__desc {
+  margin-top: var(--sp-4);
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px dashed var(--line-strong);
+  color: var(--fg-muted); font-size: .96rem;
+}
+.pk-include {
+  margin: var(--sp-5) 0 var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.pk-taglio__piede { margin-top: auto; padding-top: var(--sp-6); display: flex; flex-direction: column; gap: var(--sp-4); }
+.pk-ideale { font-size: .9rem; color: var(--fg-muted); line-height: 1.5; }
+.pk-ideale strong { display: block; color: var(--ink); font-weight: 700; }
+
+/* il taglio da spingere: in negativo, con cartellino */
+.pk-taglio--top {
+  background: var(--ink); color: var(--fg-inv);
+  border-color: var(--ink);
+  box-shadow: 0 34px 60px -26px rgba(23, 18, 14, .55);
+}
+.pk-taglio--top .pk-taglio__qta { border-color: var(--line-inv); color: var(--fg-inv-muted); }
+.pk-taglio--top .pk-unitario,
+.pk-taglio--top .pk-taglio__desc,
+.pk-taglio--top .pk-include,
+.pk-taglio--top .pk-ideale { color: var(--fg-inv-muted); }
+.pk-taglio--top .pk-unitario strong { color: var(--orange); }
+.pk-taglio--top .pk-taglio__desc { border-color: var(--line-inv); }
+.pk-taglio--top .pk-ideale strong { color: var(--fg-inv); }
+.pk-taglio--top .pk-prezzo { color: var(--orange); }
+.pk-badge {
+  position: absolute; top: -14px; left: var(--sp-6);
+  padding: 5px 12px 5px 28px;
+  background: var(--orange); color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: .7rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+}
+.pk-badge::before {
+  content: ""; position: absolute; left: 11px; top: 50%;
+  width: 8px; height: 8px; margin-top: -4px;
+  background: var(--ink); transform: rotate(45deg);
+}
+
+.pk-confronto { margin-top: var(--sp-4); font-family: var(--font-mono); font-size: .72rem; color: var(--fg-muted); }
+
+.pk-extra {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-4) var(--sp-5);
+  margin-top: var(--sp-6);
+  padding: var(--sp-5) var(--sp-6);
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+}
+.pk-extra__t {
+  font-family: var(--font-mono);
+  font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.pk-extra__lista { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.pk-extra__lista li {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  font-size: .9rem; font-weight: 600;
+}
+.pk-extra__lista li::before { content: "+"; font-family: var(--font-mono); color: var(--orange-ink); font-weight: 500; }
+.pk-extra .btn { margin-left: auto; }
+
+/* ── 02 PACCHETTO SOCIAL ─────────────────────────────────────────── */
+.pk-social {
+  background: var(--ink);
+  color: var(--fg-inv);
+  background-image: radial-gradient(70% 55% at 100% 0%, rgba(234, 118, 33, .16), transparent 62%);
+}
+.pk-testa--social { align-items: center; }
+.pk-social__lead { margin-top: var(--sp-5); font-size: 1.08rem; color: #A8968A; max-width: 54ch; }
+
+.pk-canone {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  padding: var(--sp-6);
+  background: rgba(255, 248, 243, .04);
+  border: 1px solid var(--line-inv);
+  border-radius: var(--radius-lg);
+}
+.pk-canone__t {
+  font-family: var(--font-mono);
+  font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--fg-inv-muted);
+}
+.pk-canone .pk-prezzo { color: var(--orange); font-size: clamp(3.4rem, 6.4vw, 5.4rem); }
+.pk-canone .pk-prezzo small { color: var(--fg-inv-muted); }
+.pk-canone__nota { font-size: .92rem; color: var(--fg-inv-muted); margin-bottom: var(--sp-2); }
+
+.pk-fasi {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid var(--line-inv);
+}
+.pk-fase { padding: var(--sp-5) var(--sp-4) var(--sp-4); }
+.pk-fase:first-child { padding-left: 0; }
+.pk-fase + .pk-fase { border-left: 1px solid var(--line-inv); }
+.pk-fase__n {
+  display: flex; align-items: center; gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--orange);
+}
+.pk-fase__n::before { content: ""; width: 7px; height: 7px; background: var(--orange); transform: rotate(45deg); }
+.pk-fase h3 {
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800; font-size: 1.7rem; line-height: 1;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-2);
+}
+.pk-fase > p { font-size: .93rem; color: #A8968A; margin-bottom: var(--sp-4); min-height: 3em; }
+.pk-fase ul { display: flex; flex-direction: column; gap: 6px; }
+.pk-fase li { position: relative; padding-left: 14px; font-size: .88rem; line-height: 1.4; color: #DCCFC4; }
+.pk-fase li::before { content: ""; position: absolute; left: 0; top: .6em; width: 5px; height: 1.5px; background: var(--orange); }
+
+.pk-ciclo {
+  display: flex; align-items: center; gap: var(--sp-3);
+  margin-top: var(--sp-6); padding-top: var(--sp-5);
+  border-top: 1px solid var(--line-inv);
+  font-family: var(--font-mono); font-size: .8rem;
+  color: var(--fg-inv-muted);
+}
+.pk-ciclo .ico { color: var(--orange); }
+
+/* ── 03 PACCHETTO SITO WEB ───────────────────────────────────────── */
+.pk-sito { background: var(--bg); }
+.pk-testa--sito { align-items: center; grid-template-columns: 1fr 1fr; }
+.pk-sito__lead { margin-top: var(--sp-5); font-size: 1.08rem; color: var(--fg-muted); max-width: 48ch; }
+.pk-sito__prezzo { display: flex; align-items: baseline; gap: var(--sp-3); margin: var(--sp-6) 0 var(--sp-5); }
+.pk-sito__formula { font-family: var(--font-mono); font-size: .8rem; color: var(--fg-muted); }
+.pk-sito__prezzo { margin-bottom: var(--sp-3); }
+.pk-sito__ancora { margin-bottom: var(--sp-5); font-size: .92rem; color: var(--fg-muted); max-width: 46ch; }
+
+.pk-prova {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.pk-prova__barra {
+  display: flex; align-items: center; gap: 6px;
+  padding: 11px var(--sp-4);
+  background: var(--cream-2);
+  border-bottom: 1px solid var(--line);
+}
+.pk-prova__barra i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-strong); }
+.pk-prova__barra i:first-child { background: var(--orange); }
+.pk-prova__barra span {
+  flex: 1; margin-left: var(--sp-3);
+  padding: 4px 12px;
+  background: var(--surface);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono); font-size: .72rem;
+  color: var(--fg-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pk-prova__corpo { padding: var(--sp-6); }
+.pk-prova__t { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.05; letter-spacing: -.035em; }
+.pk-prova__s { margin: var(--sp-2) 0 var(--sp-5); color: var(--fg-muted); }
+
+.pk-colonne { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-6); }
+.pk-colonna { padding-top: var(--sp-5); border-top: 2px solid var(--ink); }
+.pk-colonna h3 {
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800; font-size: 1.7rem; line-height: 1;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-5);
+}
+
+.pk-nota {
+  margin-top: var(--sp-7);
+  padding: var(--sp-5) var(--sp-6);
+  background: var(--cream-2);
+  border-left: 4px solid var(--orange);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--fg-muted);
+}
+.pk-nota strong { color: var(--ink); }
+.pk-nota a { color: var(--orange-ink); font-weight: 600; text-underline-offset: 3px; }
+.pk-nota a:hover { color: var(--ink); }
+
+/* ── 04 SERVIZI SINGOLI ──────────────────────────────────────────── */
+.pk-singoli { background: var(--cream-2); }
+
+.pk-config {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--sp-5);
+  align-items: start;
+}
+.pk-servizi {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3);
+  border: 0; padding: 0; min-width: 0;
+}
+.pk-serv {
+  position: relative;
+  display: flex; flex-direction: column; gap: 4px;
+  padding: var(--sp-5);
+  padding-right: calc(var(--sp-5) + 32px);
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color .18s var(--ease), background-color .18s var(--ease), box-shadow .18s var(--ease);
+}
+.pk-serv:hover { border-color: var(--line-strong); box-shadow: var(--shadow-sm); }
+.pk-serv__nome { font-weight: 700; font-size: 1.06rem; letter-spacing: -.015em; }
+.pk-serv__prezzo {
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800; font-size: 2rem; line-height: 1.05;
+}
+.pk-serv__prezzo small {
+  font-family: var(--font-mono); font-stretch: 100%;
+  font-size: .7rem; font-weight: 500; color: var(--fg-muted);
+}
+.pk-serv__desc { font-size: .9rem; line-height: 1.5; color: var(--fg-muted); }
+.pk-serv__nota { margin-top: 4px; font-family: var(--font-mono); font-size: .7rem; color: var(--orange-ink); }
+
+/* senza JavaScript resta la casella nativa; con JavaScript la spunta disegnata */
+.pk-serv input { position: absolute; top: var(--sp-5); right: var(--sp-5); width: 20px; height: 20px; accent-color: var(--ink); }
+.pk-serv__spunta { display: none; }
+.pk-js .pk-serv input { opacity: 0; margin: 0; width: 24px; height: 24px; }
+.pk-js .pk-serv__spunta {
+  display: grid; place-items: center;
+  position: absolute; top: var(--sp-5); right: var(--sp-5);
+  width: 24px; height: 24px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 7px;
+  background: var(--surface);
+  pointer-events: none;
+  transition: background-color .15s var(--ease), border-color .15s var(--ease);
+}
+.pk-serv__spunta svg {
+  width: 16px; height: 16px;
+  fill: none; stroke: var(--cream); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0; transform: scale(.6);
+  transition: opacity .15s var(--ease), transform .2s var(--ease);
+}
+.pk-serv.is-scelto { border-color: var(--ink); background: #FFFDFB; box-shadow: inset 0 0 0 1px var(--ink); }
+.pk-serv.is-scelto .pk-serv__spunta { background: var(--ink); border-color: var(--ink); }
+.pk-serv.is-scelto .pk-serv__spunta svg { opacity: 1; transform: none; }
+.pk-serv:focus-within { outline: 2px solid var(--focus); outline-offset: 3px; }
+.pk-serv:focus-within:not(:has(:focus-visible)) { outline: none; }
+
+.pk-riepilogo {
+  position: sticky; top: 148px;
+  display: flex; flex-direction: column; gap: var(--sp-4);
+  padding: var(--sp-6);
+  background: var(--ink); color: var(--fg-inv);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.pk-riepilogo::before {
+  content: ""; display: block;
+  height: 8px; margin: calc(-1 * var(--sp-6)) calc(-1 * var(--sp-6)) var(--sp-2);
+  background: var(--nastro);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.pk-riepilogo__t {
+  font-family: var(--font-mono);
+  font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--fg-inv-muted);
+}
+.pk-riepilogo__vuoto { color: #DCCFC4; font-size: .98rem; }
+.pk-riepilogo__conta { font-weight: 700; font-size: 1.05rem; margin-bottom: var(--sp-2); }
+.pk-riepilogo__righe > div {
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-3);
+  padding-block: var(--sp-3);
+  border-top: 1px dashed var(--line-inv);
+}
+.pk-riepilogo__righe > div[hidden] { display: none; }
+.pk-riepilogo__righe dt { font-family: var(--font-mono); font-size: .76rem; color: var(--fg-inv-muted); }
+.pk-riepilogo__righe dd {
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-weight: 800; font-size: 2.3rem; line-height: 1;
+  color: var(--orange);
+  white-space: nowrap;
+}
+.pk-riepilogo__righe dd small {
+  font-family: var(--font-mono); font-stretch: 100%;
+  font-size: .7rem; font-weight: 500;
+  color: var(--fg-inv-muted);
+}
+.pk-consiglio {
+  padding: var(--sp-4);
+  border: 1px solid rgba(234, 118, 33, .55);
+  border-radius: var(--radius);
+  background: rgba(234, 118, 33, .08);
+  font-size: .9rem; line-height: 1.5;
+  color: #F1E6DC;
+}
+.pk-consiglio a { color: var(--orange); font-weight: 600; text-underline-offset: 3px; }
+.pk-consiglio a:hover { color: var(--fg-inv); }
+.pk-riepilogo__nota { font-size: .8rem; color: var(--fg-inv-muted); text-align: center; }
+
+/* ── CHIUSURA ────────────────────────────────────────────────────── */
+.pk-finale {
+  position: relative;
+  background: var(--orange);
+  color: var(--ink);
+}
+.pk-finale__nastro {
+  position: absolute; inset: 0 0 auto 0;
+  height: 18px;
+  background: repeating-linear-gradient(-45deg, var(--ink) 0 16px, var(--orange) 16px 32px);
+}
+.pk-finale__inner { display: flex; flex-direction: column; align-items: flex-start; }
+.pk-finale__label {
+  font-family: var(--font-mono);
+  font-size: .78rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+  margin-bottom: var(--sp-4);
+}
+.pk-finale__t {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 7vw, 5.6rem);
+  line-height: .95;
+  letter-spacing: -.045em;
+  max-width: 14ch;
+  text-wrap: balance;
+}
+.pk-finale__lead { margin: var(--sp-6) 0 var(--sp-7); font-size: 1.12rem; max-width: 60ch; }
+.pk-finale__lead strong { font-weight: 700; }
+.pk-finale .btn--ghost { --btn-bd: var(--ink); }
+.pk-finale .btn--ghost:hover { --btn-bg: var(--ink); --btn-fg: var(--cream); }
+.pk-finale .btn--dark:hover { --btn-bg: var(--ink-2); }
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .pk-fasi { grid-template-columns: repeat(3, 1fr); }
+  .pk-fase, .pk-fase:first-child { padding-left: 0; padding-right: var(--sp-5); }
+  .pk-fase + .pk-fase { border-left: 0; }
+  .pk-fase { border-bottom: 1px solid var(--line-inv); }
+  .pk-fase > p { min-height: 0; }
+}
+
+@media (max-width: 1024px) {
+  .pk-hero__inner { grid-template-columns: 1fr; gap: var(--sp-7); }
+  .pk-cartello { max-width: 560px; }
+  .pk-testa, .pk-testa--sito { grid-template-columns: 1fr; align-items: start; }
+  .pk-tagli { grid-template-columns: 1fr; max-width: 620px; gap: var(--sp-6); }
+  .pk-taglio--top { order: -1; }
+  .pk-colonne { grid-template-columns: 1fr 1fr; }
+  .pk-config { grid-template-columns: 1fr; }
+  .pk-riepilogo { position: static; }
+  .pk-extra .btn { margin-left: 0; }
+}
+
+@media (max-width: 720px) {
+  html.pk { scroll-padding-top: 144px; }
+  .pk-lotti { top: 86px; }
+  .pk-lotti a { padding: 0 var(--sp-3); }
+  .pk-fasi { grid-template-columns: 1fr; }
+  .pk-colonne { grid-template-columns: 1fr; }
+  .pk-servizi { grid-template-columns: 1fr; }
+  .pk-cartello__dati > div { grid-template-columns: 1fr; gap: 0; padding-inline: var(--sp-5); }
+  .pk-cartello__lotti a { grid-template-columns: 22px 1fr auto; padding-inline: var(--sp-4); }
+  .pk-cartello__lotti .ico { display: none; }
+  .pk-cartello__sub { padding-inline: var(--sp-5); }
+  .pk-azioni .btn { flex: 1 1 auto; }
+  .pk-extra { padding: var(--sp-5); }
+  .pk-extra .btn { width: 100%; }
+}
+
+@media (max-width: 380px) {
+  .pk-cartello__nome { font-size: 1.12rem; }
+  .pk-cartello__prezzo { font-size: 1.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pk-cartello__lotti a:hover .ico { transform: none; }
+}
+
+@media print {
+  .pk-lotti, .pk-finale__nastro { display: none; }
+  .pk-social, .pk-finale { background: #fff; color: #000; }
+}

@@ -527,6 +527,93 @@ ul, ol { list-style: none; padding: 0; }
   background: var(--orange); transform: rotate(45deg);
 }
 
+/* pacchetti: 2 × 2, l'intera card porta alla pagina di dettaglio */
+.cards--pacchetti { grid-template-columns: repeat(2, 1fr); }
+
+.card .pack__prezzo {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px;
+  margin-bottom: var(--sp-5);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.4vw, 2.6rem); font-weight: 800;
+  letter-spacing: -.04em; line-height: 1;
+  color: var(--fg);
+}
+.pack__da, .pack__per {
+  font-family: var(--font-mono);
+  font-size: .8rem; font-weight: 500; letter-spacing: .04em;
+  color: var(--fg-muted);
+}
+
+.pack__prezzi {
+  margin-bottom: var(--sp-5);
+  border-top: 1px dashed var(--line-strong);
+}
+.pack__prezzi > div {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: var(--sp-4);
+  padding-block: var(--sp-3);
+  border-bottom: 1px dashed var(--line-strong);
+}
+.pack__prezzi dt { font-weight: 600; letter-spacing: -.01em; }
+.pack__qta {
+  margin-left: var(--sp-2);
+  font-family: var(--font-mono); font-size: .8rem; font-weight: 400;
+  color: var(--fg-muted);
+}
+.pack__prezzi dd {
+  font-family: var(--font-display);
+  font-size: 1.4rem; font-weight: 800; letter-spacing: -.03em;
+}
+
+.card .pack__tag {
+  flex-direction: row; flex-wrap: wrap; gap: 6px;
+  margin: 0 0 var(--sp-6);
+  padding-top: 0; border-top: 0;
+}
+.card .pack__tag li {
+  padding: 3px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  font-size: .78rem; line-height: 1.4;
+}
+.card .pack__tag li::before { content: none; }
+
+.pack__link {
+  margin-top: auto; align-self: flex-start;
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--orange-ink);
+  text-decoration: none;
+}
+.pack__link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.pack__link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.card .pack__link .ico {
+  width: 18px; height: 18px; margin: 0;
+  color: currentColor;
+  transition: transform .2s var(--ease);
+}
+.pack:hover .pack__link .ico { transform: translateX(4px); }
+
+/* il pacchetto più completo in negativo */
+.pack--in-evidenza {
+  background: var(--ink); color: var(--fg-inv);
+  border-color: var(--ink);
+}
+.pack--in-evidenza > p,
+.pack--in-evidenza .card__n,
+.pack--in-evidenza .pack__da,
+.pack--in-evidenza .pack__per { color: var(--fg-inv-muted); }
+.pack--in-evidenza .pack__prezzo { color: var(--fg-inv); }
+.card.pack--in-evidenza .pack__tag li { border-color: var(--line-inv); color: var(--fg-inv-muted); }
+.pack--in-evidenza .pack__link { color: var(--orange); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
 /* ── SETTORI ─────────────────────────────────────────────────────── */
 .sectors__grid {
   display: grid;
