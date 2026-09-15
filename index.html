@@ -28,10 +28,10 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- ⚠️ Alzate ?v= a ogni modifica di CSS/JS: forza il browser a
      riscaricarli invece di riusare la copia in cache. -->
-<link rel="stylesheet" href="styles.css?v=13">
+<link rel="stylesheet" href="styles.css?v=15">
 
 <script>
   /* Attiva l'intro prima del primo paint, così non c'è sfarfallio.
@@ -119,8 +119,12 @@
   "mainEntity": [
     { "@type": "Question", "name": "Quanto costano i pacchetti?",
       "acceptedAnswer": { "@type": "Answer", "text": "Per commessa si parte da €390 per un video, il pacchetto social parte da €1.490 al mese e il pacchetto sito web da €1.590 una tantum. Il prezzo finale dipende da quante uscite servono e da quanto budget pubblicitario mettete: dopo il sopralluogo consegniamo un preventivo scritto con tutte le voci separate." } },
+    { "@type": "Question", "name": "Possiamo partire con un solo video?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Sì. Con il pacchetto Per commessa scegliete un progetto e lo raccontiamo con 1, 2 o 4 video, senza abbonamento e senza impegno continuativo. Si parte da €390." } },
+    { "@type": "Question", "name": "Il budget pubblicitario è compreso nel prezzo?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No, ed è una scelta di trasparenza: il budget per Meta Ads e Google Ads è separato dal nostro compenso e lo decidete voi. Così sapete sempre quanto va in pubblicità e quanto al lavoro di gestione." } },
     { "@type": "Question", "name": "Dobbiamo comparire noi nei video?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Aiuta molto, ma non è obbligatorio. Lavoriamo bene anche riprendendo solo il cantiere, i materiali, le squadre al lavoro e i risultati finiti." } },
+      "acceptedAnswer": { "@type": "Answer", "text": "No, non è necessario. Nei video sarà Simona a parlare, presentare e raccontare la vostra azienda, occupandosi direttamente della parte davanti alla telecamera. Mostrare anche voi, quando possibile, è un grande valore: vedere le persone dietro un'azienda la rende più autentica, riconoscibile e dà un volto al vostro lavoro." } },
     { "@type": "Question", "name": "In quanto tempo si vedono i risultati?",
       "acceptedAnswer": { "@type": "Answer", "text": "Le campagne pubblicitarie portano i primi contatti in poche settimane. La crescita organica del profilo e il posizionamento su Google richiedono più tempo, in genere qualche mese di pubblicazioni costanti." } },
     { "@type": "Question", "name": "In quali zone lavorate?",
@@ -128,7 +132,7 @@
     { "@type": "Question", "name": "Abbiamo già chi ci fa i social. Serve lo stesso?",
       "acceptedAnswer": { "@type": "Answer", "text": "Se funziona, no. Se invece pubblicate senza un piano e senza sapere quanti contatti arrivano da lì, il problema non è chi pubblica: è che manca la regia." } },
     { "@type": "Question", "name": "C'è un vincolo di durata?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Lavoriamo su periodi minimi di alcuni mesi, perché sotto quella soglia i risultati non sono valutabili. Le condizioni esatte sono scritte nel preventivo, prima di firmare." } }
+      "acceptedAnswer": { "@type": "Answer", "text": "Per i video su commessa no: si paga il lavoro e finisce lì. Per i pacchetti mensili lavoriamo su periodi minimi di alcuni mesi, perché sotto quella soglia i risultati non sono valutabili e sarebbero soldi buttati. Le condizioni esatte sono scritte nel preventivo, prima di firmare." } }
   ]
 }
 </script>
@@ -169,7 +173,7 @@
     </a>
 
     <ul class="nav__links">
-      <li><a href="#servizi">Servizi</a></li>
+      <li><a href="/pacchetti">Pacchetti</a></li>
       <li><a href="#settori">Per chi</a></li>
       <li><a href="#metodo">Metodo</a></li>
       <li><a href="#studio">Studio</a></li>
@@ -195,7 +199,7 @@
   </nav>
 
   <div class="nav-mobile" id="nav-mobile" hidden>
-    <a href="#servizi">Servizi</a>
+    <a href="/pacchetti">Pacchetti</a>
     <a href="#settori">Per chi</a>
     <a href="#metodo">Metodo</a>
     <a href="#studio">Studio</a>
@@ -247,7 +251,7 @@
 
       <ul class="hero__ticks reveal" role="list">
         <li>Sopralluogo gratuito</li>
-        <li>Riprese incluse</li>
+        <li>Prezzi chiari, da €390</li>
         <li>Report ogni mese</li>
       </ul>
     </div>
@@ -256,7 +260,7 @@
       <img src="assets/hero-team.png" alt="Simona e Ferdinando di Cantiere Social, con caschetto arancione, videocamera e squadra da disegno." width="984" height="1200" fetchpriority="high" decoding="async">
       <div class="hero__badge" aria-hidden="true">
         <span class="hero__badge-num">360°</span>
-        <span class="hero__badge-lbl">tutto incluso</span>
+        <span class="hero__badge-lbl">dalla ripresa al contatto</span>
       </div>
     </div>
   </div>
@@ -284,31 +288,97 @@
   </div>
 </div>
 
-<!-- ══ PROBLEMA ══════════════════════════════════════════════════════ -->
-<section class="section problem">
+<!-- ══ PROBLEMA ══════════════════════════════════════════════════════
+     Racconto a scene: scorrendo, il palco resta fermo e il telefono cambia
+     schermata a ogni problema (script.js, blocco "Il problema").
+     Il telefono è un'illustrazione: i lettori di schermo leggono solo i titoli.
+     Senza JavaScript le scene compaiono una sotto l'altra. -->
+<section class="section problema" aria-labelledby="problema-t">
   <div class="wrap">
     <p class="label reveal"><span>01</span> Il problema</p>
+    <h2 class="h2 problema__claim reveal" id="problema-t">Il lavoro lo sapete fare.<br><span class="muted">Online non si vede.</span></h2>
+  </div>
 
-    <h2 class="h2 problem__claim reveal">
-      Fate un lavoro che lascia il segno.
-<br>
-      <span class="muted">Dategli la VISIBILITÀ che merita.</span>
-    </h2>
+  <div class="racconto" data-racconto data-attiva="0">
+    <div class="wrap racconto__palco">
 
-    <ol class="problem__list" role="list">
-      <li class="problem__row reveal reveal--sinistra">
-        <span class="problem__n" aria-hidden="true">01</span>
-        <h3 class="problem__t">Postate un cantiere all'anno <span class="muted">sui social.</span></h3>
-      </li>
-      <li class="problem__row problem__row--destra reveal reveal--destra">
-        <span class="problem__n" aria-hidden="true">02</span>
-        <h3 class="problem__t">Vi cercano, <span class="muted">e non vi trovano.</span></h3>
-      </li>
-      <li class="problem__row reveal reveal--sinistra">
-        <span class="problem__n" aria-hidden="true">03</span>
-        <h3 class="problem__t">Video, social e sito: <span class="muted">ognuno per conto suo.</span></h3>
-      </li>
-    </ol>
+      <div class="racconto__testi">
+        <div class="racconto__indice" aria-hidden="true">
+          <span class="is-su">Social</span><span>Google</span><span>Fornitori</span><span>Regia</span>
+        </div>
+
+        <ol class="racconto__scene" role="list">
+          <li class="racconto__scena is-attiva" data-scena>
+            <span class="racconto__n" aria-hidden="true">01</span>
+            <h3 class="racconto__t">Un cantiere all'anno sui social. <span>Il resto non lo vede nessuno.</span></h3>
+          </li>
+          <li class="racconto__scena" data-scena>
+            <span class="racconto__n" aria-hidden="true">02</span>
+            <h3 class="racconto__t">Vi cercano su Google. <span>Trovano gli altri.</span></h3>
+          </li>
+          <li class="racconto__scena" data-scena>
+            <span class="racconto__n" aria-hidden="true">03</span>
+            <h3 class="racconto__t">Video, social e sito: <span>ognuno per conto suo.</span></h3>
+          </li>
+          <li class="racconto__scena racconto__scena--svolta" data-scena>
+            <span class="racconto__n" aria-hidden="true">La svolta</span>
+            <h3 class="racconto__t">Con noi è un cantiere solo. <span>Due responsabili, una regia.</span></h3>
+            <a class="btn btn--orange btn--lg racconto__cta" href="#servizi">Vedi i pacchetti</a>
+          </li>
+        </ol>
+
+        <p class="racconto__scorri" aria-hidden="true">Scorrete <i></i></p>
+      </div>
+
+      <div class="telefono" aria-hidden="true">
+        <div class="telefono__isola"></div>
+        <div class="telefono__schermo">
+
+          <!-- 1 · profilo fermo -->
+          <div class="schermo" data-schermo="0">
+            <div class="ig__barra"><b>la_vostra_impresa</b><i></i></div>
+            <div class="ig__testa">
+              <span class="ig__avatar"></span>
+              <div class="ig__righe"><i></i><i></i><i class="corta"></i></div>
+            </div>
+            <p class="ig__avviso">Ultimo post · 11 mesi fa</p>
+            <div class="ig__griglia"><span class="ig__cella ig__cella--piena"></span><span class="ig__cella ig__cella--piena"></span><span class="ig__cella ig__cella--piena"></span><span class="ig__cella"></span><span class="ig__cella"></span><span class="ig__cella"></span><span class="ig__cella"></span><span class="ig__cella"></span><span class="ig__cella"></span></div>
+          </div>
+
+          <!-- 2 · ricerca su Google -->
+          <div class="schermo" data-schermo="1">
+            <div class="g__cerca"><i></i>impresa edile vicino a me</div>
+            <div class="g__mappa"><i class="g__pin"></i><i class="g__pin"></i><i class="g__pin"></i></div>
+            <div class="g__scheda"><b>Concorrente A</b><span>4,8 ★★★★★ · Impresa edile</span><em>Sito · Indicazioni · Chiama</em></div>
+            <div class="g__scheda"><b>Concorrente B</b><span>4,6 ★★★★★ · Ristrutturazioni</span><em>Sito · Indicazioni · Chiama</em></div>
+            <div class="g__scheda g__scheda--voi"><b>La vostra impresa</b><span>Nessuna recensione</span><em>Nessun sito · nessuna foto</em><small>Voi</small></div>
+          </div>
+
+          <!-- 3 · fornitori scollegati -->
+          <div class="schermo schermo--blocco" data-schermo="2">
+            <p class="blocco__giorno">lunedì</p>
+            <p class="blocco__ora">18:47</p>
+            <div class="notifica"><b>Videomaker</b><span>Il montaggio slitta alla prossima settimana.</span></div>
+            <div class="notifica"><b>Grafico</b><span>Mi rimandate le foto del cantiere?</span></div>
+            <div class="notifica"><b>Agenzia web</b><span>Per aggiornare il sito serve un nuovo preventivo.</span></div>
+          </div>
+
+          <!-- 4 · la svolta -->
+          <div class="schermo schermo--dopo" data-schermo="3">
+            <div class="notifica notifica--nuova"><b>Nuova richiesta dal sito</b><span>“Vorrei un preventivo per una ristrutturazione…”</span></div>
+            <div class="ig__barra"><b>la_vostra_impresa</b><i></i></div>
+            <div class="ig__testa">
+              <span class="ig__avatar ig__avatar--storia"></span>
+              <div class="ig__righe"><i></i><i></i><i class="corta"></i></div>
+            </div>
+            <p class="ig__avviso ig__avviso--oggi">Ultimo post · oggi</p>
+            <div class="ig__griglia"><span class="ig__cella ig__cella--dopo" style="--i:0"></span><span class="ig__cella ig__cella--dopo" style="--i:1"></span><span class="ig__cella ig__cella--dopo" style="--i:2"></span><span class="ig__cella ig__cella--dopo" style="--i:3"></span><span class="ig__cella ig__cella--dopo" style="--i:4"></span><span class="ig__cella ig__cella--dopo" style="--i:5"></span><span class="ig__cella ig__cella--dopo" style="--i:6"></span><span class="ig__cella ig__cella--dopo" style="--i:7"></span><span class="ig__cella ig__cella--dopo" style="--i:8"></span></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -340,6 +410,7 @@
       </article>
 
       <article class="card pack pack--in-evidenza reveal">
+        <p class="pack__badge">Il più completo</p>
         <span class="card__n" aria-hidden="true">02</span>
         <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>
         <h3>Pacchetto social</h3>
@@ -374,6 +445,11 @@
         <a class="pack__link" href="/pacchetti#servizi-singoli">Vedi tutti i servizi <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
       </article>
     </div>
+
+    <div class="pack-confronto reveal">
+      <p><strong>Volete vedere tutto nel dettaglio?</strong> Cosa include ogni pacchetto, i servizi singoli e quanto costano.</p>
+      <a class="btn btn--dark btn--lg" href="/pacchetti">Confronta i pacchetti</a>
+    </div>
   </div>
 </section>
 
@@ -394,6 +470,7 @@
         <p class="sector__claim">Il cantiere è il contenuto migliore che avete. Ed è l'unico che non pubblicate.</p>
         <p>Trasformiamo le fasi di lavoro in una serie: si parte dal grezzo e si arriva alla consegna. Chi vi segue vede come lavorate, non solo com'è venuto.</p>
         <ul role="list"><li>Serie “dal grezzo alla consegna”</li><li>Timelapse e riprese drone</li><li>Ricerca di personale e fornitori</li></ul>
+        <a class="sector__link" href="/pacchetti#commessa"><span>Da dove partire</span>Per commessa · Completa, 4 video da €990 <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
       </article>
 
       <article class="sector reveal">
@@ -404,6 +481,7 @@
         <p class="sector__claim">Il problema non è vendere. È farsi trovare.</p>
         <p>Portiamo online l'esperienza che si vive dentro: materiali, ambientazioni, novità di stagione. Poi mandiamo in showroom le persone giuste della vostra zona.</p>
         <ul role="list"><li>Riprese di prodotto e ambientazioni</li><li>Campagne di prossimità</li><li>Eventi e nuove collezioni</li></ul>
+        <a class="sector__link" href="/pacchetti#social"><span>Da dove partire</span>Pacchetto social, da €1.490/mese <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
       </article>
 
       <article class="sector reveal">
@@ -414,6 +492,7 @@
         <p class="sector__claim">Un immobile raccontato bene si vende prima. Sempre.</p>
         <p>Video tour, foto curate e schede immobile che rispondono alle domande prima della visita. Meno appuntamenti a vuoto, più visite di chi è davvero interessato.</p>
         <ul role="list"><li>Video tour e foto professionali</li><li>Annunci e schede immobile</li><li>Campagne per acquisizione incarichi</li></ul>
+        <a class="sector__link" href="/pacchetti#commessa"><span>Da dove partire</span>Per commessa, da €390 a immobile <svg viewBox="0 0 24 24" class="ico" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></a>
       </article>
     </div>
   </div>
@@ -430,6 +509,10 @@
       </p>
     </div>
 
+    <!-- Avanzamento lavori: la barra si riempie scorrendo (script.js).
+         Senza JavaScript o con meno animazioni, resta piena. -->
+    <div class="avanzamento" data-avanzamento>
+      <div class="avanzamento__binario" aria-hidden="true"><span></span></div>
     <ol class="phases" role="list">
       <li class="phase reveal">
         <span class="phase__n">01</span>
@@ -476,6 +559,7 @@
         <span class="phase__meta">continuativo</span>
       </li>
     </ol>
+    </div>
   </div>
 </section>
 
@@ -564,6 +648,11 @@ FINE BLOCCO DISATTIVATO -->
         <li>Preventivi chiari, senza voci nascoste</li>
         <li>Materiale girato da noi, mai stock</li>
       </ul>
+
+      <div class="studio__azioni reveal">
+        <a class="btn btn--orange btn--lg" href="#contatti">Prenota il sopralluogo</a>
+        <a class="studio__wa" href="https://wa.me/393474068285" target="_blank" rel="noopener">oppure scriveteci su WhatsApp</a>
+      </div>
     </div>
   </div>
 </section>
@@ -582,12 +671,14 @@ FINE BLOCCO DISATTIVATO -->
     </div>
 
     <ul class="zone__list reveal" role="list">
-      <li>Rutigliano</li><li>Bari</li><li>Conversano</li><li>Mola di Bari</li>
+      <li class="is-base">Rutigliano <small>la nostra base</small></li><li>Bari</li><li>Conversano</li><li>Mola di Bari</li>
       <li>Polignano a Mare</li><li>Noicattaro</li><li>Triggiano</li>
       <li>Casamassima</li><li>Adelfia</li><li>Turi</li><li>Putignano</li>
       <li>Castellana Grotte</li><li>Monopoli</li><li>Alberobello</li>
       <li>Gioia del Colle</li><li>Capurso</li><li>Cellamare</li><li>Valenzano</li>
     </ul>
+
+    <p class="zone__nota reveal">Il vostro comune non c'è? <a href="https://wa.me/393474068285?text=Ciao%20Cantiere%20Social%2C%20vorrei%20sapere%20se%20lavorate%20anche%20nel%20mio%20comune." target="_blank" rel="noopener">Scriveteci</a> e ci organizziamo.</p>
   </div>
 </section>
 
@@ -602,7 +693,17 @@ FINE BLOCCO DISATTIVATO -->
     <div class="acc">
       <details class="acc__item reveal">
         <summary>Quanto costano i pacchetti?</summary>
-        <div class="acc__body"><p>Per commessa si parte da <strong>€390</strong> per un video, il pacchetto social parte da <strong>€1.490 al mese</strong> e il pacchetto sito web da <strong>€1.590 una tantum</strong>. Il prezzo finale dipende da quante uscite servono e da quanto budget pubblicitario mettete: dopo il sopralluogo vi consegniamo un preventivo scritto con tutte le voci separate: sapete esattamente cosa pagate e perché. Nessun costo compare dopo la firma.</p></div>
+        <div class="acc__body"><p>Per commessa si parte da <strong>€390</strong> per un video, il pacchetto social parte da <strong>€1.490 al mese</strong> e il pacchetto sito web da <strong>€1.590 una tantum</strong>. Il prezzo finale dipende da quante uscite servono e da quanto budget pubblicitario mettete: dopo il sopralluogo vi consegniamo un preventivo scritto con tutte le voci separate: sapete esattamente cosa pagate e perché. Nessun costo compare dopo la firma. <a href="/pacchetti">Vedi tutti i prezzi</a>.</p></div>
+      </details>
+
+      <details class="acc__item reveal">
+        <summary>Possiamo partire con un solo video?</summary>
+        <div class="acc__body"><p><strong>Sì.</strong> Con il pacchetto <strong>Per commessa</strong> scegliete un progetto e lo raccontiamo con 1, 2 o 4 video, senza abbonamento e senza impegno continuativo. Si parte da €390. <a href="/pacchetti#commessa">Vedi i tagli per commessa</a>.</p></div>
+      </details>
+
+      <details class="acc__item reveal">
+        <summary>Il budget pubblicitario è compreso nel prezzo?</summary>
+        <div class="acc__body"><p><strong>No, ed è una scelta di trasparenza:</strong> il budget per Meta Ads e Google Ads è separato dal nostro compenso e lo decidete voi. Così sapete sempre quanto va in pubblicità e quanto al lavoro di gestione.</p></div>
       </details>
 
       <details class="acc__item reveal">
@@ -632,7 +733,7 @@ FINE BLOCCO DISATTIVATO -->
 
       <details class="acc__item reveal">
         <summary>C'è un vincolo di durata?</summary>
-        <div class="acc__body"><p>Lavoriamo su periodi minimi di alcuni mesi, perché sotto quella soglia i risultati non sono valutabili e sarebbero soldi buttati. Le condizioni esatte sono scritte nel preventivo, prima di firmare.</p></div>
+        <div class="acc__body"><p><strong>Per i video su commessa no:</strong> si paga il lavoro e finisce lì. Per i pacchetti mensili lavoriamo su periodi minimi di alcuni mesi, perché sotto quella soglia i risultati non sono valutabili e sarebbero soldi buttati. Le condizioni esatte sono scritte nel preventivo, prima di firmare.</p></div>
       </details>
     </div>
   </div>
@@ -711,6 +812,19 @@ FINE BLOCCO DISATTIVATO -->
         <p class="field__err" id="err-settore" hidden></p>
       </div>
 
+      <!-- Scelte rapide: scrivono "Mi interessa: …" in cima al messaggio (script.js).
+           Nascoste senza JavaScript, dove non funzionerebbero. -->
+      <fieldset class="interessi" hidden>
+        <legend>Cosa vi interessa <span>(facoltativo)</span></legend>
+        <div class="interessi__scelte">
+          <button type="button" class="interessi__scelta" aria-pressed="false" data-interesse="commessa">Video per commessa</button>
+          <button type="button" class="interessi__scelta" aria-pressed="false" data-interesse="social">Pacchetto social</button>
+          <button type="button" class="interessi__scelta" aria-pressed="false" data-interesse="sito">Sito web</button>
+          <button type="button" class="interessi__scelta" aria-pressed="false" data-interesse="singoli">Servizi singoli</button>
+          <button type="button" class="interessi__scelta" aria-pressed="false" data-interesse="consiglio">Non lo so ancora</button>
+        </div>
+      </fieldset>
+
       <div class="field">
         <label for="f-msg">Cosa vi serve</label>
         <textarea id="f-msg" name="messaggio" rows="4" placeholder="Due righe bastano."></textarea>
@@ -783,7 +897,7 @@ FINE BLOCCO DISATTIVATO -->
   </div>
 </footer>
 
-<script src="script.js?v=14" defer></script>
+<script src="script.js?v=16" defer></script>
 
 <!-- Banner cookie e tag Google Ads. Resta inattivo finché in consenso.js
      non è compilato GOOGLE_ADS_ID (vedi LEGGIMI.md). -->

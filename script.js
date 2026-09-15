@@ -150,6 +150,97 @@
     revealables.forEach(function (el) { io.observe(el); });
   }
 
+  /* ── Il problema: racconto a scene ──────────────────────────────────
+     La sezione è alta più schermi e il palco resta fermo: in base a quanto
+     si è scorso, si attiva una delle quattro scene (titolo + schermata del
+     telefono). Nessuno scorrimento forzato: decide sempre chi legge. */
+  var racconto = document.querySelector('[data-racconto]');
+
+  if (racconto) {
+    var sceneR = Array.prototype.slice.call(racconto.querySelectorAll('[data-scena]'));
+    var indiceR = Array.prototype.slice.call(racconto.querySelectorAll('.racconto__indice span'));
+    var attualeR = -1;
+    var inCodaR = false;
+
+    var mostraScena = function (i) {
+      if (i === attualeR) return;
+      attualeR = i;
+      racconto.setAttribute('data-attiva', String(i));
+      sceneR.forEach(function (s, k) { s.classList.toggle('is-attiva', k === i); });
+      indiceR.forEach(function (s, k) { s.classList.toggle('is-su', k <= i); });
+    };
+
+    var calcolaScena = function () {
+      inCodaR = false;
+      var r = racconto.getBoundingClientRect();
+      var corsa = r.height - window.innerHeight;
+      var p = corsa > 0 ? Math.min(Math.max(-r.top / corsa, 0), 0.999) : 0;
+      mostraScena(Math.floor(p * sceneR.length));
+    };
+    var chiediScena = function () {
+      if (inCodaR) return;
+      inCodaR = true;
+      requestAnimationFrame(calcolaScena);
+    };
+
+    racconto.classList.add('racconto--attivo');
+    calcolaScena();
+    window.addEventListener('scroll', chiediScena, { passive: true });
+    window.addEventListener('resize', chiediScena);
+  }
+
+  /* ── Nav: evidenzia la sezione in vista ─────────────────────────── */
+  var vociNav = Array.prototype.slice.call(document.querySelectorAll('.nav__links a[href^="#"]'));
+
+  if (vociNav.length && 'IntersectionObserver' in window) {
+    var inVista = {};
+    var spia = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { inVista[e.target.id] = e.isIntersecting; });
+      var attiva = null;
+      vociNav.forEach(function (a) { if (!attiva && inVista[a.hash.slice(1)]) attiva = a; });
+      vociNav.forEach(function (a) {
+        if (a === attiva) a.setAttribute('aria-current', 'location');
+        else a.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+
+    vociNav.forEach(function (a) {
+      var sezione = document.getElementById(a.hash.slice(1));
+      if (sezione) spia.observe(sezione);
+    });
+  }
+
+  /* ── Metodo: avanzamento lavori ─────────────────────────────────────
+     La barra arancione scende lungo le fasi mentre si scorre e ogni fase
+     si "accende" quando la si raggiunge. Con meno animazioni resta piena. */
+  var cantiere = document.querySelector('[data-avanzamento]');
+
+  if (cantiere && !reduceMotion.matches) {
+    var fasi = Array.prototype.slice.call(cantiere.querySelectorAll('.phase'));
+    var inCoda = false;
+
+    var avanza = function () {
+      inCoda = false;
+      var linea = window.innerHeight * 0.62;       // la "quota" raggiunta
+      var r = cantiere.getBoundingClientRect();
+      var p = Math.min(Math.max((linea - r.top) / r.height, 0), 1);
+      cantiere.style.setProperty('--avanzamento', p.toFixed(3));
+      fasi.forEach(function (f) {
+        f.classList.toggle('is-raggiunta', f.getBoundingClientRect().top + 36 < linea);
+      });
+    };
+    var chiedi = function () {
+      if (inCoda) return;
+      inCoda = true;
+      requestAnimationFrame(avanza);
+    };
+
+    cantiere.classList.add('avanzamento--attivo');
+    avanza();
+    window.addEventListener('scroll', chiedi, { passive: true });
+    window.addEventListener('resize', chiedi);
+  }
+
   /* ── FAQ: una risposta aperta per volta ─────────────────────────── */
   var items = document.querySelectorAll('.acc__item');
   items.forEach(function (item) {
@@ -200,6 +291,41 @@
     }
 
     if (testo) msg.value = testo + '\n\n';
+  })();
+
+  /* Scelte rapide "Cosa vi interessa": scrivono una riga in cima al
+     messaggio, che si aggiorna a ogni scelta. Il resto del testo resta. */
+  (function interessi() {
+    var box = form.querySelector('.interessi');
+    var msg = form.elements.messaggio;
+    if (!box || !msg) return;
+
+    box.hidden = false;
+    var scelte = Array.prototype.slice.call(box.querySelectorAll('[data-interesse]'));
+    var PREFISSO = 'Mi interessa: ';
+
+    // arrivando da /pacchetti la scelta corrispondente è già segnata
+    var richiesta = window.URLSearchParams ? (new URLSearchParams(location.search).get('richiesta') || '') : '';
+    var preset = richiesta.indexOf('commessa') === 0 ? 'commessa'
+      : ({ 'social': 'social', 'sito-web': 'sito', 'servizi': 'singoli' })[richiesta];
+
+    scelte.forEach(function (b) {
+      if (b.getAttribute('data-interesse') === preset) b.setAttribute('aria-pressed', 'true');
+
+      b.addEventListener('click', function () {
+        b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true'));
+
+        var nomi = scelte
+          .filter(function (x) { return x.getAttribute('aria-pressed') === 'true'; })
+          .map(function (x) { return x.textContent.trim(); });
+
+        var resto = msg.value.split('\n')
+          .filter(function (riga) { return riga.indexOf(PREFISSO) !== 0; })
+          .join('\n').replace(/^\n+/, '');
+
+        msg.value = (nomi.length ? PREFISSO + nomi.join(', ') + '.\n' : '') + resto;
+      });
+    });
   })();
 
   // Istante di apertura: il server rifiuta gli invii troppo rapidi,

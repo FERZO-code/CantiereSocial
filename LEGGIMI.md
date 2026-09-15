@@ -786,3 +786,45 @@ preventivo" costerebbe due secondi di attesa.
 `styles.css` e `script.js` (`vercel.json`): alzate `?v=` in `pacchetti.html`
 a ogni modifica. La pagina carica Archivo con l'asse della larghezza
 (`wdth`), usato per la scritta stretta di prezzi e cartello.
+
+---
+
+# Home — interazioni aggiunte
+
+- **Menu**: "Pacchetti" porta a `/pacchetti`; mentre si scorre la home,
+  la voce della sezione in vista resta evidenziata.
+- **Metodo · avanzamento lavori**: la barra arancione scende lungo le cinque
+  fasi e ogni fase si accende quando la si raggiunge (`script.js`, blocco
+  "Metodo: avanzamento lavori"). Senza JavaScript o con "riduci animazioni"
+  la barra resta piena e tutte le fasi accese.
+- **Settori**: ogni settore suggerisce da quale pacchetto partire, con il
+  prezzo. Se cambiate i prezzi, aggiornate anche questi tre link.
+- **FAQ**: le domande visibili e quelle nei dati strutturati (`FAQPage`)
+  devono dire la stessa cosa: Google lo richiede.
+- **Modulo · "Cosa vi interessa"**: pulsanti che scrivono la riga
+  "Mi interessa: …" in cima al messaggio. Non aggiungono campi: la funzione
+  `api/contact.js` non va toccata.
+
+---
+
+# Home — sezione "Il problema" (racconto a scene)
+
+Scorrendo, la sezione resta ferma sullo schermo e cambia scena quattro
+volte: a sinistra il titolo, a destra un telefono disegnato in HTML/CSS.
+
+| Scena | Titolo | Telefono |
+|---|---|---|
+| 0 | Un cantiere all'anno sui social. | Profilo fermo, "Ultimo post · 11 mesi fa" |
+| 1 | Vi cercano su Google. | Ricerca "impresa edile vicino a me", la vostra scheda vuota |
+| 2 | Video, social e sito: ognuno per conto suo. | Schermo bloccato con tre notifiche di fornitori |
+| 3 | Con noi è un cantiere solo. | Profilo pieno e "Nuova richiesta dal sito" |
+
+- **Dove si cambia**: testi in `index.html` (blocco "PROBLEMA"), stile in
+  `styles.css` (blocco "IL PROBLEMA — racconto a scene"), logica in
+  `script.js` (blocco "Il problema: racconto a scene").
+- **Durata dello scorrimento**: `.racconto--attivo { height: 360vh; }`
+  (340vh su telefono). Più alto = ogni scena resta più a lungo.
+- **Il telefono è un'illustrazione**: è nascosto ai lettori di schermo, che
+  leggono i quattro titoli. "Concorrente A/B" sono segnaposto generici, di
+  proposito: non usate nomi di imprese reali.
+- **Senza JavaScript** le scene compaiono una sotto l'altra.
