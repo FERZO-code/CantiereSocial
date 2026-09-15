@@ -31,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- ⚠️ Alzate ?v= a ogni modifica di CSS/JS: forza il browser a
      riscaricarli invece di riusare la copia in cache. -->
-<link rel="stylesheet" href="styles.css?v=16">
+<link rel="stylesheet" href="styles.css?v=18">
 
 <script>
   /* Attiva l'intro prima del primo paint, così non c'è sfarfallio.
@@ -304,14 +304,16 @@
     <div class="racconto__tappe" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="wrap racconto__palco">
 
-      <div class="racconto__testi">
-        <div class="racconto__indice" role="group" aria-label="Scene della sezione">
-          <button type="button" class="is-su" data-vai="0">Social</button>
-          <button type="button" data-vai="1">Google</button>
-          <button type="button" data-vai="2">Fornitori</button>
-          <button type="button" data-vai="3">Regia</button>
-        </div>
+      <div class="racconto__indice" role="group" aria-label="Scene della sezione">
+        <button type="button" class="is-su" data-vai="0">Social</button>
+        <button type="button" data-vai="1">Google</button>
+        <button type="button" data-vai="2">Fornitori</button>
+        <button type="button" data-vai="3">Regia</button>
+      </div>
 
+      <!-- area: testi e telefono. Su telefono si scambiano di posto a ogni scena -->
+      <div class="racconto__area">
+      <div class="racconto__testi">
         <ol class="racconto__scene" role="list">
           <li class="racconto__scena is-attiva" data-scena>
             <span class="racconto__n" aria-hidden="true">01</span>
@@ -381,6 +383,7 @@
           </div>
 
         </div>
+      </div>
       </div>
 
     </div>
@@ -902,7 +905,7 @@ FINE BLOCCO DISATTIVATO -->
   </div>
 </footer>
 
-<script src="script.js?v=17" defer></script>
+<script src="script.js?v=18" defer></script>
 
 <!-- Banner cookie e tag Google Ads. Resta inattivo finché in consenso.js
      non è compilato GOOGLE_ADS_ID (vedi LEGGIMI.md). -->

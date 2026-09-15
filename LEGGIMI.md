@@ -834,6 +834,13 @@ volte: a sinistra il titolo, a destra un telefono disegnato in HTML/CSS.
   il telefono sale leggermente, così non sembra mai di restare fermi.
 - **Indice cliccabile**: Social · Google · Fornitori · Regia portano dritti
   alla scena.
+- **Scene alterne**: la 1ª e la 3ª scena hanno il titolo in alto, la 2ª e la
+  4ª in basso, e ogni titolo entra dalla sua parte. Su telefono il mockup si
+  sposta dalla parte opposta al titolo. Il telefono si inclina a sinistra e a
+  destra nelle scene dei problemi e torna dritto alla svolta.
+- **Pulsante WhatsApp**: mentre il racconto occupa lo schermo si nasconde
+  (coprirebbe titoli e telefono) e ricompare appena si esce dalla sezione.
+  Se la finestra WhatsApp è aperta, resta visibile.
 - **Il telefono è un'illustrazione**: è nascosto ai lettori di schermo, che
   leggono i quattro titoli. "Concorrente A/B" sono segnaposto generici, di
   proposito: non usate nomi di imprese reali.

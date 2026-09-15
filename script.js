@@ -198,6 +198,12 @@
       var i = Math.floor(posizione);
 
       mostraScena(i);
+
+      // mentre il palco occupa lo schermo, il pulsante WhatsApp si fa da parte
+      // (coprirebbe titoli e telefono); ricompare appena si esce dalla sezione
+      var r = racconto.getBoundingClientRect();
+      document.body.classList.toggle('racconto-in-vista', r.top <= 0 && r.bottom >= window.innerHeight);
+
       vociR.forEach(function (b, k) {
         var riempi = k < i ? 1 : (k === i ? posizione - i : 0);
         b.style.setProperty('--riempi', riempi.toFixed(3));

@@ -1997,18 +1997,22 @@ html.aggancio-racconto { scroll-snap-type: y proximity; }
 }
 .racconto:not(.racconto--attivo) .racconto__tappe { display: none; }
 
-.racconto__palco {
+.racconto__palco { padding-block: var(--sp-7); }
+.racconto__area {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: var(--sp-8);
   align-items: center;
-  padding-block: var(--sp-7);
 }
 .racconto--attivo .racconto__palco {
   position: sticky; top: 0;
+  display: flex; flex-direction: column;
   height: 100vh;
-  padding-top: 96px; padding-bottom: var(--sp-5);
+  padding-top: 96px; padding-bottom: var(--sp-6);
 }
+.racconto--attivo .racconto__area { flex: 1 1 auto; min-height: 0; align-items: stretch; }
+.racconto--attivo .racconto__testi { position: relative; }
+.racconto--attivo .telefono { align-self: center; }
 @supports (height: 100svh) {
   .racconto--attivo .racconto__palco { height: 100svh; }
 }
@@ -2044,14 +2048,18 @@ html.aggancio-racconto { scroll-snap-type: y proximity; }
 .racconto__indice button:hover { color: var(--ink); }
 
 .racconto__scene { display: flex; flex-direction: column; gap: var(--sp-7); }
-.racconto--attivo .racconto__scene { display: grid; }
+
+/* Scene alterne: la 1ª e la 3ª in alto, la 2ª e la 4ª in basso.
+   Ognuna entra dalla sua parte, così il cambio si vede subito. */
+.racconto--attivo .racconto__scene { position: absolute; inset: 0; display: block; }
 .racconto--attivo .racconto__scena {
-  grid-area: 1 / 1;
+  position: absolute; left: 0; right: 0; top: 0;
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity .45s var(--ease), transform .55s var(--ease);
+  transform: translateY(-40px);
+  transition: opacity .45s var(--ease), transform .6s var(--ease);
   pointer-events: none;
 }
+.racconto--attivo .racconto__scena:nth-child(even) { top: auto; bottom: 0; transform: translateY(40px); }
 .racconto--attivo .racconto__scena.is-attiva { opacity: 1; transform: none; pointer-events: auto; }
 .racconto--attivo .racconto__scena:not(.is-attiva) .racconto__cta { visibility: hidden; }
 
@@ -2094,13 +2102,14 @@ html.aggancio-racconto { scroll-snap-type: y proximity; }
   0%, 100% { transform: translateY(-3px) rotate(45deg); }
   50%      { transform: translateY(3px) rotate(45deg); }
 }
+.racconto--attivo .racconto__scorri { position: absolute; left: 0; bottom: 0; margin: 0; }
 .racconto:not([data-attiva="0"]) .racconto__scorri { opacity: 0; }
 .racconto:not(.racconto--attivo) .racconto__indice,
 .racconto:not(.racconto--attivo) .racconto__scorri { display: none; }
 
 /* ── il telefono (tutto in em: si ridimensiona con --tel-w) ─────── */
 .telefono {
-  --tel-w: clamp(240px, calc((100vh - 190px) * .47), 320px);
+  --tel-w: clamp(240px, calc((100vh - 240px) * .47), 320px);
   position: relative;
   width: var(--tel-w);
   aspect-ratio: 9 / 19.2;
@@ -2116,10 +2125,18 @@ html.aggancio-racconto { scroll-snap-type: y proximity; }
   line-height: 1.3;
 }
 @supports (height: 100svh) {
-  .telefono { --tel-w: clamp(240px, calc((100svh - 190px) * .47), 320px); }
+  .telefono { --tel-w: clamp(240px, calc((100svh - 240px) * .47), 320px); }
 }
-/* il telefono sale leggermente lungo tutta la sezione: riscontro continuo */
-.racconto--attivo .telefono { transform: translateY(calc((.5 - var(--corsa, .5)) * 48px)); }
+/* Il telefono sale piano lungo la sezione (riscontro continuo) e cambia
+   inclinazione a ogni problema; alla svolta torna dritto: prima il caos,
+   poi l'ordine. */
+.racconto--attivo .telefono {
+  --tilt: -3deg;
+  transform: translateY(calc((.5 - var(--corsa, .5)) * 48px)) rotate(var(--tilt));
+  transition: transform .6s var(--ease), top .6s var(--ease);
+}
+.racconto[data-attiva="1"] .telefono { --tilt: 3deg; }
+.racconto[data-attiva="3"] .telefono { --tilt: 0deg; }
 
 .telefono__isola {
   position: absolute; z-index: 3;
@@ -2297,19 +2314,27 @@ html.aggancio-racconto { scroll-snap-type: y proximity; }
 /* ── telefono e titoli su schermi stretti ────────────────────────── */
 @media (max-width: 860px) {
   .racconto--attivo { height: 280vh; }
-  .racconto__palco { grid-template-columns: 1fr; gap: var(--sp-6); }
-  .racconto--attivo .racconto__palco {
-    grid-template-rows: auto minmax(0, 1fr);
-    align-items: start;
-    gap: var(--sp-4);
-    padding-top: 92px;
+  .racconto__area { grid-template-columns: 1fr; gap: var(--sp-6); }
+  .racconto--attivo .racconto__palco { padding-top: 92px; padding-bottom: var(--sp-4); }
+
+  /* Testi e telefono si scambiano di posto a ogni scena:
+     titolo in alto e telefono sotto, poi telefono in alto e titolo sotto. */
+  .racconto--attivo .racconto__area { display: block; position: relative; }
+  .racconto--attivo .racconto__testi { position: absolute; inset: 0; }
+  .racconto--attivo .telefono {
+    position: absolute; left: 50%;
+    margin-left: calc(var(--tel-w) / -2);
+    top: calc(100% - var(--tel-w) * 2.1334);
+    transform: rotate(var(--tilt));
   }
+  .racconto[data-attiva="1"] .telefono,
+  .racconto[data-attiva="3"] .telefono { top: 0; }
   .racconto__indice { margin-bottom: var(--sp-4); }
   .racconto__n { margin-bottom: var(--sp-2); font-size: .72rem; }
   .racconto__t { font-size: clamp(1.7rem, 7.2vw, 2.6rem); }
   .racconto__cta { margin-top: var(--sp-4); }
   .racconto__scorri { display: none; }
-  .telefono { --tel-w: clamp(160px, calc((100vh - 410px) * .47), 280px); align-self: center; }
+  .telefono { --tel-w: clamp(160px, calc((100vh - 410px) * .47), 280px); }
   @supports (height: 100svh) {
     .telefono { --tel-w: clamp(160px, calc((100svh - 410px) * .47), 280px); }
   }
@@ -2320,6 +2345,11 @@ html.aggancio-racconto { scroll-snap-type: y proximity; }
   .telefono { --tel-w: 150px; }
   @supports (height: 100svh) { .telefono { --tel-w: 150px; } }
 }
+
+/* il pulsante WhatsApp si fa da parte durante il racconto (script.js),
+   tranne se la finestra è aperta */
+.wa { transition: bottom .25s var(--ease), opacity .3s var(--ease), transform .3s var(--ease); }
+body.racconto-in-vista .wa:not(.is-aperta) { opacity: 0; transform: translateY(16px); pointer-events: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .racconto__scorri i { animation: none; }
