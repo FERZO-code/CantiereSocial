@@ -632,7 +632,6 @@ html.pk { scroll-padding-top: 148px; }
   .pk-cartello { max-width: 560px; }
   .pk-testa, .pk-testa--sito { grid-template-columns: 1fr; align-items: start; }
   .pk-tagli { grid-template-columns: 1fr; max-width: 620px; gap: var(--sp-6); }
-  .pk-taglio--top { order: -1; }
   .pk-colonne { grid-template-columns: 1fr 1fr; }
   .pk-config { grid-template-columns: 1fr; }
   .pk-riepilogo { position: static; }
