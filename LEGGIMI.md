@@ -841,6 +841,10 @@ volte: a sinistra il titolo, a destra un telefono disegnato in HTML/CSS.
 - **Pulsante WhatsApp**: mentre il racconto occupa lo schermo si nasconde
   (coprirebbe titoli e telefono) e ricompare appena si esce dalla sezione.
   Se la finestra WhatsApp è aperta, resta visibile.
+- **Schermi bassi** (iPhone con la barra di Safari): l'indice resta sempre
+  visibile; titoli e telefono si rimpiccioliscono per gradi sotto 760px,
+  640px e 580px di altezza. Non nascondete l'indice per guadagnare spazio:
+  su un iPhone reale quasi tutti gli schermi rientrano in quella fascia.
 - **Il telefono è un'illustrazione**: è nascosto ai lettori di schermo, che
   leggono i quattro titoli. "Concorrente A/B" sono segnaposto generici, di
   proposito: non usate nomi di imprese reali.
