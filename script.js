@@ -152,41 +152,80 @@
 
   /* ── Il problema: racconto a scene ──────────────────────────────────
      La sezione è alta più schermi e il palco resta fermo: in base a quanto
-     si è scorso, si attiva una delle quattro scene (titolo + schermata del
-     telefono). Nessuno scorrimento forzato: decide sempre chi legge. */
+     si è scorso si attiva una delle quattro scene.
+
+     Perché non si saltino e non sembri di restare fermi:
+     - ogni scena ha un punto di aggancio al suo centro (.racconto__tappe,
+       vedi styles.css): uno scorrimento veloce si ferma alla scena dopo;
+     - la barra dell'indice si riempie a ogni movimento e il telefono sale
+       piano, così si vede sempre che si sta scendendo;
+     - l'indice è cliccabile e porta dritti a una scena.
+     Nessuno scorrimento forzato: decide sempre chi legge. */
   var racconto = document.querySelector('[data-racconto]');
 
   if (racconto) {
+    var radice = document.documentElement;
     var sceneR = Array.prototype.slice.call(racconto.querySelectorAll('[data-scena]'));
-    var indiceR = Array.prototype.slice.call(racconto.querySelectorAll('.racconto__indice span'));
+    var vociR = Array.prototype.slice.call(racconto.querySelectorAll('[data-vai]'));
+    var tappeR = Array.prototype.slice.call(racconto.querySelectorAll('.racconto__tappe i'));
+    var nR = sceneR.length;
     var attualeR = -1;
     var inCodaR = false;
+
+    var corsaR = function () { return racconto.offsetHeight - window.innerHeight; };
+
+    // centro della scena k, in pixel dall'inizio della sezione
+    var centroR = function (k) { return corsaR() * (k + 0.5) / nR; };
+
+    // l'aggancio tiene conto di scroll-padding-top (spazio per la nav)
+    var posizionaTappe = function () {
+      var margine = parseFloat(getComputedStyle(radice).scrollPaddingTop) || 0;
+      tappeR.forEach(function (t, k) { t.style.top = (centroR(k) + margine) + 'px'; });
+    };
 
     var mostraScena = function (i) {
       if (i === attualeR) return;
       attualeR = i;
       racconto.setAttribute('data-attiva', String(i));
       sceneR.forEach(function (s, k) { s.classList.toggle('is-attiva', k === i); });
-      indiceR.forEach(function (s, k) { s.classList.toggle('is-su', k <= i); });
     };
 
     var calcolaScena = function () {
       inCodaR = false;
-      var r = racconto.getBoundingClientRect();
-      var corsa = r.height - window.innerHeight;
-      var p = corsa > 0 ? Math.min(Math.max(-r.top / corsa, 0), 0.999) : 0;
-      mostraScena(Math.floor(p * sceneR.length));
+      var corsa = corsaR();
+      var p = corsa > 0 ? Math.min(Math.max(-racconto.getBoundingClientRect().top / corsa, 0), 0.9999) : 0;
+      var posizione = p * nR;
+      var i = Math.floor(posizione);
+
+      mostraScena(i);
+      vociR.forEach(function (b, k) {
+        var riempi = k < i ? 1 : (k === i ? posizione - i : 0);
+        b.style.setProperty('--riempi', riempi.toFixed(3));
+        b.classList.toggle('is-su', k <= i);
+      });
+      racconto.style.setProperty('--corsa', p.toFixed(3));
     };
+
     var chiediScena = function () {
       if (inCodaR) return;
       inCodaR = true;
       requestAnimationFrame(calcolaScena);
     };
 
+    vociR.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var k = parseInt(b.getAttribute('data-vai'), 10);
+        var inizio = racconto.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: inizio + centroR(k), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      });
+    });
+
     racconto.classList.add('racconto--attivo');
+    radice.classList.add('aggancio-racconto');
+    posizionaTappe();
     calcolaScena();
     window.addEventListener('scroll', chiediScena, { passive: true });
-    window.addEventListener('resize', chiediScena);
+    window.addEventListener('resize', function () { posizionaTappe(); chiediScena(); });
   }
 
   /* ── Nav: evidenzia la sezione in vista ─────────────────────────── */

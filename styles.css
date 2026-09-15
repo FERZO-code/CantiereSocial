@@ -1980,7 +1980,22 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 .problema__claim { max-width: 18ch; }
 
 .racconto { position: relative; }
-.racconto--attivo { height: 360vh; }
+/* 300vh: ogni scena ~50vh di scorrimento. Più alto = scene più lunghe. */
+.racconto--attivo { height: 300vh; }
+
+/* Aggancio: il browser si ferma al centro di una scena quando si smette di
+   scorrere lì vicino ("proximity"), e uno scorrimento veloce non può
+   attraversare più scene in un colpo ("scroll-snap-stop: always").
+   Fuori dalla sezione non ci sono punti di aggancio: lo scorrimento è libero. */
+html.aggancio-racconto { scroll-snap-type: y proximity; }
+.racconto__tappe { position: absolute; inset: 0; pointer-events: none; }
+.racconto__tappe i {
+  position: absolute; left: 0;
+  width: 1px; height: 1px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.racconto:not(.racconto--attivo) .racconto__tappe { display: none; }
 
 .racconto__palco {
   display: grid;
@@ -1999,17 +2014,34 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 }
 
 /* ── titoli ──────────────────────────────────────────────────────── */
-.racconto__indice { display: flex; gap: 6px; margin-bottom: var(--sp-6); }
-.racconto__indice span {
+.racconto__indice { display: flex; gap: 6px; margin-bottom: var(--sp-5); }
+.racconto__indice button {
+  position: relative;
   flex: 1 1 0; max-width: 128px;
-  padding-top: 10px;
-  border-top: 3px solid var(--line-strong);
+  min-height: 40px;
+  padding: 13px 0 0;
+  background: none; border: 0;
+  text-align: left;
   font-family: var(--font-mono);
   font-size: .66rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--fg-faint);
-  transition: border-color .35s var(--ease), color .35s var(--ease);
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: color .25s var(--ease);
 }
-.racconto__indice span.is-su { border-color: var(--orange); color: var(--ink); }
+/* binario grigio + riempimento arancione che segue lo scorrimento */
+.racconto__indice button::before,
+.racconto__indice button::after {
+  content: ""; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; border-radius: 2px;
+}
+.racconto__indice button::before { background: var(--line-strong); }
+.racconto__indice button::after {
+  background: var(--orange);
+  transform-origin: left;
+  transform: scaleX(var(--riempi, 0));
+}
+.racconto__indice button.is-su,
+.racconto__indice button:hover { color: var(--ink); }
 
 .racconto__scene { display: flex; flex-direction: column; gap: var(--sp-7); }
 .racconto--attivo .racconto__scene { display: grid; }
@@ -2086,6 +2118,9 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 @supports (height: 100svh) {
   .telefono { --tel-w: clamp(240px, calc((100svh - 190px) * .47), 320px); }
 }
+/* il telefono sale leggermente lungo tutta la sezione: riscontro continuo */
+.racconto--attivo .telefono { transform: translateY(calc((.5 - var(--corsa, .5)) * 48px)); }
+
 .telefono__isola {
   position: absolute; z-index: 3;
   top: calc(var(--tel-w) * .06); left: 35%;
@@ -2261,7 +2296,7 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 
 /* ── telefono e titoli su schermi stretti ────────────────────────── */
 @media (max-width: 860px) {
-  .racconto--attivo { height: 340vh; }
+  .racconto--attivo { height: 280vh; }
   .racconto__palco { grid-template-columns: 1fr; gap: var(--sp-6); }
   .racconto--attivo .racconto__palco {
     grid-template-rows: auto minmax(0, 1fr);
@@ -2274,9 +2309,9 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
   .racconto__t { font-size: clamp(1.7rem, 7.2vw, 2.6rem); }
   .racconto__cta { margin-top: var(--sp-4); }
   .racconto__scorri { display: none; }
-  .telefono { --tel-w: clamp(160px, calc((100vh - 390px) * .47), 280px); align-self: center; }
+  .telefono { --tel-w: clamp(160px, calc((100vh - 410px) * .47), 280px); align-self: center; }
   @supports (height: 100svh) {
-    .telefono { --tel-w: clamp(160px, calc((100svh - 390px) * .47), 280px); }
+    .telefono { --tel-w: clamp(160px, calc((100svh - 410px) * .47), 280px); }
   }
 }
 @media (max-width: 860px) and (max-height: 720px) {
@@ -2289,4 +2324,5 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 @media (prefers-reduced-motion: reduce) {
   .racconto__scorri i { animation: none; }
   .racconto--attivo .racconto__scena { transform: none; }
+  .racconto--attivo .telefono { transform: none; }
 }

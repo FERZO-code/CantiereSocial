@@ -822,8 +822,18 @@ volte: a sinistra il titolo, a destra un telefono disegnato in HTML/CSS.
 - **Dove si cambia**: testi in `index.html` (blocco "PROBLEMA"), stile in
   `styles.css` (blocco "IL PROBLEMA — racconto a scene"), logica in
   `script.js` (blocco "Il problema: racconto a scene").
-- **Durata dello scorrimento**: `.racconto--attivo { height: 360vh; }`
-  (340vh su telefono). Più alto = ogni scena resta più a lungo.
+- **Durata dello scorrimento**: `.racconto--attivo { height: 300vh; }`
+  (280vh su telefono). Più alto = ogni scena resta più a lungo.
+- **Aggancio alle scene**: al centro di ogni scena c'è un punto di aggancio
+  (`scroll-snap-type: y proximity` + `scroll-snap-stop: always`). Chi smette
+  di scorrere vicino a una scena ci si ferma sopra, e uno scorrimento veloce
+  (rotella, trackpad, dito sul telefono) si ferma alla scena successiva invece
+  di saltarle. Fuori dalla sezione lo scorrimento è libero. I punti sono
+  posizionati da `script.js` e tengono conto di `scroll-padding-top`.
+- **Riscontro continuo**: la barra dell'indice si riempie a ogni movimento e
+  il telefono sale leggermente, così non sembra mai di restare fermi.
+- **Indice cliccabile**: Social · Google · Fornitori · Regia portano dritti
+  alla scena.
 - **Il telefono è un'illustrazione**: è nascosto ai lettori di schermo, che
   leggono i quattro titoli. "Concorrente A/B" sono segnaposto generici, di
   proposito: non usate nomi di imprese reali.
