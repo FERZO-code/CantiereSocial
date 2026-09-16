@@ -530,15 +530,38 @@
   'use strict';
 
   var NUMERO = '393474068285';
-  var MESSAGGI = {
-    edile:       "Ciao Cantiere Social, ho un'impresa edile e vorrei informazioni sui vostri pacchetti.",
-    showroom:    "Ciao Cantiere Social, ho uno showroom e vorrei informazioni sui vostri pacchetti.",
-    immobiliare: "Ciao Cantiere Social, ho un'agenzia immobiliare e vorrei informazioni sui vostri pacchetti.",
-    altro:       "Ciao Cantiere Social, vorrei informazioni sui vostri servizi."
+
+  /* Il messaggio si compone da due scelte: chi siete + cosa vi serve.
+     ⚠️ La data dell'offerta compare anche nel pop-up (blocco "OFFERTA
+     SPECIALE"): se la spostate, cambiatela in tutti e due i posti. */
+  var FINE_OFFERTA = new Date('2026-10-01T23:59:59+02:00');
+  var offertaAttiva = new Date() <= FINE_OFFERTA;
+
+  var SETTORI = {
+    edile:       "ho un'impresa edile",
+    showroom:    'ho uno showroom',
+    immobiliare: "ho un'agenzia immobiliare",
+    altro:       ''
+  };
+  var SERVIZI = {
+    offerta:  "vorrei informazioni sull'offerta 3 video a €390",
+    commessa: 'vorrei informazioni sui video per una commessa',
+    social:   'vorrei informazioni sul pacchetto social',
+    sito:     'vorrei informazioni sul sito web',
+    altro:    'vorrei informazioni sui vostri servizi'
   };
 
-  function link(tipo) {
-    return 'https://wa.me/' + NUMERO + '?text=' + encodeURIComponent(MESSAGGI[tipo] || MESSAGGI.altro);
+  var settoreScelto = '';
+  var servizioScelto = '';
+
+  function messaggio() {
+    var chi = SETTORI[settoreScelto] || '';
+    var cosa = SERVIZI[servizioScelto] || SERVIZI.altro;
+    return 'Ciao Cantiere Social, ' + (chi ? chi + ' e ' : '') + cosa + '.';
+  }
+
+  function link() {
+    return 'https://wa.me/' + NUMERO + '?text=' + encodeURIComponent(messaggio());
   }
 
   var TRACCIATO_WA = 'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z';
@@ -552,8 +575,9 @@
   var STELLA = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">' +
     '<path fill="currentColor" d="M12 1.6l2.9 6.6 7.1.7-5.3 4.8 1.5 7-6.2-3.6-6.2 3.6 1.5-7L2 8.9l7.1-.7z"/></svg>';
 
-  function scelta(tipo, testo) {
-    return '<button type="button" class="wa__scelta" data-tipo="' + tipo + '" aria-pressed="false">' + testo + '</button>';
+  function scelta(gruppo, tipo, testo, extra) {
+    return '<button type="button" class="wa__scelta' + (extra ? ' ' + extra : '') +
+      '" data-gruppo="' + gruppo + '" data-tipo="' + tipo + '" aria-pressed="false">' + testo + '</button>';
   }
 
   var wa = document.createElement('div');
@@ -570,14 +594,25 @@
       '</div>' +
       '<div class="wa__corpo">' +
         '<p class="wa__fumetto">Ciao, siamo Simona e Ferdinando. Di cosa vi occupate? ' +
-          'Vi prepariamo il messaggio, poi lo inviate voi da WhatsApp.</p>' +
+          'Poi diteci cosa vi serve: vi prepariamo il messaggio, lo inviate voi da WhatsApp.</p>' +
         '<div class="wa__scelte" role="group" aria-label="Di cosa vi occupate">' +
-          scelta('edile', 'Impresa edile') +
-          scelta('showroom', 'Showroom') +
-          scelta('immobiliare', 'Agenzia immobiliare') +
-          scelta('altro', 'Altro') +
+          scelta('settore', 'edile', 'Impresa edile') +
+          scelta('settore', 'showroom', 'Showroom') +
+          scelta('settore', 'immobiliare', 'Agenzia immobiliare') +
+          scelta('settore', 'altro', 'Altro') +
         '</div>' +
-        '<a class="wa__apri" href="' + link('altro') + '" target="_blank" rel="noopener">' +
+        '<div class="wa__passo" data-passo hidden>' +
+          '<p class="wa__domanda">Cosa vi serve?</p>' +
+          '<div class="wa__scelte" role="group" aria-label="Cosa vi serve">' +
+            (offertaAttiva ? scelta('servizio', 'offerta', 'Offerta 3 video a €390', 'wa__scelta--offerta') : '') +
+            scelta('servizio', 'commessa', 'Video per una commessa') +
+            scelta('servizio', 'social', 'Pacchetto social') +
+            scelta('servizio', 'sito', 'Sito web') +
+            scelta('servizio', 'altro', 'Non so ancora') +
+          '</div>' +
+          (offertaAttiva ? '<p class="wa__nota-offerta">L’offerta 3 video a €390 vale fino al 1° ottobre.</p>' : '') +
+        '</div>' +
+        '<a class="wa__apri" href="' + link() + '" target="_blank" rel="noopener">' +
           logo(20) + 'Apri la chat su WhatsApp</a>' +
         '<p class="wa__nota">Nulla parte finché non premete invia su WhatsApp.</p>' +
       '</div>' +
@@ -614,11 +649,28 @@
 
   wa.querySelector('.wa__chiudi').addEventListener('click', function () { chiudiPannello(true); });
 
-  // la scelta del settore riscrive il messaggio già pronto
+  /* Ogni scelta riscrive il messaggio già pronto. Scelto il settore
+     compare il secondo passaggio, con i servizi. */
+  var passo = wa.querySelector('[data-passo]');
+
   scelte.forEach(function (b) {
     b.addEventListener('click', function () {
-      scelte.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-      apri.href = link(b.getAttribute('data-tipo'));
+      var gruppo = b.getAttribute('data-gruppo');
+
+      scelte.forEach(function (x) {
+        if (x.getAttribute('data-gruppo') === gruppo) {
+          x.setAttribute('aria-pressed', String(x === b));
+        }
+      });
+
+      if (gruppo === 'settore') {
+        settoreScelto = b.getAttribute('data-tipo');
+        passo.hidden = false;
+      } else {
+        servizioScelto = b.getAttribute('data-tipo');
+      }
+
+      apri.href = link();
     });
   });
 

@@ -1684,6 +1684,8 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 .wa__chiudi:hover { color: var(--fg-inv); background: rgba(255, 248, 243, .08); }
 
 .wa__corpo {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
   display: flex; flex-direction: column; gap: var(--sp-3);
   padding: var(--sp-4);
 }
@@ -1712,7 +1714,31 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
 .wa__scelta:hover { border-color: var(--ink); }
 .wa__scelta[aria-pressed="true"] { background: var(--orange-soft); border-color: var(--orange-deep); }
 
+/* secondo passaggio: cosa vi serve */
+.wa__passo { display: flex; flex-direction: column; gap: var(--sp-2); }
+.wa__passo[hidden] { display: none; }
+.wa__domanda {
+  font-family: var(--font-mono);
+  font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--fg-muted);
+}
+/* l’offerta si distingue dalle altre voci */
+.wa__scelta--offerta {
+  background: var(--orange);
+  border-color: var(--orange-deep);
+  color: var(--ink);
+  font-weight: 700;
+}
+.wa__scelta--offerta::before { content: "★ "; color: var(--orange-ink); }
+.wa__scelta--offerta:hover { background: var(--orange-deep); border-color: var(--orange-deep); color: #fff; }
+.wa__scelta--offerta:hover::before { color: #fff; }
+.wa__scelta--offerta[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--cream); }
+.wa__scelta--offerta[aria-pressed="true"]::before { color: var(--orange); }
+.wa__nota-offerta { font-size: .76rem; line-height: 1.4; color: var(--orange-ink); }
+
+/* il corpo scorre sugli schermi bassi: il pulsante resta sempre in vista */
 .wa__apri {
+  position: sticky; bottom: 0; z-index: 1;
   display: flex; align-items: center; justify-content: center;
   gap: var(--sp-2);
   min-height: 48px;

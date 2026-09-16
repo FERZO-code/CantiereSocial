@@ -721,6 +721,18 @@ var MESSAGGI = { edile: "...", showroom: "...", immobiliare: "...", altro: "..."
 
 Dopo la modifica alzate `?v=` di `script.js` in tutte e tre le pagine.
 
+## Due passaggi: chi siete, cosa vi serve
+
+Il messaggio si compone da due scelte: il settore (impresa edile, showroom,
+agenzia, altro) e il servizio (offerta, commessa, social, sito, non so).
+Il secondo gruppo compare dopo la prima scelta.
+
+La voce **"Offerta 3 video a €390"** è arancione, diversa dalle altre, e
+compare solo fino a `FINE_OFFERTA`, in cima al blocco WhatsApp di
+`script.js`. ⚠️ La stessa data sta anche nel blocco "OFFERTA SPECIALE"
+(pop-up): cambiatele insieme. Passata la data, la voce e la nota spariscono
+da sole e restano gli altri servizi.
+
 ---
 
 # Pagina Pacchetti (`/pacchetti`)
