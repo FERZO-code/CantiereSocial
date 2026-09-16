@@ -712,6 +712,7 @@
   var ora = new Date();
   if (ora > FINE) return;
   if (document.querySelector('.legal')) return;
+  if (document.querySelector('[data-offerta-landing]')) return;   // landing: il modulo è già in pagina
   if (!('HTMLDialogElement' in window)) return;
   if (location.hash === '#contatti' || /[?&]richiesta=/.test(location.search)) return;
 

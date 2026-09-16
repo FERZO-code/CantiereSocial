@@ -858,3 +858,28 @@ non sulle pagine legali.
 - **A offerta finita**: si può lasciare così (non compare più) o togliere il
   blocco da `script.js` e `styles.css`, la riga `cs_offerta` dalla cookie
   policy e il paragrafo dall'informativa.
+
+---
+
+# Landing per le inserzioni (`/offerta`)
+
+Pagina separata, pensata per il traffico a pagamento: un solo obiettivo,
+lasciare **nome e cellulare**. File: `offerta.html`, `offerta.css`, `offerta.js`.
+
+- **Concetto**: "3 video al prezzo di 1 — €390 fino al 1° ottobre", con il
+  conto alla rovescia dei giorni che mancano.
+- **Niente menu**: in una landing i link portano via dal modulo. Restano solo
+  il marchio in alto e privacy/cookie in fondo.
+- **Fuori da Google**: `noindex, follow` e non è nella sitemap, così non
+  compete con la home sulle stesse parole chiave.
+- **Il modulo** manda a `/api/contact` con `tipo: 'offerta'`, lo stesso del
+  pop-up: email con oggetto "Offerta 3 video — Nome · cellulare". Nel campo
+  "Pagina" arrivano anche gli utm dell'inserzione, utili per capire quale
+  annuncio ha portato il contatto.
+- **Il pop-up dell'offerta non compare qui** (il modulo è già in pagina):
+  se ne occupa il controllo su `[data-offerta-landing]` in `script.js`.
+- **Dopo il 1° ottobre** il conto alla rovescia diventa "Offerta conclusa ·
+  scriveteci per un preventivo". Prezzi e titoli restano: aggiornateli o
+  togliete la pagina dalle inserzioni.
+- **⚠️ La data dell'offerta** è in tre punti: `offerta.js`, il pop-up e la
+  finestra WhatsApp in `script.js`. Cambiatele insieme.

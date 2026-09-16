@@ -43,7 +43,7 @@
       ]
     },
     {
-      "source": "/(styles\\.css|script\\.js|pacchetti\\.css|pacchetti\\.js)",
+      "source": "/(styles\\.css|script\\.js|pacchetti\\.css|pacchetti\\.js|offerta\\.css|offerta\\.js)",
       "headers": [
         {
           "key": "Cache-Control",
