@@ -142,3 +142,45 @@
       });
   });
 })();
+
+/* ── video di presentazione (VSL) ────────────────────────────────────
+   Niente autoplay: parte al tocco, con l'audio e i controlli nativi.
+   preload="none" nell'HTML: i 12 MB si scaricano solo se lo si guarda.
+   Se c'è il consenso alle statistiche, Analytics riceve inizio, metà e fine
+   (gtag esiste solo dopo il consenso, vedi consenso.js). */
+(function () {
+  'use strict';
+
+  var box = document.querySelector('[data-vsl]');
+  if (!box) return;
+  var video = box.querySelector('video');
+  var play = box.querySelector('[data-vsl-play]');
+  var inviati = {};
+
+  function evento(nome) {
+    if (inviati[nome] || typeof window.gtag !== 'function') return;
+    inviati[nome] = true;
+    window.gtag('event', nome, { video_title: 'VSL offerta 3 video' });
+  }
+
+  play.addEventListener('click', function () {
+    box.classList.add('is-avviato');
+    video.controls = true;
+    var p = video.play();
+    if (p && p.catch) p.catch(function () { /* il browser ha bloccato: restano i controlli */ });
+    video.focus();
+  });
+
+  video.addEventListener('play', function () { evento('vsl_inizio'); });
+  video.addEventListener('timeupdate', function () {
+    if (video.duration && video.currentTime / video.duration >= 0.5) evento('vsl_meta');
+  });
+  video.addEventListener('ended', function () {
+    evento('vsl_fine');
+    // finito il video, il passo successivo è il modulo
+    var modulo = document.getElementById('modulo');
+    if (modulo && modulo.getBoundingClientRect().top > window.innerHeight * 0.6) {
+      modulo.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    }
+  });
+})();

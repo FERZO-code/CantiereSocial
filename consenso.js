@@ -27,13 +27,13 @@
 
   /* ── Configurazione (vedi LEGGIMI.md) ───────────────────────────── */
   var GA4_ID             = 'G-Y99687KHVT';   // Google Analytics 4
-  var GOOGLE_ADS_ID      = 'AW-XXXXXXXXXX';  // ⚠️ DA COMPILARE, es. AW-123456789
+  var GOOGLE_ADS_ID      = 'AW-18443335576'; // Google Ads (conversioni avanzate per i lead)
   var ETICHETTA_MODULO   = '';               // Google Ads: la parte dopo "/" in send_to
   var ETICHETTA_WHATSAPP = '';
 
   /* Alzate VERSIONE quando cambiano cookie, fornitori o finalità:
      il banner ricomparirà a tutti, come richiesto dal Garante. */
-  var VERSIONE  = 1;
+  var VERSIONE  = 2;   // 2: attivata la finalità pubblicitaria (Google Ads)
   var CHIAVE    = 'cs_consenso';
   var DURATA_MS = 180 * 24 * 60 * 60 * 1000;   // 6 mesi
 

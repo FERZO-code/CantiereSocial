@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Generatore immagine — cartello offerta (non pubblicata)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; padding: 24px; background: #241B14; font-family: system-ui, sans-serif; color: #FFF8F3; }
+  canvas { width: 600px; height: 450px; display: block; border-radius: 8px; }
+  p { font-size: 13px; color: #A8968A; }
+</style>
+</head>
+<body>
+<!-- Pagina di servizio: disegna il cartello dell'offerta su una tela 1200×900
+     (misura consigliata per i post di Google Business Profile) e ne ricava un
+     PNG. Non viene pubblicata: la cartella test/ è esclusa dal deploy. -->
+<canvas id="tela" width="1200" height="900"></canvas>
+<p><button type="button" id="scarica">Scarica PNG 1200×900</button> <span id="stato">Disegno in corso…</span></p>
+
+<script>
+const CREMA = '#FFF8F3', CREMA2 = '#FBEFE5', INK = '#17120E', ARANCIO = '#EA7621',
+      ARANCIO_SCURO = '#C25A10', ARANCIO_INK = '#A94B0B', GRIGIO = '#6B5B4E', LINEA = 'rgba(23,18,14,.13)';
+
+const c = document.getElementById('tela');
+const x = c.getContext('2d');
+
+/* testo con larghezza compressa: Archivo ha l'asse wdth, ma su canvas
+   è più affidabile comprimere in orizzontale con una trasformazione */
+function stretto(testo, px, peso, colore, cx, cy, fattore) {
+  x.save();
+  x.font = peso + ' ' + px + 'px Archivo, Helvetica, sans-serif';
+  x.fillStyle = colore;
+  x.textAlign = 'center';
+  x.textBaseline = 'alphabetic';
+  x.translate(cx, cy);
+  x.scale(fattore || 0.78, 1);
+  x.fillText(testo, 0, 0);
+  x.restore();
+}
+
+function mono(testo, px, colore, cx, cy, spaziatura, allineamento) {
+  x.save();
+  x.font = '500 ' + px + 'px "IBM Plex Mono", monospace';
+  x.fillStyle = colore;
+  x.textBaseline = 'alphabetic';
+  x.letterSpacing = (spaziatura || 0) + 'px';
+  x.textAlign = allineamento || 'center';
+  x.fillText(testo, cx, cy);
+  x.restore();
+}
+
+function testo(t, px, peso, colore, cx, cy, allineamento) {
+  x.save();
+  x.font = peso + ' ' + px + 'px Archivo, Helvetica, sans-serif';
+  x.fillStyle = colore;
+  x.textAlign = allineamento || 'center';
+  x.textBaseline = 'alphabetic';
+  x.fillText(t, cx, cy);
+  x.restore();
+}
+
+function rettArrotondato(px, py, w, h, r) {
+  x.beginPath();
+  x.moveTo(px + r, py);
+  x.arcTo(px + w, py, px + w, py + h, r);
+  x.arcTo(px + w, py + h, px, py + h, r);
+  x.arcTo(px, py + h, px, py, r);
+  x.arcTo(px, py, px + w, py, r);
+  x.closePath();
+}
+
+function bullone(px, py) {
+  const g = x.createRadialGradient(px - 2, py - 2, 1, px, py, 7);
+  g.addColorStop(0, '#ffffff'); g.addColorStop(.35, '#B7A89C'); g.addColorStop(1, '#6B5B4E');
+  x.beginPath(); x.arc(px, py, 7, 0, Math.PI * 2); x.fillStyle = g; x.fill();
+  x.strokeStyle = 'rgba(23,18,14,.35)'; x.lineWidth = 1; x.stroke();
+}
+
+function disegna() {
+  // fondo: carta da progetto
+  x.fillStyle = CREMA; x.fillRect(0, 0, 1200, 900);
+  x.strokeStyle = 'rgba(23,18,14,.06)'; x.lineWidth = 1;
+  for (let i = 0; i <= 1200; i += 60) { x.beginPath(); x.moveTo(i + .5, 0); x.lineTo(i + .5, 900); x.stroke(); }
+  for (let i = 0; i <= 900; i += 60) { x.beginPath(); x.moveTo(0, i + .5); x.lineTo(1200, i + .5); x.stroke(); }
+
+  // il cartello
+  const X = 110, Y = 70, W = 980, H = 760, R = 14;
+  x.save();
+  x.shadowColor = 'rgba(23,18,14,.35)'; x.shadowBlur = 50; x.shadowOffsetY = 24;
+  rettArrotondato(X, Y, W, H, R); x.fillStyle = '#FFFFFF'; x.fill();
+  x.restore();
+  rettArrotondato(X, Y, W, H, R); x.strokeStyle = INK; x.lineWidth = 4; x.stroke();
+
+  // nastro di cantiere in alto
+  x.save();
+  rettArrotondato(X, Y, W, H, R); x.clip();
+  const NASTRO = 34;
+  x.fillStyle = ARANCIO; x.fillRect(X, Y, W, NASTRO);
+  x.fillStyle = INK;
+  for (let i = -H; i < W + H; i += 56) {
+    x.beginPath();
+    x.moveTo(X + i, Y); x.lineTo(X + i + 28, Y);
+    x.lineTo(X + i + 28 - NASTRO, Y + NASTRO); x.lineTo(X + i - NASTRO, Y + NASTRO);
+    x.closePath(); x.fill();
+  }
+  x.fillStyle = INK; x.fillRect(X, Y + NASTRO, W, 4);
+  x.restore();
+
+  bullone(X + 34, Y + 74); bullone(X + W - 34, Y + 74);
+
+  // intestazione
+  mono('OFFERTA SPECIALE · CANTIERE SOCIAL', 20, ARANCIO_INK, 600, Y + 100, 7);
+  stretto('3 VIDEO', 118, '800', INK, 600, Y + 215);
+  stretto('AL PREZZO DI 1', 118, '800', INK, 600, Y + 325);
+
+  // riga divisoria
+  x.fillStyle = INK; x.fillRect(X, Y + 360, W, 4);
+
+  // righe del cartello
+  const righe = [
+    ['OGGETTO', '3 video per la vostra commessa'],
+    ['DOVE', 'Cantiere, showroom o immobile'],
+    ['SCADENZA', '1° ottobre 2026']
+  ];
+  let ry = Y + 364;
+  righe.forEach(function (r) {
+    mono(r[0], 18, GRIGIO, X + 46, ry + 40, 3, 'left');
+    testo(r[1], 29, '600', INK, X + 250, ry + 42, 'left');
+    ry += 62;
+    x.fillStyle = LINEA; x.fillRect(X + 46, ry, W - 92, 1);
+  });
+
+  // importo: sopra la fascia scura, con aria attorno
+  mono('IMPORTO', 18, GRIGIO, X + 46, ry + 48, 3, 'left');
+  x.save();
+  x.font = '800 104px Archivo, Helvetica, sans-serif';
+  x.fillStyle = ARANCIO_SCURO;
+  x.textAlign = 'left';
+  x.translate(X + 250, ry + 78);
+  x.scale(.78, 1);
+  x.fillText('€390', 0, 0);
+  x.restore();
+  mono('invece di €1.170 per 3 video', 19, GRIGIO, X + 468, ry + 76, 1, 'left');
+
+  // fascia scura in fondo
+  const FY = Y + H - 76;
+  x.save();
+  rettArrotondato(X, Y, W, H, R); x.clip();
+  x.fillStyle = INK; x.fillRect(X, FY, W, 76);
+  x.restore();
+  mono('RUTIGLIANO (BA) · BARI E PROVINCIA · CANTIERESOCIAL.COM', 20, CREMA2, 600, FY + 47, 5);
+
+  document.getElementById('stato').textContent = 'Pronto: ' + c.width + '×' + c.height;
+  window.PNG_PRONTO = true;
+}
+
+document.fonts.load('800 132px Archivo')
+  .then(function () { return document.fonts.load('500 20px "IBM Plex Mono"'); })
+  .then(function () { return document.fonts.ready; })
+  .then(disegna)
+  .catch(function () { disegna(); });
+
+window.dammiPNG = function () { return c.toDataURL('image/png'); };
+
+document.getElementById('scarica').addEventListener('click', function () {
+  var a = document.createElement('a');
+  a.href = c.toDataURL('image/png');
+  a.download = 'cantiere-social-offerta-3video.png';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
+</script>
+</body>
+</html>

@@ -194,7 +194,7 @@ riempimento nero di default: l'icona apparirebbe come un quadrato pieno.
 
 # Cache dei file (importante a ogni deploy)
 
-`styles.css` e `script.js` sono richiamati con `?v=2`. **Alzate quel numero
+`styles.css`, `script.js` e `consenso.js` sono richiamati con `?v=`. **Alzate quel numero
 ogni volta che li modificate**, altrimenti chi ha già visitato il sito
 continua a vedere la versione vecchia dalla cache del browser.
 
@@ -601,12 +601,19 @@ Banner di consenso e tag di Google Ads in un unico file, senza servizi esterni.
 ## ⚠️ Per attivarlo: tre valori in cima a `consenso.js`
 
 ```js
-var GOOGLE_ADS_ID      = 'AW-XXXXXXXXXX';
+var GOOGLE_ADS_ID      = 'AW-18443335576';   // già compilato
 var ETICHETTA_MODULO   = '';
 var ETICHETTA_WHATSAPP = '';
 ```
 
-**Finché `GOOGLE_ADS_ID` resta `AW-XXXXXXXXXX` il file non fa nulla**: niente
+**L'ID di Google Ads è compilato** (`AW-18443335576`, conversioni avanzate per
+i lead). Mancano le **etichette** delle singole azioni di conversione: finché
+`ETICHETTA_MODULO` ed `ETICHETTA_WHATSAPP` restano vuote, il tag si carica con
+il consenso ma le conversioni per azione non vengono inviate. Le trovate in
+Google Ads → Obiettivi → Conversioni → azione → Configurazione tag → "Installa
+il tag autonomamente": sono la parte dopo la barra in `send_to`.
+
+Nota storica: finché l'ID restava `AW-XXXXXXXXXX` il file non faceva nulla: niente
 banner, niente tag. Si può pubblicare senza rischi anche prima di averlo.
 
 Dove trovarli in Google Ads:
@@ -883,3 +890,16 @@ lasciare **nome e cellulare**. File: `offerta.html`, `offerta.css`, `offerta.js`
   togliete la pagina dalle inserzioni.
 - **⚠️ La data dell'offerta** è in tre punti: `offerta.js`, il pop-up e la
   finestra WhatsApp in `script.js`. Cambiatele insieme.
+- **Il video (VSL)** è `assets/vsl-offerta.mp4` (720×1280, H.264, ~12 MB) con
+  copertina `assets/vsl-offerta.jpg`. Parte solo al tocco, con l'audio;
+  `preload="none"`, quindi chi non lo guarda non lo scarica. Sul telefono sta
+  tra il titolo e il cartello, largo al massimo 240px, così il modulo si
+  intravede sotto. Con il consenso alle statistiche, Analytics riceve
+  `vsl_inizio`, `vsl_meta` e `vsl_fine`; a fine video la pagina scende al modulo.
+  Per sostituirlo, convertite il nuovo file (l'originale da iPhone è HEVC e
+  non si vede su Chrome/Android) e **dategli un nome nuovo**: `/assets/` ha
+  la cache di 7 giorni.
+  ```
+  ffmpeg -i ORIGINALE.MOV -vf "scale=720:1280,fps=30,format=yuv420p" -c:v libx264 -preset slow -crf 25 -c:a aac -b:a 128k -movflags +faststart assets/vsl-offerta.mp4
+  ffmpeg -ss 5.8 -i assets/vsl-offerta.mp4 -frames:v 1 -q:v 4 assets/vsl-offerta.jpg
+  ```
