@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="it" class="lk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cantiere Social — i nostri link</title>
+<meta name="description" content="I link di Cantiere Social: l'offerta 3 video a €390, i pacchetti con i prezzi e il sito. Video, social e siti per imprese edili, showroom e agenzie immobiliari di Bari e provincia.">
+
+<!-- Pagina per la bio di Instagram: fuori da Google, così non compete
+     con la home e con /pacchetti nei risultati di ricerca. -->
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://www.cantieresocial.com/link">
+<meta name="theme-color" content="#EA7621">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.cantieresocial.com/link">
+<meta property="og:site_name" content="Cantiere Social">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="Cantiere Social — i nostri link">
+<meta property="og:description" content="3 video a €390, i pacchetti e il sito.">
+<meta property="og:image" content="https://www.cantieresocial.com/assets/og-cover.png">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/og-mark.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     PAGINA LINK (bio di Instagram) — /link
+     Il CSS sta qui dentro di proposito: è poco, e chi arriva dalla bio
+     apre la pagina una volta sola, spesso in 4G dentro l'app di Instagram.
+     Un solo file = una sola richiesta, quindi si apre prima.
+     ⚠️ Perciò NON c'è un link.css da versionare in vercel.json.
+
+     La data dell'offerta è anche in offerta.js e in script.js (pop-up e
+     finestra WhatsApp): se la spostate, cambiatela in tutti i punti.
+     ═══════════════════════════════════════════════════════════════════ -->
+<style>
+  :root {
+    --ink: #17120E;
+    --orange: #EA7621;
+    --orange-deep: #C25A10;
+    --orange-ink: #A94B0B;
+    --cream: #FFF8F3;
+    --surface: #FFFFFF;
+    --muted: #6B5B4E;
+    --line: rgba(23, 18, 14, .14);
+    --font: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    --stretto: 74%;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100svh;
+    padding: clamp(20px, 6vw, 40px) 16px calc(20px + env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; align-items: center;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+  /* carta da progetto, come sul sito */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(to right, rgba(23, 18, 14, .05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(23, 18, 14, .05) 1px, transparent 1px);
+    background-size: 44px 44px;
+    pointer-events: none;
+  }
+
+  .lk-wrap { position: relative; z-index: 1; width: 100%; max-width: 440px; }
+
+  /* ── intestazione ─────────────────────────────────────────────────── */
+  .lk-testa { text-align: center; margin-bottom: clamp(20px, 5vw, 28px); }
+
+  .lk-foto {
+    width: clamp(108px, 30vw, 136px); height: auto;
+    display: block; margin: 0 auto 14px;
+  }
+
+  .lk-nome {
+    font-weight: 800; font-stretch: var(--stretto);
+    font-size: clamp(2.1rem, 9vw, 2.7rem); line-height: .92;
+    letter-spacing: -.03em; text-transform: uppercase;
+    margin: 0 0 10px;
+  }
+  .lk-nome span { color: var(--orange); }
+
+  .lk-claim { font-size: 1rem; font-weight: 600; line-height: 1.4; margin: 0 0 10px; }
+  .lk-claim b { color: var(--orange-ink); font-weight: 700; }
+
+  .lk-dove {
+    font-family: var(--mono); font-size: .72rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); margin: 0;
+  }
+
+  /* ── i link ───────────────────────────────────────────────────────── */
+  .lk-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+
+  .lk-voce {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px;
+    min-height: 66px;
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    color: var(--ink); text-decoration: none;
+    box-shadow: 0 4px 0 var(--ink);
+    transition: transform .14s ease, box-shadow .14s ease;
+  }
+  .lk-voce:hover, .lk-voce:focus-visible { transform: translateY(2px); box-shadow: 0 2px 0 var(--ink); }
+  .lk-voce:active { transform: translateY(4px); box-shadow: 0 0 0 var(--ink); }
+  .lk-voce:focus-visible { outline: 3px solid var(--orange-deep); outline-offset: 3px; }
+
+  .lk-voce__testo { flex: 1 1 auto; min-width: 0; }
+  .lk-voce__t { display: block; font-weight: 800; font-size: 1.06rem; line-height: 1.15; }
+  .lk-voce__s {
+    display: block; margin-top: 3px;
+    font-family: var(--mono); font-size: .7rem;
+    letter-spacing: .05em; text-transform: uppercase; color: var(--muted);
+  }
+  .lk-voce__freccia { flex: none; width: 20px; height: 20px; color: var(--orange-deep); }
+
+  /* l'offerta: cartello dei lavori, con il nastro */
+  .lk-voce--offerta {
+    position: relative;
+    padding-top: 26px;
+    background: var(--ink); color: var(--cream);
+    box-shadow: 0 6px 0 var(--orange-deep);
+    overflow: hidden;
+  }
+  .lk-voce--offerta::before {
+    content: "";
+    position: absolute; inset: 0 0 auto; height: 12px;
+    background: repeating-linear-gradient(-45deg, var(--orange) 0 10px, var(--ink) 10px 20px);
+    border-bottom: 2px solid var(--ink);
+  }
+  .lk-voce--offerta:hover, .lk-voce--offerta:focus-visible { box-shadow: 0 4px 0 var(--orange-deep); }
+  .lk-voce--offerta:active { box-shadow: 0 0 0 var(--orange-deep); }
+  .lk-voce--offerta .lk-voce__t { font-size: 1.24rem; font-stretch: var(--stretto); text-transform: uppercase; letter-spacing: -.01em; }
+  .lk-voce--offerta .lk-voce__t b { color: var(--orange); font-weight: 800; }
+  .lk-voce--offerta .lk-voce__s { color: var(--orange); }
+  .lk-voce--offerta .lk-voce__freccia { color: var(--orange); }
+
+  /* WhatsApp, più discreto */
+  .lk-voce--wa { background: transparent; box-shadow: 0 3px 0 var(--ink); }
+  .lk-voce--wa .lk-voce__t { font-size: 1rem; }
+  .lk-icona-wa { flex: none; width: 24px; height: 24px; color: var(--orange-deep); }
+
+  /* ── piede ────────────────────────────────────────────────────────── */
+  .lk-piede {
+    margin-top: 22px; text-align: center;
+    font-family: var(--mono); font-size: .68rem; line-height: 1.8;
+    letter-spacing: .04em; color: var(--muted);
+  }
+  .lk-piede a, .lk-piede button {
+    color: var(--muted); text-underline-offset: 3px;
+    font: inherit; background: none; border: 0; padding: 0; cursor: pointer;
+    text-decoration: underline;
+  }
+  .lk-piede a:hover, .lk-piede button:hover { color: var(--ink); }
+
+  /* schermi bassi (iPhone SE e simili): tutto più compatto, così le voci
+     restano in una schermata sola e non serve scorrere */
+  @media (max-height: 720px) {
+    .lk-foto { width: 84px; margin-bottom: 8px; }
+    .lk-nome { font-size: 1.95rem; margin-bottom: 7px; }
+    .lk-claim { font-size: .92rem; margin-bottom: 6px; }
+    .lk-testa { margin-bottom: 16px; }
+    .lk-lista { gap: 9px; }
+    .lk-voce { min-height: 58px; padding: 12px 16px; }
+    .lk-voce--offerta { padding-top: 20px; }
+    .lk-piede { margin-top: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lk-voce { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<main class="lk-wrap">
+
+  <header class="lk-testa">
+    <img class="lk-foto" src="/assets/og-mark.png" alt="Simona e Ferdinando di Cantiere Social, con il caschetto arancione." width="512" height="512" fetchpriority="high" decoding="async">
+
+    <h1 class="lk-nome"><span>Cantiere</span><br>Social</h1>
+
+    <p class="lk-claim">Video, social e siti per <b>imprese edili, showroom e agenzie immobiliari</b>.</p>
+    <p class="lk-dove">Rutigliano (BA) · Bari e provincia</p>
+  </header>
+
+  <ul class="lk-lista" role="list">
+
+    <!-- L'offerta per prima: è quella che converte dalla bio -->
+    <li>
+      <a class="lk-voce lk-voce--offerta" href="/offerta" data-offerta>
+        <span class="lk-voce__testo">
+          <span class="lk-voce__t">3 video a <b>€390</b></span>
+          <span class="lk-voce__s" data-scadenza>Offerta fino al 1° ottobre</span>
+        </span>
+        <svg class="lk-voce__freccia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5.5L18.5 12 12 18.5"/></svg>
+      </a>
+    </li>
+
+    <li>
+      <a class="lk-voce" href="/pacchetti">
+        <span class="lk-voce__testo">
+          <span class="lk-voce__t">Pacchetti e prezzi</span>
+          <span class="lk-voce__s">Cosa facciamo e quanto costa</span>
+        </span>
+        <svg class="lk-voce__freccia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5.5L18.5 12 12 18.5"/></svg>
+      </a>
+    </li>
+
+    <li>
+      <a class="lk-voce" href="/">
+        <span class="lk-voce__testo">
+          <span class="lk-voce__t">Il nostro sito</span>
+          <span class="lk-voce__s">Lavori, metodo e chi siamo</span>
+        </span>
+        <svg class="lk-voce__freccia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5.5L18.5 12 12 18.5"/></svg>
+      </a>
+    </li>
+
+    <li>
+      <a class="lk-voce lk-voce--wa" href="https://wa.me/393474068285?text=Ciao%20Cantiere%20Social%2C%20vi%20scrivo%20da%20Instagram." target="_blank" rel="noopener">
+        <svg class="lk-icona-wa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M20.5 12a8.5 8.5 0 01-12.6 7.4L3.5 20.5l1.2-4.3A8.5 8.5 0 1120.5 12z"/><path d="M8.8 9.2c.3 2.6 3.4 5.7 6 6l1.2-1.4 2 1.1-.6 1.6c-2.6.9-7.9-2.6-9.4-6.6l1.5-.9z" fill="currentColor" stroke="none"/></svg>
+        <span class="lk-voce__testo">
+          <span class="lk-voce__t">Scriveteci su WhatsApp</span>
+          <span class="lk-voce__s">Rispondiamo noi, non un call center</span>
+        </span>
+      </a>
+    </li>
+
+  </ul>
+
+  <footer class="lk-piede">
+    <p>© <span id="year">2026</span> Cantiere Social · P.IVA 08895170721</p>
+    <p><a href="/privacy">Privacy</a> · <a href="/cookie">Cookie</a><span data-consenso-sep hidden> · <button type="button" data-consenso-apri hidden>Preferenze cookie</button></span></p>
+  </footer>
+
+</main>
+
+<script>
+/* Conto alla rovescia dell'offerta, uguale a quello di /offerta.
+   ⚠️ Stessa data anche in offerta.js e script.js. */
+(function () {
+  'use strict';
+  var FINE = new Date('2026-10-01T23:59:59+02:00');
+  var anno = document.getElementById('year');
+  if (anno) anno.textContent = new Date().getFullYear();
+
+  var etichetta = document.querySelector('[data-scadenza]');
+  if (!etichetta) return;
+
+  var ora = new Date();
+  if (ora > FINE) {
+    // a offerta finita la voce resta, ma senza promettere il prezzo scaduto
+    var voce = document.querySelector('[data-offerta]');
+    if (voce) {
+      voce.querySelector('.lk-voce__t').innerHTML = 'Chiedete un <b>preventivo</b>';
+      etichetta.textContent = 'Gratis e senza impegno';
+    }
+    return;
+  }
+
+  var giorni = Math.ceil((FINE - ora) / 86400000);
+  etichetta.textContent = giorni <= 1
+    ? 'Offerta · ultimo giorno'
+    : 'Offerta · mancano ' + giorni + ' giorni';
+})();
+</script>
+
+<script src="/consenso.js?v=2" defer></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>

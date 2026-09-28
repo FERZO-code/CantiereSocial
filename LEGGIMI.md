@@ -903,3 +903,29 @@ lasciare **nome e cellulare**. File: `offerta.html`, `offerta.css`, `offerta.js`
   ffmpeg -i ORIGINALE.MOV -vf "scale=720:1280,fps=30,format=yuv420p" -c:v libx264 -preset slow -crf 25 -c:a aac -b:a 128k -movflags +faststart assets/vsl-offerta.mp4
   ffmpeg -ss 5.8 -i assets/vsl-offerta.mp4 -frames:v 1 -q:v 4 assets/vsl-offerta.jpg
   ```
+
+---
+
+# Pagina link per la bio di Instagram (`/link`)
+
+Il "linktree" di casa: un solo file, `link.html`, da incollare nella bio
+come `https://www.cantieresocial.com/link`.
+
+- **Le voci**, in ordine: l'offerta **3 video a €390** (cartello nero con il
+  nastro, la più vistosa), **Pacchetti e prezzi**, **Il nostro sito** e
+  **WhatsApp**. L'offerta sta per prima perché è quella che converte.
+- **Il CSS è dentro la pagina**, non in un file a parte: chi arriva dalla bio
+  la apre una volta sola, spesso in 4G dentro l'app di Instagram, e una sola
+  richiesta si carica prima. Per questo **non c'è un `link.css`** da
+  versionare in `vercel.json`.
+- **Fuori da Google**: `noindex, follow` e fuori dalla sitemap, così non
+  compete con la home e con `/pacchetti`.
+- **Dopo il 1° ottobre** la voce dell'offerta diventa da sola "Chiedete un
+  preventivo · gratis e senza impegno", continuando a puntare a `/offerta`.
+  ⚠️ La data è anche in `offerta.js` e in `script.js` (pop-up e finestra
+  WhatsApp): cambiatele insieme.
+- **Cookie**: la pagina carica solo `consenso.js`, quindi banner e
+  "Preferenze cookie" funzionano come altrove. Non carica `script.js`, così
+  qui non compaiono né il pop-up né il widget WhatsApp.
+- **Sta in una schermata** di telefono senza scorrere: se aggiungete voci,
+  ricontrollate su uno schermo da 844 px di altezza.
