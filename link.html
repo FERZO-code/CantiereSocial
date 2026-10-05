@@ -27,12 +27,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+<!-- styles.css serve al banner dei cookie: banner e finestra "Preferenze"
+     sono disegnati lì dentro (classi .consenso* e i pulsanti .btn). Senza,
+     comparirebbero senza stile. È in cache per un anno ed è quasi sempre
+     già scaricato da chi ha visitato il sito. -->
+<link rel="stylesheet" href="/styles.css?v=24">
+
 <!-- ═══════════════════════════════════════════════════════════════════
      PAGINA LINK (bio di Instagram) — /link
-     Il CSS sta qui dentro di proposito: è poco, e chi arriva dalla bio
-     apre la pagina una volta sola, spesso in 4G dentro l'app di Instagram.
-     Un solo file = una sola richiesta, quindi si apre prima.
+     Gli stili della pagina stanno qui dentro di proposito: sono pochi e
+     chi arriva dalla bio la apre una volta sola, spesso in 4G dentro
+     l'app di Instagram. Stando nell'HTML non aggiungono una richiesta.
      ⚠️ Perciò NON c'è un link.css da versionare in vercel.json.
+     ⚠️ Questo blocco viene DOPO styles.css: le regole qui sotto vincono.
 
      La data dell'offerta è anche in offerta.js e in script.js (pop-up e
      finestra WhatsApp): se la spostate, cambiatela in tutti i punti.

@@ -914,10 +914,13 @@ come `https://www.cantieresocial.com/link`.
 - **Le voci**, in ordine: l'offerta **3 video a €390** (cartello nero con il
   nastro, la più vistosa), **Pacchetti e prezzi**, **Il nostro sito** e
   **WhatsApp**. L'offerta sta per prima perché è quella che converte.
-- **Il CSS è dentro la pagina**, non in un file a parte: chi arriva dalla bio
-  la apre una volta sola, spesso in 4G dentro l'app di Instagram, e una sola
-  richiesta si carica prima. Per questo **non c'è un `link.css`** da
-  versionare in `vercel.json`.
+- **Gli stili della pagina sono dentro l'HTML**, non in un file a parte: sono
+  pochi e chi arriva dalla bio la apre una volta sola, spesso in 4G dentro
+  l'app di Instagram. Per questo **non c'è un `link.css`** da versionare in
+  `vercel.json`. La pagina carica però `styles.css`, perché **banner e
+  finestra dei cookie sono disegnati lì** (classi `.consenso*` e i pulsanti
+  `.btn`): senza, uscirebbero senza stile. ⚠️ Il blocco `<style>` della
+  pagina viene dopo `styles.css`, così le sue regole vincono.
 - **Fuori da Google**: `noindex, follow` e fuori dalla sitemap, così non
   compete con la home e con `/pacchetti`.
 - **Dopo il 1° ottobre** la voce dell'offerta diventa da sola "Chiedete un
