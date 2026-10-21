@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it" class="of">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Posto bloccato — Cantiere Social</title>
+<meta name="description" content="Prenotazione ricevuta: vi richiamiamo entro un giorno lavorativo.">
+<!-- Pagina di ritorno dal pagamento: fuori da Google. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#EA7621">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/og-mark.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=24">
+<link rel="stylesheet" href="/offerta.css?v=12">
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     DOPO IL PAGAMENTO — /grazie
+     Qui torna chi ha pagato la prenotazione: nel pannello Stripe, sul
+     link di pagamento, impostate questa pagina come reindirizzamento
+     dopo il pagamento riuscito.
+     ⚠️ La pagina non verifica nulla: chi apre l'indirizzo a mano la vede
+     comunque. La conferma vera dell'incasso è l'email di Stripe.
+     ═══════════════════════════════════════════════════════════════════ -->
+</head>
+<body data-offerta-landing>
+
+<header class="of-testa">
+  <p class="of-marchio">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+      <path d="M12 1.6l2.9 6.6 7.1.7-5.3 4.8 1.5 7-6.2-3.6-6.2 3.6 1.5-7L2 8.9l7.1-.7z" fill="currentColor"/>
+    </svg>
+    Cantiere Social
+  </p>
+  <p class="of-luogo">Lavoriamo con imprese di tutta Italia</p>
+</header>
+
+<main id="main">
+<section class="of-hero">
+  <div class="hero__grid-bg" aria-hidden="true"></div>
+
+  <div class="of-wrap of-grazie">
+    <p class="of-eyebrow"><span class="of-punto" aria-hidden="true"></span> Prenotazione ricevuta</p>
+
+    <h1 class="of-titolo">Il posto<br><span>è vostro.</span></h1>
+
+    <p class="of-lead">
+      I <strong>€50</strong> sono registrati e li scaliamo dai €490 del sito.
+      Vi arriva la ricevuta di Stripe via email, intestata alla vostra impresa.
+    </p>
+
+    <div class="of-cartello of-cartello--grazie">
+      <div class="of-cartello__nastro" aria-hidden="true"></div>
+      <span class="of-bullone of-bullone--sx" aria-hidden="true"></span>
+      <span class="of-bullone of-bullone--dx" aria-hidden="true"></span>
+
+      <div class="of-cartello__corpo">
+        <p class="of-cartello__ente">Cosa succede adesso</p>
+        <ol class="of-passi__lista of-passi__lista--grazie" role="list">
+          <li>
+            <span class="of-passo__n" aria-hidden="true">01</span>
+            <h2>Vi chiamiamo noi</h2>
+            <p>Entro un giorno lavorativo, al numero che avete lasciato. Quindici minuti per capire cosa fate e per chi.</p>
+          </li>
+          <li>
+            <span class="of-passo__n" aria-hidden="true">02</span>
+            <h2>Ci mandate le foto</h2>
+            <p>Quelle dei vostri lavori, anche scattate col telefono. Al resto pensiamo noi.</p>
+          </li>
+          <li>
+            <span class="of-passo__n" aria-hidden="true">03</span>
+            <h2>Il sito va online</h2>
+            <p>Con modulo, WhatsApp e Google a posto. A quel punto vi mandiamo la fattura del saldo, <strong>€440 con bonifico</strong>.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <p class="of-grazie__azioni">
+      Se avete fretta o volete anticipare qualcosa:
+      <a class="of-wa" href="https://wa.me/393474068285?text=Ciao%20Cantiere%20Social%2C%20ho%20appena%20prenotato%20il%20posto%20per%20il%20sito." target="_blank" rel="noopener">scriveteci su WhatsApp</a>
+    </p>
+
+    <p class="of-grazie__torna"><a href="/">Torna al sito</a></p>
+  </div>
+</section>
+</main>
+
+<footer class="of-piede">
+  <p>© <span id="year">2026</span> Cantiere Social di Ferdinando Romanazzi · P.IVA 08895170721</p>
+  <p><a href="/privacy">Privacy</a> · <a href="/cookie">Cookie</a><span data-consenso-sep hidden> · <button type="button" class="link-btn" data-consenso-apri hidden>Preferenze cookie</button></span></p>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script src="/consenso.js?v=2" defer></script>
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>
+</body>
+</html>

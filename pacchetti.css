@@ -508,6 +508,17 @@ html.pk { scroll-padding-top: 148px; }
 .pk-serv__desc { font-size: .9rem; line-height: 1.5; color: var(--fg-muted); }
 .pk-serv__nota { margin-top: 4px; font-family: var(--font-mono); font-size: .7rem; color: var(--orange-ink); }
 
+/* "A cosa serve": la riga che spiega il risultato, non il contenuto.
+   Staccata dall'elenco con un filetto arancione, come una nota a margine. */
+.pk-serv__serve {
+  margin-top: 8px;
+  padding-left: 12px;
+  border-left: 2px solid var(--orange);
+  font-size: .88rem; line-height: 1.5;
+  color: var(--fg);
+}
+.pk-serv__serve b { font-weight: 700; color: var(--orange-ink); }
+
 /* senza JavaScript resta la casella nativa; con JavaScript la spunta disegnata */
 .pk-serv input { position: absolute; top: var(--sp-5); right: var(--sp-5); width: 20px; height: 20px; accent-color: var(--ink); }
 .pk-serv__spunta { display: none; }

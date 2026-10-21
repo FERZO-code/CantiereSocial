@@ -232,7 +232,7 @@ module.exports = async function handler(req, res) {
       + '<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;'
       +   'background:#FFF8F3;padding:28px;border-radius:14px">'
       +   '<p style="margin:0 0 4px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;'
-      +     'color:#A94B0B">Offerta speciale · 3 video a €390</p>'
+      +     'color:#A94B0B">Offerta · sito web a €490</p>'
       +   '<h1 style="margin:0 0 22px;font-size:22px;color:#17120E">Da richiamare</h1>'
       +   '<table style="border-collapse:collapse;font-size:15px">'
       +     '<tr><td style="padding:6px 16px 6px 0;color:#6B5B4E">Nome</td>'
@@ -249,9 +249,9 @@ module.exports = async function handler(req, res) {
       + '</div>';
 
     return spedisci(res, ip, {
-      subject: 'Offerta 3 video — ' + nomeO + ' · ' + cell,
+      subject: 'Offerta sito €490 — ' + nomeO + ' · ' + cell,
       html: htmlO,
-      text: 'Offerta speciale 3 video a €390\n\nNome: ' + nomeO + '\nCellulare: ' + cell
+      text: 'Offerta sito web a €490\n\nNome: ' + nomeO + '\nCellulare: ' + cell
         + '\nPagina: ' + (pagina || '-') + '\n\nDa richiamare entro un giorno lavorativo.'
     });
   }

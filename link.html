@@ -203,7 +203,7 @@
 
     <h1 class="lk-nome"><span>Cantiere</span><br>Social</h1>
 
-    <p class="lk-claim">Video, social e siti per <b>imprese edili, showroom e agenzie immobiliari</b>.</p>
+    <p class="lk-claim">Facciamo vedere il vostro lavoro a <b>chi, qui vicino, lo sta cercando</b>.</p>
     <p class="lk-dove">Rutigliano (BA) · Bari e provincia</p>
   </header>
 
@@ -213,8 +213,8 @@
     <li>
       <a class="lk-voce lk-voce--offerta" href="/offerta" data-offerta>
         <span class="lk-voce__testo">
-          <span class="lk-voce__t">3 video a <b>€390</b></span>
-          <span class="lk-voce__s" data-scadenza>Offerta fino al 1° ottobre</span>
+          <span class="lk-voce__t">Il vostro sito a <b>€490</b></span>
+          <span class="lk-voce__s">Primi 10 clienti · 9 rimanenti</span>
         </span>
         <svg class="lk-voce__freccia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5.5L18.5 12 12 18.5"/></svg>
       </a>
@@ -260,32 +260,13 @@
 </main>
 
 <script>
-/* Conto alla rovescia dell'offerta, uguale a quello di /offerta.
-   ⚠️ Stessa data anche in offerta.js e script.js. */
+/* L'offerta del sito a €490 non ha una scadenza: qui resta solo l'anno
+   nel piede. Se un domani mettete una data, il blocco con il conto alla
+   rovescia sta nella cronologia git (versione dei 3 video). */
 (function () {
   'use strict';
-  var FINE = new Date('2026-10-01T23:59:59+02:00');
   var anno = document.getElementById('year');
   if (anno) anno.textContent = new Date().getFullYear();
-
-  var etichetta = document.querySelector('[data-scadenza]');
-  if (!etichetta) return;
-
-  var ora = new Date();
-  if (ora > FINE) {
-    // a offerta finita la voce resta, ma senza promettere il prezzo scaduto
-    var voce = document.querySelector('[data-offerta]');
-    if (voce) {
-      voce.querySelector('.lk-voce__t').innerHTML = 'Chiedete un <b>preventivo</b>';
-      etichetta.textContent = 'Gratis e senza impegno';
-    }
-    return;
-  }
-
-  var giorni = Math.ceil((FINE - ora) / 86400000);
-  etichetta.textContent = giorni <= 1
-    ? 'Offerta · ultimo giorno'
-    : 'Offerta · mancano ' + giorni + ' giorni';
 })();
 </script>
 

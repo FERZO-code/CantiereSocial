@@ -868,41 +868,87 @@ non sulle pagine legali.
 
 ---
 
-# Landing per le inserzioni (`/offerta`)
+# Landing per le inserzioni (`/offerta`) — sito web a €490
 
-Pagina separata, pensata per il traffico a pagamento: un solo obiettivo,
+Pagina separata, per il traffico a pagamento: un solo obiettivo, farsi
 lasciare **nome e cellulare**. File: `offerta.html`, `offerta.css`, `offerta.js`.
 
-- **Concetto**: "3 video al prezzo di 1 — €390 fino al 1° ottobre", con il
-  conto alla rovescia dei giorni che mancano.
-- **Niente menu**: in una landing i link portano via dal modulo. Restano solo
-  il marchio in alto e privacy/cookie in fondo.
-- **Fuori da Google**: `noindex, follow` e non è nella sitemap, così non
-  compete con la home sulle stesse parole chiave.
-- **Il modulo** manda a `/api/contact` con `tipo: 'offerta'`, lo stesso del
-  pop-up: email con oggetto "Offerta 3 video — Nome · cellulare". Nel campo
-  "Pagina" arrivano anche gli utm dell'inserzione, utili per capire quale
-  annuncio ha portato il contatto.
-- **Il pop-up dell'offerta non compare qui** (il modulo è già in pagina):
-  se ne occupa il controllo su `[data-offerta-landing]` in `script.js`.
-- **Dopo il 1° ottobre** il conto alla rovescia diventa "Offerta conclusa ·
-  scriveteci per un preventivo". Prezzi e titoli restano: aggiornateli o
-  togliete la pagina dalle inserzioni.
-- **⚠️ La data dell'offerta** è in tre punti: `offerta.js`, il pop-up e la
-  finestra WhatsApp in `script.js`. Cambiatele insieme.
-- **Il video (VSL)** è `assets/vsl-offerta.mp4` (720×1280, H.264, ~12 MB) con
-  copertina `assets/vsl-offerta.jpg`. Parte solo al tocco, con l'audio;
-  `preload="none"`, quindi chi non lo guarda non lo scarica. Sul telefono sta
-  tra il titolo e il cartello, largo al massimo 240px, così il modulo si
-  intravede sotto. Con il consenso alle statistiche, Analytics riceve
-  `vsl_inizio`, `vsl_meta` e `vsl_fine`; a fine video la pagina scende al modulo.
-  Per sostituirlo, convertite il nuovo file (l'originale da iPhone è HEVC e
-  non si vede su Chrome/Android) e **dategli un nome nuovo**: `/assets/` ha
-  la cache di 7 giorni.
+- **Concetto**: "Il vostro sito. 490 euro." Un sito essenziale ma
+  completo, che racconta l'impresa com'è, curato per Google e costruito per
+  ricevere contatti. **Pubblico: imprese di tutta Italia**, si lavora a
+  distanza (la vecchia offerta era solo Bari e provincia).
+- **Niente scadenza, ma posti contati**: al posto del conto alla rovescia
+  c'è «per i primi 10 clienti · 9 rimanenti», con dieci mattoncini che si
+  riempiono. ⚠️ **Il numero si cambia in un punto solo**: `POSTI_RIMASTI`
+  in cima a `offerta.js`. Da lì si aggiornano occhiello, cartello e
+  chiusura. A 1 scrive «ultimo posto», a 0 «posti esauriti». Il numero in
+  `link.html` invece è scritto a mano: aggiornatelo insieme.
+  **Tenetelo vero**: un «9 rimanenti» fermo per mesi se ne accorgono tutti,
+  e brucia la fiducia che il resto della pagina costruisce.
+  Se volete anche una data di scadenza, il conto alla rovescia sta nella
+  cronologia git (versione "3 video") e va messo anche in `script.js`.
+- **Il video (VSL)** è `assets/vsl-sito.mp4` (720×1280, H.264, ~5,8 MB, 50
+  secondi) con copertina `assets/vsl-sito.jpg`. Parte solo al tocco, con
+  l'audio; `preload="none"`, quindi chi non lo guarda non lo scarica. Sul
+  telefono sta fra il titolo e il cartello, largo al massimo 240px. Con il
+  consenso alle statistiche Analytics riceve `vsl_inizio`, `vsl_meta` e
+  `vsl_fine`; a fine video la pagina scende al cartello con il prezzo.
+  Per sostituirlo, convertite il nuovo girato e **dategli un nome nuovo**
+  (`/assets/` ha la cache di 7 giorni):
   ```
-  ffmpeg -i ORIGINALE.MOV -vf "scale=720:1280,fps=30,format=yuv420p" -c:v libx264 -preset slow -crf 25 -c:a aac -b:a 128k -movflags +faststart assets/vsl-offerta.mp4
-  ffmpeg -ss 5.8 -i assets/vsl-offerta.mp4 -frames:v 1 -q:v 4 assets/vsl-offerta.jpg
+  ffmpeg -i ORIGINALE.mp4 -vf "scale=720:1280,format=yuv420p" -c:v libx264 -preset slow -crf 25 -c:a aac -b:a 128k -movflags +faststart assets/vsl-sito.mp4
+  ffmpeg -ss 10.5 -i assets/vsl-sito.mp4 -frames:v 1 -q:v 4 assets/vsl-sito.jpg
   ```
+- **Il vecchio video** `assets/vsl-offerta.mp4` (12 MB, offerta dei 3 video)
+  non è più usato da nessuna pagina: si può cancellare.
+- **Il modulo** manda a `/api/contact` con `tipo: 'offerta'`: email con
+  oggetto "Offerta sito €490 — Nome · cellulare". Nel campo "Pagina" arrivano
+  anche gli utm dell'inserzione.
+- **Il pop-up non compare qui**: se ne occupa `[data-offerta-landing]` in
+  `script.js`.
+- ⚠️ **Da aggiornare quando cambia l'offerta**: il prezzo compare in
+  `offerta.html` (cartello, titolo e chiusura), nel testo WhatsApp dei due
+  pulsanti, in `api/contact.js` (oggetto email) e nella voce di `link.html`.
+- ⚠️ **Cose da confermare con il cliente** prima di spingere le inserzioni:
+  cosa è incluso davvero a €490, dominio e hosting esclusi, tempi di
+  consegna (in pagina non è promessa nessuna data) e se il prezzo è IVA
+  inclusa o esclusa (sul sito non è scritto da nessuna parte).
+
+---
+
+# Pagamenti: prenotazione con Stripe
+
+Sulla landing `/offerta` c'è un secondo pulsante, oltre al modulo: **bloccare
+uno dei dieci posti pagando €50 online**, scalati dai €490 finali.
+
+**Come si attiva (10 minuti, una volta sola):**
+
+1. Nel pannello Stripe: **Pagamenti → Link di pagamento → Nuovo**.
+2. Prodotto "Prenotazione sito web", importo **€50**, pagamento una tantum.
+   I prezzi del sito sono **IVA inclusa**: impostate il prodotto di
+   conseguenza, altrimenti il cliente paga più di quanto legge in pagina.
+3. Attivate la raccolta di **email** e **telefono** (servono per richiamare)
+   e, se volete fatturare, anche dei dati di fatturazione.
+4. Alla voce "Dopo il pagamento" scegliete **reindirizza a una pagina** e
+   mettete `https://www.cantieresocial.com/grazie`.
+5. Copiate il link (`https://buy.stripe.com/...`) e incollatelo in
+   **`offerta.js`**, nella riga `var STRIPE_PRENOTAZIONE = '';`
+
+Finché quella riga è vuota, il blocco «Volete bloccare il posto adesso?» e
+il link sotto il modulo **restano nascosti**: meglio niente che un pulsante
+che non porta da nessuna parte. L'importo mostrato si cambia con
+`PRENOTAZIONE_EURO`, che deve corrispondere a quello del link Stripe.
+
+- **Nessuna chiave segreta nel sito**: il pagamento avviene sulle pagine di
+  Stripe. Noi mandiamo lì il visitatore, non tocchiamo i dati della carta.
+- **La pagina `/grazie`** è solo di cortesia: non verifica nessun pagamento
+  (chi digita l'indirizzo la vede comunque). La conferma vera dell'incasso
+  è l'email che Stripe manda a voi.
+- **Privacy aggiornata**: Stripe è fra i fornitori elencati nell'informativa,
+  con la riga sui dati di pagamento e la nota sui trasferimenti fuori UE.
+- ⚠️ **Da sistemare fuori dal sito**: fattura elettronica al cliente (Stripe
+  non la emette per l'Italia), e le condizioni di vendita se un domani
+  vendete l'intero pacchetto online e non solo la prenotazione.
 
 ---
 
@@ -932,3 +978,32 @@ come `https://www.cantieresocial.com/link`.
   qui non compaiono né il pop-up né il widget WhatsApp.
 - **Sta in una schermata** di telefono senza scorrere: se aggiungete voci,
   ricontrollate su uno schermo da 844 px di altezza.
+
+---
+
+# Come si scrive sul sito (voce del marchio)
+
+**La promessa, in una riga:** *il ponte tra voi e i prossimi clienti.* Non
+vendiamo video, social o siti: quelli sono il mezzo. Vendiamo **richieste di
+preventivo**. Ogni testo nuovo deve poter rispondere a "e quindi che ci
+guadagna il cliente?".
+
+Regole pratiche, già applicate in home:
+
+- **Niente parole da brochure**: "a 360°", "soluzioni", "su misura",
+  "partner", "professionalità". Se una frase potrebbe stare sul sito di un
+  concorrente qualsiasi, va riscritta.
+- **Cose concrete al posto di concetti**: non "valorizziamo il vostro
+  lavoro", ma "il grezzo, la consegna, il sabato perso in visite a vuoto".
+- **Contrasto in due tempi**, il nostro tic riconoscibile: *"Il cantiere è il
+  contenuto migliore che avete. Ed è l'unico che non pubblicate."*
+- **Il "voi" davanti a tutto**: il soggetto è il cliente, non noi.
+- **Un numero, se c'è**: €390, 45 minuti, 4 video, 2 persone. I numeri si
+  ricordano, gli aggettivi no.
+- **Chiudere togliendo un rischio**: "gratuito", "per iscritto", "anche se
+  poi decidete di farlo da soli", "senza vendervi il resto".
+- **La metafora del cantiere resta**, ma al servizio del ponte: sopralluogo,
+  progetto, cantiere, collaudo, manutenzione. Non abusarne nei testi brevi.
+
+⚠️ Le biografie di Simona e Ferdinando nella sezione Studio sono scritte da
+loro: non riscriverle.

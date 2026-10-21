@@ -1,16 +1,89 @@
 /* ═══════════════════════════════════════════════════════════════════
-   CANTIERE SOCIAL — landing /offerta
-   Modulo corto (nome + cellulare) verso /api/contact con tipo "offerta",
-   lo stesso che riceve il pop-up. Più il conto alla rovescia.
+   CANTIERE SOCIAL — landing /offerta (sito web a €500)
+   Modulo corto (nome + cellulare) verso /api/contact con tipo "offerta".
 
-   ⚠️ La data dell'offerta compare anche in script.js, nel pop-up e nella
-   finestra WhatsApp: se la spostate, cambiatela in tutti i punti.
+   Nessun conto alla rovescia: l'offerta non ha una scadenza. Se ne mettete
+   una, rimettete il blocco "conto alla rovescia" (sta nella cronologia git,
+   versione dei 3 video) e ricordatevi che la data va cambiata anche in
+   script.js, dove vivono il pop-up e la finestra WhatsApp.
    ═══════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
-  var FINE = new Date('2026-10-01T23:59:59+02:00');
-  var GIORNO = 86400000;
+
+  /* ── PRENOTAZIONE CON STRIPE ───────────────────────────────────────
+     Incolliamo qui il link di pagamento creato nel pannello Stripe
+     (Pagamenti → Link di pagamento). Finché la riga resta vuota, i
+     pulsanti «Prenota il posto» non compaiono: meglio nessun pulsante
+     che un pulsante rotto.
+
+     Nel pannello Stripe, sul link, impostate:
+       · importo 50€ (IVA inclusa), descrizione "Prenotazione sito web"
+       · dopo il pagamento → reindirizza a https://www.cantieresocial.com/grazie
+       · raccolta dell'indirizzo email e del numero di telefono
+     Non serve nessuna chiave segreta nel sito: il pagamento avviene
+     su Stripe, noi mandiamo solo il visitatore. */
+  var STRIPE_PRENOTAZIONE = 'https://buy.stripe.com/28E8wO12G02j5dq84If3a00';
+  var PRENOTAZIONE_EURO   = 50;
+
+  (function prenotazione() {
+    var bottoni = document.querySelectorAll('[data-stripe]');
+    var blocchi = document.querySelectorAll('[data-prenota]');
+    var ok = /^https:\/\/(buy\.stripe\.com|[a-z0-9-]+\.stripe\.com)\//.test(STRIPE_PRENOTAZIONE);
+
+    if (!ok) return;   // link non ancora configurato: i blocchi restano nascosti
+
+    Array.prototype.forEach.call(bottoni, function (b) {
+      b.href = STRIPE_PRENOTAZIONE;
+      b.textContent = 'Prenota il posto · €' + PRENOTAZIONE_EURO;
+    });
+    Array.prototype.forEach.call(blocchi, function (b) { b.hidden = false; });
+  })();
+
+  /* ── POSTI DISPONIBILI ─────────────────────────────────────────────
+     ⚠️ UNICO PUNTO DA AGGIORNARE: quando entra un cliente, calate
+     POSTI_RIMASTI di uno. Il numero compare in tre punti della pagina
+     (occhiello, cartello, chiusura) e nella pagina /link: li riempie
+     questo blocco, non copiateli a mano.
+     Tenetelo vero: un «9 rimanenti» fermo per tre mesi lo smaschera
+     chiunque, e fa più danno che bene. */
+  var POSTI_TOTALI  = 10;
+  var POSTI_RIMASTI = 9;
+
+  (function posti() {
+    var n = Math.max(0, Math.min(POSTI_RIMASTI, POSTI_TOTALI));
+    var presi = POSTI_TOTALI - n;
+
+    var riga = document.querySelector('[data-posti]');
+    if (riga) {
+      riga.innerHTML = n === 0
+        ? 'Posti esauriti · <strong>scriveteci per la prossima finestra</strong>'
+        : 'Per i primi <b>' + POSTI_TOTALI + ' clienti</b> · <strong>' +
+          (n === 1 ? 'ultimo posto' : n + ' rimanenti') + '</strong>';
+    }
+
+    var occhiello = document.querySelector('[data-posti-occhiello]');
+    if (occhiello) occhiello.textContent = 'primi ' + POSTI_TOTALI + ' clienti';
+
+    var finale = document.querySelector('[data-posti-finale]');
+    if (finale) {
+      finale.textContent = n === 0
+        ? 'primi ' + POSTI_TOTALI + ' clienti: i posti sono esauriti'
+        : 'primi ' + POSTI_TOTALI + ' clienti: ' +
+          (n === 1 ? 'ne resta uno' : 'ne restano ' + n);
+    }
+
+    /* i lotti: un mattoncino per posto, quelli presi sono pieni */
+    var lotti = document.querySelector('[data-lotti]');
+    if (lotti) {
+      var html = '';
+      for (var i = 0; i < POSTI_TOTALI; i++) {
+        html += '<span class="of-lotto' + (i < presi ? ' is-preso' : '') + '"></span>';
+      }
+      lotti.innerHTML = html;
+      lotti.hidden = false;
+    }
+  })();
 
   var form = document.getElementById('of-form');
   if (!form) return;
@@ -18,19 +91,6 @@
   var stato = form.querySelector('.of-stato');
   var apertoIl = Date.now();
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-  /* ── conto alla rovescia ─────────────────────────────────────────── */
-  var scadenza = document.querySelector('[data-scadenza]');
-  if (scadenza) {
-    var ora = new Date();
-    if (ora > FINE) {
-      scadenza.textContent = 'Offerta conclusa · scriveteci per un preventivo';
-    } else {
-      var giorni = Math.ceil((FINE - ora) / GIORNO);
-      scadenza.innerHTML = 'Fino al 1° ottobre · <strong>' +
-        (giorni <= 1 ? 'ultimo giorno' : 'mancano ' + giorni + ' giorni') + '</strong>';
-    }
-  }
 
   /* ── validazione (il server ricontrolla tutto) ───────────────────── */
   var CELLULARE_OK = /^(?:\+39|0039)?3\d{8,9}$/;
@@ -80,7 +140,7 @@
         '<p class="of-fatto-t">Richiesta inviata</p>' +
         '<p data-grazie></p>' +
         '<a class="of-wa" href="https://wa.me/393474068285?text=' +
-          encodeURIComponent('Ciao Cantiere Social, ho appena richiesto l\'offerta 3 video a €390.') +
+          encodeURIComponent('Ciao Cantiere Social, ho appena richiesto il sito a 500€.') +
           '" target="_blank" rel="noopener">Se avete fretta, scriveteci su WhatsApp</a>' +
       '</div>';
     corpo.querySelector('[data-grazie]').textContent =
@@ -145,8 +205,8 @@
 
 /* ── video di presentazione (VSL) ────────────────────────────────────
    Niente autoplay: parte al tocco, con l'audio e i controlli nativi.
-   preload="none" nell'HTML: i 12 MB si scaricano solo se lo si guarda.
-   Se c'è il consenso alle statistiche, Analytics riceve inizio, metà e fine
+   preload="none" nell'HTML: i 6 MB si scaricano solo se lo si guarda.
+   Con il consenso alle statistiche, Analytics riceve inizio, metà e fine
    (gtag esiste solo dopo il consenso, vedi consenso.js). */
 (function () {
   'use strict';
@@ -160,14 +220,14 @@
   function evento(nome) {
     if (inviati[nome] || typeof window.gtag !== 'function') return;
     inviati[nome] = true;
-    window.gtag('event', nome, { video_title: 'VSL offerta 3 video' });
+    window.gtag('event', nome, { video_title: 'VSL sito 490' });
   }
 
   play.addEventListener('click', function () {
     box.classList.add('is-avviato');
     video.controls = true;
     var p = video.play();
-    if (p && p.catch) p.catch(function () { /* il browser ha bloccato: restano i controlli */ });
+    if (p && p.catch) p.catch(function () { /* bloccato dal browser: restano i controlli */ });
     video.focus();
   });
 
@@ -177,10 +237,13 @@
   });
   video.addEventListener('ended', function () {
     evento('vsl_fine');
-    // finito il video, il passo successivo è il modulo
+    // finito il video, il passo successivo è il cartello con il prezzo
     var modulo = document.getElementById('modulo');
     if (modulo && modulo.getBoundingClientRect().top > window.innerHeight * 0.6) {
-      modulo.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      modulo.scrollIntoView({
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start'
+      });
     }
   });
 })();

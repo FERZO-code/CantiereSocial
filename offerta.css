@@ -125,6 +125,7 @@
 }
 @media (prefers-reduced-motion: reduce) { .of-vsl__icona { transition: none; } }
 
+
 .of-eyebrow {
   display: inline-flex; align-items: center; gap: var(--sp-2);
   margin-bottom: var(--sp-5);
@@ -214,6 +215,34 @@
 }
 .of-scadenza strong { font-weight: 500; color: var(--ink); }
 
+/* ── posti disponibili: il contatore e i dieci mattoncini ─────────── */
+.of-posti {
+  margin-top: var(--sp-4);
+  font-size: .92rem;
+  color: var(--fg-muted);
+}
+.of-posti b { color: var(--ink); font-weight: 700; }
+.of-posti strong {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--orange);
+  color: var(--ink);
+  font-weight: 800; font-size: .88rem;
+}
+/* un mattoncino per posto: pieni quelli già andati */
+.of-lotti {
+  display: flex; gap: 5px; justify-content: center;
+  margin-top: var(--sp-3);
+}
+.of-lotto {
+  width: 18px; height: 9px;
+  border: 1.5px solid var(--ink);
+  border-radius: 2px;
+  background: transparent;
+}
+.of-lotto.is-preso { background: var(--ink); }
+
 .of-cartello__sub {
   padding: 7px var(--sp-5);
   background: var(--ink); color: var(--cream);
@@ -292,6 +321,91 @@
   transform: rotate(-45deg);
 }
 .of-aggiunte { margin-top: var(--sp-6); font-size: .92rem; color: var(--fg-muted); }
+
+/* ── "Vi suona familiare?": l'elenco dei dolori, su fondo scuro ───── */
+.of-dolore { background: var(--ink); color: var(--cream); }
+.of-dolore .of-h2 { color: var(--cream); }
+.of-dolore .of-lista li { color: #E9DFD6; }
+.of-dolore .of-lista li::before { border-color: var(--orange); }
+.of-dolore .of-aggiunte { color: #C4B5A8; }
+.of-dolore .of-aggiunte strong { color: var(--orange); }
+
+/* ── pagina /grazie (ritorno dal pagamento) ───────────────────────── */
+.of-grazie { max-width: 760px; }
+.of-grazie .of-titolo { margin-bottom: var(--sp-4); }
+.of-cartello--grazie { margin-top: var(--sp-6); }
+/* qui dentro non c'è la testa con il prezzo: l'etichetta ha bisogno
+   del suo spazio sotto il nastro di cantiere */
+.of-cartello--grazie .of-cartello__corpo { padding-top: var(--sp-5); }
+.of-cartello--grazie .of-cartello__ente { margin-bottom: var(--sp-4); text-align: center; }
+.of-passi__lista--grazie { grid-template-columns: 1fr; gap: var(--sp-4); }
+.of-passi__lista--grazie h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 2px; }
+.of-grazie__azioni { margin-top: var(--sp-6); color: var(--fg-muted); }
+.of-grazie__torna { margin-top: var(--sp-3); font-family: var(--font-mono); font-size: .72rem; }
+.of-grazie__torna a { color: var(--fg-muted); text-underline-offset: 3px; }
+
+/* ── prenotazione con Stripe ──────────────────────────────────────── */
+.of-prenota { background: var(--cream-2); }
+.of-prenota__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+.of-prenota__testo {
+  max-width: 54ch;
+  margin-bottom: var(--sp-5);
+  font-size: clamp(1rem, 1.3vw, 1.08rem); line-height: 1.6;
+  color: var(--fg-muted);
+}
+.of-prenota__testo strong { color: var(--ink); font-weight: 700; }
+.of-prenota__azione {
+  padding: var(--sp-5);
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 0 16px 36px -22px rgba(23, 18, 14, .45);
+}
+.of-prenota__nota {
+  margin-top: var(--sp-3);
+  font-family: var(--font-mono); font-size: .68rem;
+  letter-spacing: .04em; text-align: center; color: var(--fg-muted);
+}
+/* la prenotazione dentro al cartello, sotto il modulo */
+.of-paga { padding: var(--sp-5) var(--sp-5) 0; }
+/* il bottone sta sopra al modulo: il filetto "oppure" va sotto, a separare */
+.of-paga .of-paga__o { margin: var(--sp-5) 0 0; }
+.of-paga__o {
+  position: relative;
+  margin: var(--sp-4) 0;
+  text-align: center;
+}
+.of-paga__o::before {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 50%;
+  border-top: 1px solid var(--line);
+}
+.of-paga__o span {
+  position: relative;
+  padding: 0 10px;
+  background: var(--surface);
+  font-family: var(--font-mono); font-size: .68rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--fg-muted);
+}
+.of-paga__nota {
+  margin-top: var(--sp-3);
+  font-size: .78rem; line-height: 1.45; text-align: center; color: var(--fg-muted);
+}
+
+/* ── "Perché €500": due paragrafi larghi, niente elenco ───────────── */
+.of-perche__testo {
+  max-width: 62ch;
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+  line-height: 1.65;
+  color: var(--fg-muted);
+}
+.of-perche__testo + .of-perche__testo { margin-top: var(--sp-5); }
+.of-perche__testo strong { color: var(--ink); font-weight: 700; }
 
 /* ── come funziona ────────────────────────────────────────────────── */
 .of-passi__lista { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
@@ -382,8 +496,8 @@
   .of-vsl         { order: 2; }
   .of-cartello    { order: 3; }
   .of-hero__resto { order: 4; }
-  /* sul telefono un 9:16 a tutta larghezza occuperebbe lo schermo intero:
-     lo teniamo stretto, così il cartello con il modulo si intravede sotto */
+  /* un 9:16 a tutta larghezza mangerebbe lo schermo: lo teniamo stretto,
+     così sotto si intravede il cartello con il prezzo e il pulsante */
   .of-vsl { width: min(100%, 240px, 30svh); justify-self: center; }
   .of-vsl__dida { display: none; }
   .of-vsl__icona { width: 60px; height: 60px; }
@@ -392,6 +506,7 @@
   .of-lead { font-size: 1rem; margin-bottom: 0; }
   .of-passi__lista { grid-template-columns: 1fr; }
   .of-noi__inner { grid-template-columns: 1fr; }
+  .of-prenota__inner { grid-template-columns: 1fr; }
   .of-noi__foto { max-width: 340px; }
 }
 
