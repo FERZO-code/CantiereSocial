@@ -87,7 +87,10 @@
   border-bottom: 2px solid var(--ink);
   pointer-events: none;
 }
-.of-vsl__video { display: block; width: 100%; height: 100%; object-fit: cover; background: var(--ink); }
+/* contain, non cover: il riquadro è 9:16 come il video, quindi in pagina
+   non cambia niente — ma a tutto schermo «cover» ingrandirebbe il video per
+   riempire uno schermo 16:9, tagliando via mezza inquadratura. */
+.of-vsl__video { display: block; width: 100%; height: 100%; object-fit: contain; background: var(--ink); }
 .of-vsl__play {
   position: absolute; inset: 0; z-index: 1;
   display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
