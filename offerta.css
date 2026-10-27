@@ -333,6 +333,75 @@
 .of-dolore .of-aggiunte { color: #C4B5A8; }
 .of-dolore .of-aggiunte strong { color: var(--orange); }
 
+/* ── i siti già fatti ─────────────────────────────────────────────── */
+.of-lavori { background: var(--cream-2); }
+.of-lavori__intro {
+  max-width: 54ch;
+  margin-top: calc(var(--sp-4) * -1);
+  margin-bottom: var(--sp-6);
+  font-size: clamp(1rem, 1.3vw, 1.08rem);
+  color: var(--fg-muted);
+}
+.of-lavori__griglia {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 32px);
+}
+
+.of-lavoro {
+  display: flex; flex-direction: column;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 44px -26px rgba(23, 18, 14, .45);
+}
+
+/* la finestra del browser attorno alla schermata */
+.of-lavoro__barra {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px;
+  background: var(--ink);
+}
+.of-lavoro__barra i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 248, 243, .32); }
+.of-lavoro__barra i:first-child { background: var(--orange); }
+.of-lavoro__barra span {
+  flex: 1 1 auto;
+  margin-left: 6px;
+  font-family: var(--font-mono); font-size: .62rem;
+  letter-spacing: .04em; color: #C4B5A8;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.of-lavoro__schermo img { display: block; width: 100%; height: auto; border-bottom: 2px solid var(--ink); }
+
+/* la barra con il logo esteso del cliente, sul suo stesso colore */
+.of-lavoro__marchio {
+  display: flex; align-items: center;
+  padding: 14px var(--sp-5);
+  background: var(--marchio, var(--ink));
+}
+.of-lavoro__marchio img { display: block; width: auto; height: 30px; }
+
+.of-lavoro__corpo { display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); }
+.of-lavoro__chi {
+  font-family: var(--font-mono); font-size: .68rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--orange-ink);
+}
+.of-lavoro__testo { font-size: .95rem; line-height: 1.55; color: var(--fg-muted); }
+.of-lavoro__link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: auto;
+  font-weight: 700; color: var(--ink);
+  text-decoration: underline; text-underline-offset: 4px;
+  text-decoration-color: var(--orange);
+}
+.of-lavoro__link:hover { color: var(--orange-ink); }
+
+.of-lavori__nota {
+  margin-top: var(--sp-6);
+  font-size: .92rem; color: var(--fg-muted);
+}
+
 /* ── pagina /grazie (ritorno dal pagamento) ───────────────────────── */
 .of-grazie { max-width: 760px; }
 .of-grazie .of-titolo { margin-bottom: var(--sp-4); }
@@ -510,6 +579,7 @@
   .of-passi__lista { grid-template-columns: 1fr; }
   .of-noi__inner { grid-template-columns: 1fr; }
   .of-prenota__inner { grid-template-columns: 1fr; }
+  .of-lavori__griglia { grid-template-columns: 1fr; }
   .of-noi__foto { max-width: 340px; }
 }
 

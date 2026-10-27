@@ -899,6 +899,20 @@ lasciare **nome e cellulare**. File: `offerta.html`, `offerta.css`, `offerta.js`
   ffmpeg -i ORIGINALE.mp4 -vf "scale=720:1280,format=yuv420p" -c:v libx264 -preset slow -crf 25 -c:a aac -b:a 128k -movflags +faststart assets/vsl-sito.mp4
   ffmpeg -ss 10.5 -i assets/vsl-sito.mp4 -frames:v 1 -q:v 4 assets/vsl-sito.jpg
   ```
+- **I siti già fatti**: la sezione "Non ve lo raccontiamo. Ve lo facciamo
+  vedere." mostra due schermate vere (`assets/lavoro-romanazzi.jpg`,
+  `assets/lavoro-madel.jpg`) con il logo esteso del cliente
+  (`assets/logo-romanazzi.png`, `assets/logo-madel.png`), ritagliato dalla
+  testata del suo sito. Il colore della barra del logo è scritto nell'HTML
+  della scheda (`style="--marchio:#0D0D0D"`): deve essere lo stesso sfondo
+  del ritaglio, altrimenti si vede lo stacco.
+  ⚠️ **Le schermate invecchiano**: se il cliente rifà il sito, rifatele.
+  ```
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars --force-prefers-reduced-motion --window-size=1280,800 --virtual-time-budget=20000 --screenshot=/tmp/sito.png "https://INDIRIZZO/"
+  ffmpeg -i /tmp/sito.png -vf "crop=1280:760:0:0,scale=1100:-1" -q:v 5 assets/lavoro-NOME.jpg
+  ```
+  Per aggiungere un terzo sito basta copiare una `<article class="of-lavoro">`:
+  la griglia passa da sola a due colonne con l'ultima a capo.
 - **Il vecchio video** `assets/vsl-offerta.mp4` (12 MB, offerta dei 3 video)
   non è più usato da nessuna pagina: si può cancellare.
 - **Il modulo** manda a `/api/contact` con `tipo: 'offerta'`: email con
