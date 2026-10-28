@@ -233,46 +233,14 @@ e **cosa è cambiato**, possibilmente con un numero. Una testimonianza vaga
 
 ---
 
-# Intro / schermata di apertura
+# Intro / schermata di apertura — TOLTA (28 ottobre 2026)
 
-Contatore da 0 a 100 in basso a destra, barra arancione che cresce sul bordo
-destro, poi l'overlay si solleva e scopre la pagina. Durata **2 secondi**.
-
-Il codice è scritto da zero (CSS + `requestAnimationFrame`), nessuna libreria
-e nessun file preso da altri siti: è lo stesso *tipo* di apertura, con i vostri
-colori, il vostro font mono e la griglia da foglio di progetto.
-
-## Regolazioni
-
-In cima a `script.js`:
-
-```js
-var UNA_VOLTA = false;   // true = la mostra una sola volta per sessione
-var DURATA = 2000;       // durata in millisecondi
-```
-
-**Consiglio:** se notate che le visite calano, mettete `UNA_VOLTA = true`.
-Un'intro vista a ogni ricaricamento diverte la prima volta e infastidisce
-dalla terza. E non superate i 1500 ms: oltre, la gente chiude.
-
-## Perché non rallenta la SEO
-
-L'overlay è solo visivo. Il contenuto della pagina esiste già sotto, quindi
-Google lo legge normalmente. L'elemento ha `aria-hidden` e `inert`, così i
-lettori di schermo lo saltano, e si autodistrugge a fine animazione.
-
-## Le protezioni previste
-
-| Situazione | Cosa succede |
-|---|---|
-| Utente con animazioni ridotte di sistema | L'intro non compare affatto (3 livelli: script inline, CSS, JS) |
-| JavaScript non parte | Dopo 6 s una regola CSS solleva l'overlay: il sito non resta mai bloccato |
-| Animazione interrotta a metà | Timeout di sicurezza a 3,8 s che forza l'uscita |
-| Scorrimento | Bloccato durante l'intro, sbloccato appena parte l'uscita |
-
-Verificato: a 1217 ms il contatore è a 100 con l'overlay a piena pagina, a
-1420 ms l'overlay è sollevato e lo scorrimento è già libero, poi l'elemento
-viene rimosso dal DOM.
+C'era un contatore da 0 a 100 che copriva la home per circa 3 secondi a
+ogni visita. È stata tolta per la velocità: su telefono era metà del
+ritardo misurato da Google (LCP 8,7 s). Markup, script e stili non ci sono
+più. Se un giorno la si vuole rimettere, sta nella cronologia git; ma
+qualunque schermata che copre la pagina all'apertura ritarda l'LCP di
+tutta la sua durata, e chi arriva dalle inserzioni non aspetta.
 
 ---
 
@@ -793,12 +761,6 @@ Valori: `sopralluogo`, `commessa`, `commessa-essenziale`, `commessa-racconto`,
 Il configuratore dei servizi singoli funziona anche senza JavaScript: è un
 normale modulo che porta alla home con i servizi scelti.
 
-## Intro della home
-
-Chi arriva in home da un'altra pagina del sito, o su un'ancora come
-`#contatti`, non vede l'intro: altrimenti ogni clic su "Richiedi un
-preventivo" costerebbe due secondi di attesa.
-
 ## Versioni dei file
 
 `pacchetti.css` e `pacchetti.js` hanno la stessa cache di un anno di
@@ -846,7 +808,7 @@ non sulle pagine legali.
   - `FINE`: ultimo istante valido. Dopo, il pop-up non compare più da solo.
   - `ATTESA_MS` (10 s) e `SOGLIA_SCORRIMENTO` (un terzo di pagina): quando compare.
   - `RIPROPONI_GIORNI` (3): dopo quanto si ripropone a chi l'ha chiuso.
-- **Quando non compare**: sopra l'intro, il banner cookie, un'altra finestra
+- **Quando non compare**: sopra il banner cookie, un'altra finestra
   aperta, la chat WhatsApp aperta, mentre si scrive in un campo, a chi arriva
   già sul modulo (`#contatti` o `?richiesta=`), a chi l'ha già inviato.
 - **Cosa arriva**: un'email a info@cantieresocial.com con oggetto
@@ -1046,3 +1008,36 @@ Regole pratiche, già applicate in home:
 
 ⚠️ Le biografie di Simona e Ferdinando nella sezione Studio sono scritte da
 loro: non riscriverle.
+
+---
+
+# Velocità: immagini e caratteri
+
+Misure di PageSpeed su telefono, prima degli interventi (home): FCP 3,6 s,
+LCP 8,7 s, Speed Index 8,0 s. Le cause e cosa è stato fatto:
+
+- **La foto della home** era `hero-team.png`, 1.062 KB. Ora è servita in
+  AVIF in tre misure (`hero-team-560/720/984.avif`, 18–34 KB) con
+  `<picture>`, più `hero-team.jpg` (90 KB, fondo crema) per i browser che
+  non leggono AVIF. È anche precaricata nella `<head>`. Il PNG resta come
+  originale, ma nessuna pagina lo usa più.
+  Per rifare le AVIF da un nuovo originale (macOS, senza installare nulla):
+  ```
+  sips --resampleWidth 720 originale.png --out tmp.png
+  sips -s format avif -s formatOptions 55 tmp.png --out assets/hero-team-720.avif
+  ```
+- **Gli elementi in apertura** (titolo, testo, bottoni, foto) non hanno più
+  la classe `reveal`: nascevano trasparenti e Google non li conta finché
+  non si vedono. Più in basso le dissolvenze restano.
+- **I caratteri** non arrivano più da Google Fonts ma da `/assets/fonts`
+  (Archivo variabile, IBM Plex Mono 400 e 500, solo alfabeto latino, 108 KB
+  in tutto, licenza SIL OFL). Il principale è precaricato in ogni pagina.
+  Effetto collaterale utile: Google Fonts è uscito da privacy e cookie
+  policy, perché l'IP dei visitatori non va più a Google per i caratteri.
+  ⚠️ Una pagina nuova deve avere la riga di precaricamento del carattere
+  e caricare `styles.css`, dove stanno le `@font-face`.
+- **La foto della pagina bio** (`/link`) è `og-mark-288.avif`, 7 KB invece
+  dei 190 del PNG.
+- **L'intro della home è stata tolta**: copriva la pagina per circa 3 s.
+- **Cache**: `consenso.js` ora ha la cache di un anno come gli altri JS
+  (va versionato con `?v=` come loro), e `/assets/fonts/` è immutabile.

@@ -11,11 +11,10 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/og-mark.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- caratteri ospitati sul sito (vedi styles.css): il principale parte subito -->
+<link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- ⚠️ Alzate ?v= a ogni modifica di CSS/JS, anche qui e in cookie.html -->
-<link rel="stylesheet" href="/styles.css?v=26">
+<link rel="stylesheet" href="/styles.css?v=28">
 </head>
 <body>
 
@@ -47,7 +46,7 @@
     <header class="legal__head">
       <p class="label"><span>§</span> Documenti</p>
       <h1 class="legal__title">Informativa privacy</h1>
-      <p class="legal__meta">Ultimo aggiornamento: 19 ottobre 2026</p>
+      <p class="legal__meta">Ultimo aggiornamento: 28 ottobre 2026</p>
     </header>
 
     <section class="legal__summary" aria-labelledby="in-breve">
@@ -118,8 +117,8 @@
     <p>Per capire quante persone visitano il sito e quali pagine consultano usiamo <strong>Vercel Web Analytics</strong>; per sapere se il sito si carica velocemente usiamo <strong>Vercel Speed Insights</strong>. Entrambi raccolgono informazioni tecniche come la pagina visitata, il sito di provenienza, il paese, il tipo di dispositivo e di browser e i tempi di caricamento.</p>
     <p>Questi strumenti <strong>non usano cookie e non salvano informazioni sul vostro dispositivo</strong>. Noi consultiamo i dati solo in forma aggregata, per esempio "120 visite questa settimana", e non li usiamo per identificare le singole persone né per fini pubblicitari.</p>
 
-    <h3>Caratteri tipografici (Google Fonts)</h3>
-    <p>I caratteri del sito sono forniti da Google Fonts e vengono scaricati dai server di Google. Per farlo, il vostro browser comunica a Google il vostro indirizzo IP e alcune informazioni tecniche, come il tipo di browser. Google Fonts non imposta cookie.</p>
+    <h3>Caratteri tipografici</h3>
+    <p>I caratteri del sito sono ospitati sui nostri stessi server: per mostrarli <strong>non contattiamo servizi esterni</strong> e il vostro indirizzo IP non viene comunicato a terzi.</p>
 
     <h3>Statistiche con Google Analytics</h3>
     <p><strong>Solo se ci date il consenso</strong> alle statistiche, usiamo anche <strong>Google Analytics 4</strong> per capire come viene usato il sito: pagine visitate, sito di provenienza, tipo di dispositivo, area geografica approssimativa, e se inviate il modulo o cliccate su WhatsApp. Google Analytics usa cookie e un identificativo del browser.</p>
@@ -155,11 +154,6 @@
             <td>Misurare visite e velocità del sito, in forma aggregata</td>
             <td>Statistiche di Vercel Web Analytics e Speed Insights</td>
             <td>Nostro legittimo interesse a migliorare il sito (art. 6.1.f)</td>
-          </tr>
-          <tr>
-            <td>Mostrare correttamente i caratteri tipografici</td>
-            <td>IP e dati tecnici inviati a Google Fonts</td>
-            <td>Nostro legittimo interesse al corretto funzionamento del sito (art. 6.1.f)</td>
           </tr>
           <tr>
             <td>Statistiche dettagliate sull'uso del sito</td>
@@ -214,11 +208,6 @@
             <td>Dati del modulo, email che ci inviate</td>
           </tr>
           <tr>
-            <td><strong>Google Fonts</strong><br>Google</td>
-            <td>Fornisce i caratteri tipografici del sito</td>
-            <td>Indirizzo IP e dati tecnici del browser</td>
-          </tr>
-          <tr>
             <td><strong>Google Analytics</strong><br>Google</td>
             <td>Solo con il vostro consenso, produce statistiche sull'uso del sito</td>
             <td>Cookie e identificativi, pagine visitate, dispositivo, area geografica approssimativa</td>
@@ -231,7 +220,7 @@
         </tbody>
       </table>
     </div>
-    <p>Vercel, Resend e Google Workspace trattano i dati per nostro conto, come responsabili del trattamento (art. 28 GDPR), solo per fornirci il servizio. Stripe tratta i dati del pagamento come titolare autonomo, secondo la propria <a href="https://stripe.com/it/privacy" target="_blank" rel="noopener">informativa</a>, perché è l'istituto che esegue l'operazione. Per Google Analytics, Google Ads, Google Fonts e Google Search Console, Google opera secondo le proprie condizioni e la propria informativa: <a href="https://policies.google.com/technologies/partner-sites?hl=it" target="_blank" rel="noopener">come Google usa i dati dei siti che utilizzano i suoi servizi</a>.</p>
+    <p>Vercel, Resend e Google Workspace trattano i dati per nostro conto, come responsabili del trattamento (art. 28 GDPR), solo per fornirci il servizio. Stripe tratta i dati del pagamento come titolare autonomo, secondo la propria <a href="https://stripe.com/it/privacy" target="_blank" rel="noopener">informativa</a>, perché è l'istituto che esegue l'operazione. Per Google Analytics, Google Ads e Google Search Console, Google opera secondo le proprie condizioni e la propria informativa: <a href="https://policies.google.com/technologies/partner-sites?hl=it" target="_blank" rel="noopener">come Google usa i dati dei siti che utilizzano i suoi servizi</a>.</p>
     <p>I dati possono essere comunicati alle autorità competenti solo quando è la legge a richiederlo. <strong>Non vendiamo né cediamo i vostri dati</strong> a terzi per finalità commerciali o pubblicitarie.</p>
 
     <h2 id="estero"><span>06</span>Trasferimenti fuori dall'Unione europea</h2>
@@ -328,7 +317,7 @@
   </div>
 </footer>
 
-<script src="/script.js?v=24" defer></script>
+<script src="/script.js?v=25" defer></script>
 <script src="/consenso.js?v=2" defer></script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>

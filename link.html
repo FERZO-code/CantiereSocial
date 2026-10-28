@@ -23,15 +23,14 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/og-mark.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- caratteri ospitati sul sito (vedi styles.css): il principale parte subito -->
+<link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 
 <!-- styles.css serve al banner dei cookie: banner e finestra "Preferenze"
      sono disegnati lì dentro (classi .consenso* e i pulsanti .btn). Senza,
      comparirebbero senza stile. È in cache per un anno ed è quasi sempre
      già scaricato da chi ha visitato il sito. -->
-<link rel="stylesheet" href="/styles.css?v=26">
+<link rel="stylesheet" href="/styles.css?v=28">
 
 <!-- ═══════════════════════════════════════════════════════════════════
      PAGINA LINK (bio di Instagram) — /link
@@ -199,7 +198,11 @@
 <main class="lk-wrap">
 
   <header class="lk-testa">
-    <img class="lk-foto" src="/assets/og-mark.png" alt="Simona e Ferdinando di Cantiere Social, con il caschetto arancione." width="512" height="512" fetchpriority="high" decoding="async">
+    <!-- 7 KB invece dei 190 del PNG originale: si vede a 136px, da telefono -->
+    <picture>
+      <source type="image/avif" srcset="/assets/og-mark-288.avif">
+      <img class="lk-foto" src="/assets/og-mark-288.png" alt="Simona e Ferdinando di Cantiere Social, con il caschetto arancione." width="288" height="288" fetchpriority="high" decoding="async">
+    </picture>
 
     <h1 class="lk-nome"><span>Cantiere</span><br>Social</h1>
 

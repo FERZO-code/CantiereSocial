@@ -26,28 +26,15 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/og-mark.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- la foto in apertura parte subito, in parallelo al resto -->
+<link rel="preload" as="image" type="image/avif" fetchpriority="high"
+      imagesrcset="assets/hero-team-560.avif 560w, assets/hero-team-720.avif 720w, assets/hero-team-984.avif 984w"
+      imagesizes="(max-width: 900px) calc(100vw - 48px), 486px">
+<!-- caratteri ospitati sul sito (vedi styles.css): il principale parte subito -->
+<link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- ⚠️ Alzate ?v= a ogni modifica di CSS/JS: forza il browser a
      riscaricarli invece di riusare la copia in cache. -->
-<link rel="stylesheet" href="styles.css?v=26">
-
-<script>
-  /* Attiva l'intro prima del primo paint, così non c'è sfarfallio.
-     Chi ha chiesto meno animazioni al sistema operativo la salta del tutto,
-     e così chi arriva da un'altra pagina del sito o su un'ancora (#contatti):
-     rivedere l'intro a ogni passaggio farebbe solo perdere tempo. */
-  (function () {
-    try {
-      var interno = document.referrer.indexOf(location.origin) === 0;
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash && !interno) {
-        document.documentElement.classList.add('intro-on');
-      }
-    } catch (e) {}
-  })();
-</script>
-
+<link rel="stylesheet" href="styles.css?v=28">
 <!-- Attività senza sede aperta al pubblico: ci spostiamo presso i clienti.
      Per questo l'indirizzo è indicato solo a livello di comune, senza via
      né coordinate. sameAs: aggiungete Facebook, LinkedIn, TikTok se li avete. -->
@@ -139,27 +126,6 @@
 </head>
 <body>
 
-<!-- ══ INTRO ═════════════════════════════════════════════════════════
-     Schermata di apertura. Puramente visiva: il contenuto della pagina
-     esiste già sotto, quindi non ostacola né i lettori di schermo né
-     l'indicizzazione. Si autodistrugge dopo l'animazione. -->
-<div class="intro" id="intro" aria-hidden="true" inert>
-  <div class="intro__grid"></div>
-
-  <div class="intro__side"><span id="intro-fill"></span></div>
-
-  <div class="intro__brand">
-    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
-      <path d="M12 1.6l2.9 6.6 7.1.7-5.3 4.8 1.5 7-6.2-3.6-6.2 3.6 1.5-7L2 8.9l7.1-.7z" fill="currentColor"/>
-    </svg>
-    <span>Cantiere Social</span>
-  </div>
-
-  <p class="intro__status">Allestimento del cantiere</p>
-
-  <p class="intro__count"><span id="intro-num">0</span><i>%</i></p>
-</div>
-
 <a class="skip-link" href="#main">Vai al contenuto principale</a>
 
 <!-- ══ NAV ═══════════════════════════════════════════════════════════ -->
@@ -246,37 +212,42 @@
 
   <div class="wrap hero__inner">
     <div class="hero__copy">
-      <p class="eyebrow reveal">
+      <p class="eyebrow">
         <span class="eyebrow__dot" aria-hidden="true"></span>
         <span class="hide-sm">Rutigliano (BA) ·</span> Simona &amp; Ferdinando
       </p>
 
-      <h1 class="hero__title reveal">
+      <h1 class="hero__title">
         <span class="muted">Il ponte tra voi</span><br>
         <strong>e chi vi sta cercando.</strong>
       </h1>
 
-      <p class="hero__sub reveal">
+      <p class="hero__sub">
         In questo momento, a dieci chilometri da voi, qualcuno cerca esattamente
         quello che sapete fare. <strong>E sta chiamando un altro.</strong><br>
         Noi sappiamo come farlo arrivare a voi: imprese di costruzione, showroom e
         agenzie immobiliari di <strong>Bari e provincia</strong>.
       </p>
 
-      <div class="hero__actions reveal">
+      <div class="hero__actions">
         <a class="btn btn--orange btn--lg" href="#contatti">Contattaci</a>
         <a class="btn btn--ghost btn--lg" href="#servizi">Vedi i pacchetti</a>
       </div>
 
-      <ul class="hero__ticks reveal" role="list">
+      <ul class="hero__ticks" role="list">
         <li>Sopralluogo gratuito</li>
         <li>Prezzi chiari, da €390</li>
         <li>Ogni mese: contatti e costi</li>
       </ul>
     </div>
 
-    <div class="hero__media reveal">
-      <img src="assets/hero-team.png" alt="Simona e Ferdinando di Cantiere Social, con caschetto arancione, videocamera e squadra da disegno." width="984" height="1200" fetchpriority="high" decoding="async">
+    <div class="hero__media">
+      <picture>
+        <source type="image/avif"
+                srcset="assets/hero-team-560.avif 560w, assets/hero-team-720.avif 720w, assets/hero-team-984.avif 984w"
+                sizes="(max-width: 900px) calc(100vw - 48px), 486px">
+        <img src="assets/hero-team.jpg" alt="Simona e Ferdinando di Cantiere Social, con caschetto arancione, videocamera e squadra da disegno." width="984" height="1200" fetchpriority="high" decoding="async">
+      </picture>
       <div class="hero__badge" aria-hidden="true">
         <span class="hero__badge-num">2</span>
         <span class="hero__badge-lbl">persone, sempre le stesse</span>
@@ -865,7 +836,7 @@ FINE BLOCCO DISATTIVATO -->
   </div>
 </footer>
 
-<script src="script.js?v=24" defer></script>
+<script src="script.js?v=25" defer></script>
 
 <!-- Banner cookie e tag Google Ads. Resta inattivo finché in consenso.js
      non è compilato GOOGLE_ADS_ID (vedi LEGGIMI.md). -->

@@ -7,69 +7,6 @@
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* ── Intro / schermata di apertura ──────────────────────────────────
-     Contatore 0→100 con barra di avanzamento, poi l'overlay si solleva.
-     Durata volutamente breve: un'intro lunga fa perdere visite.
-     Per mostrarla una sola volta a sessione, mettete UNA_VOLTA a true. */
-  var UNA_VOLTA = false;
-  var DURATA = 2000;   // millisecondi
-
-  (function intro() {
-    var root = document.documentElement;
-    var box  = document.getElementById('intro');
-
-    function chiudi(subito) {
-      root.classList.remove('intro-on');
-      if (box && box.parentNode) box.parentNode.removeChild(box);
-    }
-
-    // reduced-motion, JS parziale, o intro già vista in questa sessione
-    var giaVista = false;
-    try { giaVista = UNA_VOLTA && sessionStorage.getItem('intro') === '1'; } catch (e) {}
-
-    if (!box || !root.classList.contains('intro-on') || reduceMotion.matches || giaVista) {
-      chiudi(true);
-      return;
-    }
-
-    try { if (UNA_VOLTA) sessionStorage.setItem('intro', '1'); } catch (e) {}
-
-    var num  = document.getElementById('intro-num');
-    var fill = document.getElementById('intro-fill');
-    var inizio = null;
-    var chiuso = false;
-
-    function esci() {
-      if (chiuso) return;
-      chiuso = true;
-      box.classList.add('is-done');
-      root.classList.remove('intro-on');           // sblocca subito lo scorrimento
-      setTimeout(function () {
-        if (box.parentNode) box.parentNode.removeChild(box);
-      }, 900);
-    }
-
-    function passo(t) {
-      if (inizio === null) inizio = t;
-      var p = Math.min((t - inizio) / DURATA, 1);
-      var eased = 1 - Math.pow(1 - p, 3);          // decelera verso il 100
-      var v = Math.round(eased * 100);
-
-      num.textContent = v;
-      fill.style.height = v + '%';
-
-      if (p < 1) {
-        requestAnimationFrame(passo);
-      } else {
-        setTimeout(esci, 180);                     // un attimo sul 100%
-      }
-    }
-
-    requestAnimationFrame(passo);
-    setTimeout(esci, DURATA + 2500);               // rete di sicurezza
-  })();
-
-
   /* ── Anno corrente nel footer ───────────────────────────────────── */
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
@@ -693,7 +630,7 @@
    "3 video al prezzo di 1": €390 fino al 1° ottobre 2026.
 
    Quando compare: dopo ATTESA_MS oppure a un terzo di pagina, mai sopra
-   l'intro, il banner cookie, un'altra finestra aperta o mentre si scrive
+   il banner cookie, un'altra finestra aperta o mentre si scrive
    in un campo. Non compare sulle pagine legali né a chi arriva già sul
    modulo (#contatti o ?richiesta=…).
    Chiuso: si ripropone dopo RIPROPONI_GIORNI. Inviato: non torna più.
@@ -799,8 +736,7 @@
   /* ── quando mostrarlo ────────────────────────────────────────────── */
   function libero() {
     var attivo = document.activeElement;
-    return !document.documentElement.classList.contains('intro-on') &&
-      !document.body.classList.contains('consenso-aperto') &&
+    return !document.body.classList.contains('consenso-aperto') &&
       !document.querySelector('dialog[open]') &&
       !document.querySelector('.wa.is-aperta') &&
       !(attivo && /^(INPUT|TEXTAREA|SELECT)$/.test(attivo.tagName));

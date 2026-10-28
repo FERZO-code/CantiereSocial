@@ -4,6 +4,39 @@
    sicurezza, tipografia da cartello.
    ═══════════════════════════════════════════════════════════════════ */
 
+/* ── CARATTERI (ospitati sul sito) ───────────────────────────────────
+   Prima arrivavano da Google Fonts: due server esterni da contattare
+   prima di vedere il testo, e un trasferimento dell'IP a Google ad ogni
+   visita. Ora stanno in /assets/fonts, solo l'alfabeto latino (copre
+   anche à è é ì ò ù € « »). Licenza: SIL Open Font License 1.1.
+   Archivo è variabile: un solo file per tutti i pesi (400-800) e le
+   larghezze (62%-125%) che usiamo, compreso il condensato. */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400 800;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url(/assets/fonts/archivo-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/assets/fonts/plexmono-400-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/assets/fonts/plexmono-500-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* ── TOKENS ──────────────────────────────────────────────────────── */
 :root {
   /* colore — estratto dal logo */
@@ -1108,114 +1141,6 @@ ul, ol { list-style: none; padding: 0; }
   .nav__ig { display: none; }   /* nel menu mobile c'è già la voce dedicata */
 }
 
-/* ── INTRO / SCHERMATA DI APERTURA ───────────────────────────────── */
-
-/* blocca lo scorrimento finché l'intro è visibile */
-html.intro-on, html.intro-on body { overflow: hidden; }
-
-/* senza la classe .intro-on (reduced-motion, o JS assente) non esiste */
-.intro { display: none; }
-
-.intro-on .intro {
-  display: block;
-  position: fixed; inset: 0;
-  z-index: 300;
-  background: var(--cream);
-  transform: translateY(0);
-  transition: transform .78s cubic-bezier(.76, 0, .24, 1);
-
-  /* Rete di sicurezza: se il JS non parte, dopo 6s l'intro sparisce da sola
-     invece di lasciare il sito irraggiungibile. */
-  animation: intro-failsafe 0s 6s forwards;
-}
-@keyframes intro-failsafe { to { transform: translateY(-100%); visibility: hidden; } }
-
-.intro.is-done { transform: translateY(-100%); }
-
-/* griglia da foglio di progetto, come nell'hero */
-.intro__grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(to right, rgba(23,18,14,.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(23,18,14,.05) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(110% 80% at 50% 40%, #000 25%, transparent 80%);
-  -webkit-mask-image: radial-gradient(110% 80% at 50% 40%, #000 25%, transparent 80%);
-}
-
-/* barra di avanzamento sul bordo destro, cresce dal basso */
-.intro__side {
-  position: absolute; top: 0; right: 0; bottom: 0;
-  width: 8px;
-  background: rgba(23, 18, 14, .07);
-}
-.intro__side span {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  height: 0%;
-  background: var(--orange);
-  will-change: height;
-}
-
-.intro__brand {
-  position: absolute; top: 32px; left: 32px;
-  display: inline-flex; align-items: center; gap: var(--sp-2);
-  font-family: var(--font-display);
-  font-weight: 700; font-size: 1rem;
-  letter-spacing: -.025em;
-}
-.intro__brand svg { color: var(--orange); }
-
-.intro__status {
-  position: absolute; left: 32px; bottom: 38px;
-  font-family: var(--font-mono);
-  font-size: .74rem;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-}
-/* puntini animati dopo la scritta */
-.intro__status::after {
-  content: "";
-  animation: intro-dots 1.2s steps(4, end) infinite;
-}
-@keyframes intro-dots {
-  0%   { content: ""; }
-  25%  { content: "."; }
-  50%  { content: ".."; }
-  75%  { content: "..."; }
-}
-
-/* contatore in basso a destra */
-.intro__count {
-  position: absolute; right: 40px; bottom: 24px;
-  display: flex; align-items: baseline; gap: 2px;
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: clamp(3.5rem, 13vw, 8rem);
-  line-height: 1;
-  letter-spacing: -.06em;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-}
-.intro__count i {
-  font-style: normal;
-  font-size: .3em;
-  color: var(--orange);
-  letter-spacing: 0;
-}
-
-@media (max-width: 720px) {
-  .intro__brand  { top: 24px; left: 24px; }
-  .intro__status { left: 24px; bottom: 30px; }
-  .intro__count  { right: 24px; bottom: 18px; }
-  .intro__side   { width: 6px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .intro, .intro-on .intro { display: none; }
-  html.intro-on, html.intro-on body { overflow: visible; }
-}
-
 /* ── FORM: trappola anti-spam e stati d'invio ────────────────────── */
 
 /* Nascosta senza display:none — alcuni bot ignorano i campi con
@@ -1472,7 +1397,7 @@ body.consenso-aperto { padding-bottom: var(--consenso-h, 0px); }
   position: fixed;
   left: var(--sp-4); right: var(--sp-4);
   bottom: max(var(--sp-4), env(safe-area-inset-bottom));
-  z-index: 250;                 /* sopra il menu (100), sotto l'intro (300) */
+  z-index: 250;                 /* sopra il menu (100) */
   display: flex; justify-content: center;
   pointer-events: none;
 }
@@ -1612,7 +1537,7 @@ label.consenso-pref__nome { cursor: pointer; }
   position: fixed;
   right: var(--sp-4);
   bottom: max(var(--sp-4), env(safe-area-inset-bottom));
-  z-index: 240;                 /* sotto il banner cookie (250) e l'intro (300) */
+  z-index: 240;                 /* sotto il banner cookie (250) */
   display: flex; flex-direction: column; align-items: flex-end;
   gap: var(--sp-3);
   transition: bottom .25s var(--ease);
