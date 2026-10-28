@@ -1816,6 +1816,105 @@ body.consenso-aperto .wa { bottom: calc(var(--consenso-h, 0px) + var(--sp-2)); }
   background: var(--ink); transform: rotate(45deg);
 }
 
+/* ── Richiamo all'offerta di lancio, in cima alla home ───────────── */
+.lancio {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "eti  cta"
+    "t    cta"
+    "sub  cta";
+  align-items: center;
+  column-gap: var(--sp-6); row-gap: 2px;
+  margin-bottom: clamp(28px, 4vw, 44px);
+  padding: calc(var(--sp-5) + 6px) var(--sp-6) var(--sp-5);
+  background: var(--orange);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 6px 0 var(--ink);
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform .16s var(--ease), box-shadow .16s var(--ease);
+}
+.lancio:hover, .lancio:focus-visible { transform: translateY(3px); box-shadow: 0 3px 0 var(--ink); }
+.lancio:active { transform: translateY(6px); box-shadow: 0 0 0 var(--ink); }
+
+/* nastro da cantiere lungo il bordo alto */
+.lancio__nastro {
+  position: absolute; inset: 0 0 auto; height: 8px;
+  background: repeating-linear-gradient(-45deg, var(--ink) 0 8px, var(--orange) 8px 16px);
+  border-bottom: 2px solid var(--ink);
+}
+
+.lancio__eti {
+  grid-area: eti;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono);
+  font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(23, 18, 14, .78);
+}
+.lancio__pallino {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ink);
+  animation: lancio-battito 1.8s var(--ease) infinite;
+}
+@keyframes lancio-battito {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(23, 18, 14, .45); }
+  60%      { box-shadow: 0 0 0 7px rgba(23, 18, 14, 0); }
+}
+
+.lancio__t {
+  grid-area: t;
+  font-family: var(--font-display);
+  font-stretch: var(--stretto);
+  font-size: clamp(1.6rem, 3.6vw, 2.5rem); font-weight: 800;
+  letter-spacing: -.02em; line-height: 1.05;
+  text-transform: uppercase;
+}
+.lancio__t b { color: var(--cream); text-shadow: 0 2px 0 rgba(23, 18, 14, .28); }
+.lancio__sub { grid-area: sub; font-size: .95rem; font-weight: 600; color: rgba(23, 18, 14, .8); }
+.lancio__sub strong { color: var(--ink); font-weight: 800; }
+
+.lancio__cta {
+  grid-area: cta;
+  display: inline-flex; align-items: center; gap: 8px;
+  flex: 0 0 auto;
+  padding: 14px var(--sp-5);
+  background: var(--ink); color: var(--cream);
+  border-radius: var(--radius-pill);
+  font-weight: 700; white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .lancio {
+    grid-template-columns: 1fr;
+    grid-template-areas: "eti" "t" "sub" "cta";
+    row-gap: 4px;
+    padding: calc(var(--sp-4) + 6px) var(--sp-5) var(--sp-4);
+  }
+  .lancio__t { font-size: clamp(1.3rem, 6.4vw, 1.7rem); }
+  .lancio__sub { font-size: .88rem; }
+  .lancio__cta { width: 100%; justify-content: center; margin-top: 10px; padding-block: 12px; }
+}
+/* sul telefono stretto l'etichetta si accorcia: deve stare su una riga */
+@media (max-width: 520px) {
+  .lancio__eti-piu { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lancio { transition: none; }
+  .lancio__pallino { animation: none; }
+}
+
+/* la voce "Offerta" nei menu, con il pallino arancione */
+.nav__offerta { color: var(--orange-ink) !important; font-weight: 700 !important; }
+.nav__pallino {
+  display: inline-block; width: 7px; height: 7px; margin-right: 7px;
+  border-radius: 50%; background: var(--orange);
+  box-shadow: 0 0 0 3px rgba(234, 118, 33, .22);
+}
+
 .pack-confronto {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
   gap: var(--sp-4) var(--sp-6);

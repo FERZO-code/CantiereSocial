@@ -930,6 +930,31 @@ lasciare **nome e cellulare**. File: `offerta.html`, `offerta.css`, `offerta.js`
 
 ---
 
+# Come si arriva all'offerta dal sito
+
+La landing `/offerta` è fuori da Google (noindex), quindi va raggiunta dai
+link interni. Sono tre:
+
+1. **Voce «Offerta» nel menu** della home, con il pallino arancione: sta
+   nella barra in alto e nel menu del telefono (lì scritta «Offerta · sito
+   a €490»).
+2. **La fascia scura** in fondo alla sezione Pacchetti della home
+   (`.lancio` in `styles.css`): nastro da cantiere, prezzo e «Scopri
+   l'offerta».
+3. **Il richiamo dentro `/pacchetti`**, nella sezione del sito web
+   (`.pk-lancio`): spiega la differenza fra il sito di listino da €990 e
+   l'offerta di lancio da €490.
+
+⚠️ **A offerta chiusa** vanno tolti tutti e tre, altrimenti il sito porta a
+una pagina che promette posti esauriti. La scadenza non è automatica: il
+numero dei posti si governa a mano da `POSTI_RIMASTI` in `offerta.js`.
+
+⚠️ **Non scrivete il numero dei posti rimasti** nella home e in
+`/pacchetti`: là è fisso e invecchierebbe. Il conteggio vive solo sulla
+landing, dove si aggiorna da un punto solo.
+
+---
+
 # Pagamenti: prenotazione con Stripe
 
 Sulla landing `/offerta` c'è un secondo pulsante, oltre al modulo: **bloccare

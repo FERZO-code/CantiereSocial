@@ -508,6 +508,25 @@ html.pk { scroll-padding-top: 148px; }
 .pk-serv__desc { font-size: .9rem; line-height: 1.5; color: var(--fg-muted); }
 .pk-serv__nota { margin-top: 4px; font-family: var(--font-mono); font-size: .7rem; color: var(--orange-ink); }
 
+/* richiamo all'offerta di lancio dentro la sezione del sito web */
+.pk-lancio {
+  margin-top: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--ink);
+  color: #C4B5A8;
+  border-radius: var(--radius);
+  font-size: .95rem; line-height: 1.55;
+}
+.pk-lancio span {
+  display: block; margin-bottom: 4px;
+  font-family: var(--font-mono);
+  font-size: .66rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--orange);
+}
+.pk-lancio b { color: var(--cream); font-weight: 800; }
+.pk-lancio a { color: var(--orange); font-weight: 700; text-underline-offset: 3px; }
+.pk-lancio a:hover { color: var(--cream); }
+
 /* "A cosa serve": la riga che spiega il risultato, non il contenuto.
    Staccata dall'elenco con un filetto arancione, come una nota a margine. */
 .pk-serv__serve {

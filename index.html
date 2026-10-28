@@ -31,7 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- ⚠️ Alzate ?v= a ogni modifica di CSS/JS: forza il browser a
      riscaricarli invece di riusare la copia in cache. -->
-<link rel="stylesheet" href="styles.css?v=24">
+<link rel="stylesheet" href="styles.css?v=26">
 
 <script>
   /* Attiva l'intro prima del primo paint, così non c'è sfarfallio.
@@ -173,6 +173,7 @@
     </a>
 
     <ul class="nav__links">
+      <li><a class="nav__offerta" href="/offerta"><span class="nav__pallino" aria-hidden="true"></span>Offerta</a></li>
       <li><a href="/pacchetti">Pacchetti</a></li>
       <li><a href="#settori">Per chi</a></li>
       <li><a href="#metodo">Metodo</a></li>
@@ -199,6 +200,7 @@
   </nav>
 
   <div class="nav-mobile" id="nav-mobile" hidden>
+    <a class="nav__offerta" href="/offerta"><span class="nav__pallino" aria-hidden="true"></span>Offerta · sito a €490</a>
     <a href="/pacchetti">Pacchetti</a>
     <a href="#settori">Per chi</a>
     <a href="#metodo">Metodo</a>
@@ -225,6 +227,22 @@
 <!-- ══ HERO ══════════════════════════════════════════════════════════ -->
 <section class="hero">
   <div class="hero__grid-bg" aria-hidden="true"></div>
+
+  <!-- Richiamo all'offerta di lancio, in cima a tutto: porta a /offerta.
+       ⚠️ A offerta finita togliete questo blocco e la voce "Offerta" nei
+       due menu, altrimenti il sito porta a una pagina chiusa. -->
+  <div class="wrap">
+    <a class="lancio" href="/offerta">
+      <span class="lancio__nastro" aria-hidden="true"></span>
+      <span class="lancio__eti"><span class="lancio__pallino" aria-hidden="true"></span>Offerta di lancio<span class="lancio__eti-piu"> · a esaurimento posti</span></span>
+      <span class="lancio__t">Il sito della vostra impresa a <b>€490</b></span>
+      <span class="lancio__sub">Invece di €990. Ai <strong>primi 10 clienti</strong>, poi si chiude.</span>
+      <span class="lancio__cta">
+        Scopri l'offerta
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 5.5L18.5 12 12 18.5"/></svg>
+      </span>
+    </a>
+  </div>
 
   <div class="wrap hero__inner">
     <div class="hero__copy">
